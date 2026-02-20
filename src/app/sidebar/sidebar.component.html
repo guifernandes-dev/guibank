@@ -1,0 +1,13 @@
+<aside class="sidebar">
+  <nav class="container-btn">
+    @for (item of menuItems$ | async; track $index) {
+      <button
+        class="btn"
+        [disabled]="item.selected"
+        (click)="redirectToPage(item.page)"
+      >
+        {{item.label}}
+      </button>
+    }
+  </nav>
+</aside>

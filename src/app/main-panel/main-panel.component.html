@@ -1,0 +1,17 @@
+@switch (currentPage$ | async) {
+  @case (pages.DASHBOARD) {
+    <app-dashboard/>
+  }
+  @case (pages.TRANSACTION) {
+    <app-transactions-list/>
+  }
+  @case (pages.TRANSFER) {
+    <app-transfer/>
+  }
+  @case (pages.CREDIT) {
+    <app-credit/>
+  }
+  @default {
+    <p>404 - NOT FOUND</p>
+  }
+}

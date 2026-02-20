@@ -1,0 +1,23 @@
+<main>
+  <h1>Bem-vindo!</h1>
+  <section>
+    <mat-card class="example-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>ENDEREÇO</mat-card-title>
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content>
+        CEP: {{address?.cep}}<br>
+        Rua: {{address?.logradouro}}<br>
+        Complemento: {{address?.complemento}}<br>
+        Cidade: {{address?.localidade}}<br>
+        Estado: {{address?.estado}}<br>
+        DDD: {{address?.ddd}}<br>
+      </mat-card-content>
+    </mat-card>
+  </section>
+  <section>
+    <h2>Últimas Transações</h2>
+  </section>
+</main>

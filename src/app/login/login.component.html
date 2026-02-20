@@ -1,0 +1,102 @@
+
+<form
+  class="d-flex flex-column justify-content-center align-items-center w-75 px-4 py-2 rounded border border-secondary container gap-2"
+  (ngSubmit)="submit()"
+>
+  <img src="/guiBank.png" alt="GuiBank logo" height="150px"/>
+  <h3>{{loginForm ? 'Login' : 'Nova Conta'}}</h3>
+  <div class="w-100 d-flex flex-column justify-content-center align-items-center">
+    @if (!loginForm) {
+      <mat-form-field class="w-75">
+        <mat-label>Nome</mat-label>
+        <input
+          matInput
+          placeholder="Nome Completo"
+          [formControl]="nome"
+          type="text"
+          (blur)="updateNomeError()"
+          required
+        />
+        @if (nome.invalid) {
+          <mat-error>{{nomeError()}}</mat-error>
+        }
+      </mat-form-field>
+    }
+    <mat-form-field class="w-75">
+      <mat-label>E-mail</mat-label>
+      <input
+        matInput
+        placeholder="usuario@email.com"
+        type="email"
+        [formControl]="email"
+        (blur)="updateEmailError()"
+        required
+      />
+      @if (email.invalid) {
+        <mat-error>{{emailError()}}</mat-error>
+      }
+    </mat-form-field>
+    <div class="w-75">
+      <mat-form-field class="w-100">
+        <mat-label>Senha</mat-label>
+        <input
+          matInput
+          [type]="hide() ? 'password' : 'text'"
+          [formControl]="senha"
+          (input)="updateSenhaChecks()"
+          (blur)="updateSenhaChecks()"
+          maxlength="8"
+          required
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button                                                    "
+          (click)="changeHide($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="w-100">
+        <div class="req" [class.ok]="senhaChecks().hasMinLength">
+          <mat-icon>{{ senhaChecks().hasMinLength ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          senha entre 4 e 8 dígitos
+        </div>
+        <div class="req" [class.ok]="senhaChecks().hasLetter">
+          <mat-icon>{{ senhaChecks().hasLetter ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          senha com letra
+        </div>
+        <div class="req" [class.ok]="senhaChecks().hasNumber">
+          <mat-icon>{{ senhaChecks().hasNumber ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          senha com número
+        </div>
+        <div class="req" [class.ok]="senhaChecks().hasSpecial">
+          <mat-icon>{{ senhaChecks().hasSpecial ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          senha com caractere especial
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  <button
+    mat-fab
+    extended
+    class="btn-padrao"
+    type="submit"
+    [disabled]="formValido()"
+  >
+    <mat-icon>{{loginForm ? 'login' : 'person_add'}}</mat-icon>
+    {{loginForm ? 'Entrar' : 'Criar'}}
+  </button>
+  <button
+    mat-button
+    class="mt-3"
+    class="link-padrao"
+    type="button"
+    (click)="toogleLoginForm()"
+  >
+    {{loginForm ? 'Criar Conta' : 'Logar'}}
+  </button>
+</form>

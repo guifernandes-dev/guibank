@@ -1,0 +1,24 @@
+{
+  "user": [
+    {
+      "id": "6770",
+      "nome": "Guilherme Fernandes",
+      "email": "guifjj92@gmail.com",
+      "saldo": 0,
+      "senha": "gui!27"
+    },
+    {
+      "id": "2ef1",
+      "nome": "Cristina Dehon",
+      "email": "crisdehon67@gmail.com",
+      "senha": "va!1012"
+    },
+    {
+      "id": "55f3",
+      "nome": "Stella Sousa Melo",
+      "email": "stellasouzamelo@outlook.com",
+      "senha": "Stela@26"
+    }
+  ],
+  "transactions": []
+}

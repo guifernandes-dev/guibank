@@ -1,0 +1,13 @@
+@if (user | async) {
+  <div class="menu">
+    <app-header/>
+    <app-sidebar/>
+  </div>
+  <main class="content">
+    <app-main-panel/>
+  </main>
+} @else {
+    <app-login
+      class="d-flex justify-content-center align-items-center vh-100 vw-100"
+    />
+}

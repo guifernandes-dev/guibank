@@ -1,0 +1,44 @@
+:root {
+  --menu-background: #e6e6e6;
+  --dourado-escuro: #a08e2a;
+  --branco: #ffffff;
+  --hover-menu-btn: #2a73a0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--branco);
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+.btn-padrao {
+  background-color: var(--dourado-escuro) !important;
+  color: var(--branco) !important;
+}
+
+.btn-padrao:disabled {
+  background-color: var(--menu-background) !important;
+}
+
+.link-padrao {
+  color: var(--dourado-escuro) !important;
+}
+
+.link-padrao:hover {
+  background: rgba(160, 142, 42, 0.1) !important;
+}
+
+.snackbar-erro {
+  background: #f44336 !important;
+  color: white !important;
+}

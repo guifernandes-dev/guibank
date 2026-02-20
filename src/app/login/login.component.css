@@ -1,0 +1,30 @@
+.container {
+  max-width: 500px;
+}
+
+.senha-requisitos {
+  color: #666;
+}
+
+.req {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.req.ok {
+  color: #2e7d32; /* verde Material */
+}
+
+.req mat-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  font-size: 16px;
+}
+
+.color:focus {
+  color: var(--dourado-escuro);
+}
