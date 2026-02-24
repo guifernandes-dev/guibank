@@ -1,19 +1,32 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Pages } from '../constants/pages.enum';
-import { MenuItem } from '../models/services.model';
+import { MenuItem } from '../core/models/services.model';
 import { RouterService } from '../core/router.services/router.service';
-import { Observable } from 'rxjs';
+import { first, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, MatIconModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
   private routerService = inject(RouterService);
   menuItems$: Observable<MenuItem[]> = this.routerService.menuItem;
+
+  disabledBtn(pageIterr: string): boolean {
+    let disabled = false;
+    this.routerService.currentPage
+      .pipe(first())
+      .subscribe(page => {
+        if (page === pageIterr) {
+          disabled = true
+        };
+      });
+    return disabled;
+  }
 
   redirectToPage(page: Pages): void {
     this.routerService.currentPage = page;

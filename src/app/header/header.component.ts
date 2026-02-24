@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { LoginService } from '../core/login.services/login.service';
-import { User } from '../models/services.model';
+import { User } from '../core/models/services.model';
 import { first } from 'rxjs';
 
 @Component({

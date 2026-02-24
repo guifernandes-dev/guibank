@@ -1,36 +1,32 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Pages } from '../../constants/pages.enum';
-import { MenuItem } from '../../models/services.model';
+import { MenuItem } from '../models/services.model';
 import { BehaviorSubject, first, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouterService {
-  private currentPage$ = new BehaviorSubject<Pages>(Pages.DASHBOARD);
+  private currentPage$ = new BehaviorSubject<Pages>(Pages.OPERATIONS);
   private menuItems$ = new BehaviorSubject<MenuItem[]>([
     {
-      label: "Dashboard",
-      selected: true,
-      icon: "",
+      label: "Home",
+      icon: "home",
       page: Pages.DASHBOARD,
     },
     {
       label: "Extrato",
-      selected: false,
-      icon: "",
-      page: Pages.TRANSACTION,
+      icon: "account_balance_wallet",
+      page: Pages.STATEMENTS,
     },
     {
-      label: "Transferência",
-      selected: false,
-      icon: "",
-      page: Pages.TRANSFER,
+      label: "Operações",
+      icon: "currency_exchange",
+      page: Pages.OPERATIONS,
     },
     {
       label: "Crédito",
-      selected: false,
-      icon: "",
+      icon: "price_check",
       page: Pages.CREDIT,
     }
   ]);
@@ -51,18 +47,5 @@ export class RouterService {
         arrayPages.push(page);
       })
     this.currentPage$.next(page);
-    this.menuItems$
-      .pipe(first())
-      .subscribe(menuItems => {
-        this.menuItems$.next(menuItems.map(item => {
-          if(arrayPages.includes(item.page)) {
-            return {
-              ...item,
-              selected: !item.selected
-            }
-          }
-          return item
-        }));
-      })
   }
 }

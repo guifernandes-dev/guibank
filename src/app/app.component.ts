@@ -4,7 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MainPanelComponent } from "./main-panel/main-panel.component";
 import { LoginComponent } from "./login/login.component";
-import { User } from './models/services.model';
+import { User } from './core/models/services.model';
 import { LoginService } from './core/login.services/login.service';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';

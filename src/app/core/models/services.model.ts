@@ -1,10 +1,9 @@
-import { Pages } from "../constants/pages.enum";
+import { Pages } from "../../constants/pages.enum";
 
 export interface MenuItem {
   label: string,
   icon: string,
-  page: Pages,
-  selected: boolean
+  page: Pages
 }
 
 export interface User {

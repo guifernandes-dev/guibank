@@ -3,7 +3,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { inject, Injectable } from '@angular/core';
 import { APIService } from '../api.services/api.service';
 import { BehaviorSubject, first, Observable } from 'rxjs';
-import { User } from '../../models/services.model';
+import { User } from '../models/services.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({

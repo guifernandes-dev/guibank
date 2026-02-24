@@ -2,10 +2,13 @@
   <nav class="container-btn">
     @for (item of menuItems$ | async; track $index) {
       <button
-        class="btn"
-        [disabled]="item.selected"
+        class="btn d-flex gap-1"
+        [disabled]="disabledBtn(item.page)"
         (click)="redirectToPage(item.page)"
       >
+        <mat-icon>
+          {{item.icon}}
+        </mat-icon>
         {{item.label}}
       </button>
     }

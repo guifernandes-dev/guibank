@@ -1,1 +1,5 @@
-<p>transfer works!</p>
+<nav class="d-flex justify-content-around">
+  @for (operation of operations; track $index) {
+    <button type="button">{{operation.label}}</button>
+  }
+</nav>

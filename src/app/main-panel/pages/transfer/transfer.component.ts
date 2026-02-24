@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { TransferService } from './services/transfer.service';
 
 @Component({
   selector: 'app-transfer',
@@ -7,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './transfer.component.css'
 })
 export class TransferComponent {
-
+  private transferService = inject(TransferService);
+  get operations() {
+    return this.transferService.operations;
+  }
 }

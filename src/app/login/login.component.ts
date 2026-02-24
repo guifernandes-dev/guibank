@@ -9,7 +9,7 @@ import {MatInputModule} from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
 import { LoginService } from '../core/login.services/login.service';
-import { User } from '../models/services.model';
+import { User } from '../core/models/services.model';
 
 @Component({
   selector: 'app-login',
