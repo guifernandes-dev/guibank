@@ -8,9 +8,8 @@ import { User } from '../models/services.model';
   providedIn: 'root',
 })
 export class APIService {
-
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:3000'
+  private baseUrl = 'http://localhost:3000';
 
   getUserByAccount(conta: string): Observable<Account[]> {
     return this.http.get<Account[]>(`${this.baseUrl}/user?id=${conta}`)

@@ -1,3 +1,6 @@
+@use "@angular/material" as mat;
+@use '../_theme-colors' as my-theme;
+
 :root {
   --menu-background: #e6e6e6;
   --dourado-escuro: #a08e2a;
@@ -9,6 +12,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  @include mat.theme((
+    color: ((
+      primary: my-theme.$primary-palette
+    ))
+  ))
 }
 
 body {

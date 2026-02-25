@@ -10,5 +10,6 @@ export interface User {
   conta?: string,
   nome: string,
   email: string,
+  saldo: number,
   senha?: string
 }

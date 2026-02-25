@@ -1,0 +1,39 @@
+.no-pointer {
+  pointer-events: none;
+}
+
+form {
+  max-width: 400px;
+}
+
+input.input-valor::-webkit-outer-spin-button,
+input.input-valor::-webkit-inner-spin-button {
+  display: none;
+}
+
+.saldo {
+  font-size: 13px;
+}
+
+.container-saldo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 25px;
+}
+
+.btn {
+  width: 120px;
+  font-size: 12px;
+  height: 23px;
+  padding: 0;
+  border: 1px solid black;
+}
+
+.btn:hover {
+  width: 120px;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-color: var(--dourado-escuro);
+  color: var(--dourado-escuro)
+}

@@ -10,7 +10,7 @@ export interface Account {
 }
 
 export interface Transaction {
-  id: number,
+  id: string,
   origem: string,
   destino: string,
   data: Date,

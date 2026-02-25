@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { merge, Observable } from 'rxjs';
+import { merge } from 'rxjs';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -8,7 +8,6 @@ import {MatInputModule} from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
 import { LoginService } from '../core/login.services/login.service';
-import { User } from '../core/models/services.model';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +19,6 @@ import { User } from '../core/models/services.model';
 export class LoginComponent {
   private loginService = inject(LoginService);
   private _loginForm = signal(true);
-  user$: Observable<User | null> = this.loginService.user;
   readonly nome = new FormControl('', [Validators.required, Validators.minLength(3)]);
   readonly email = new FormControl('', [Validators.required, Validators.email]);
   readonly senha = new FormControl('', [Validators.required, this.passwordStrengthValidator()]);
@@ -127,8 +125,7 @@ export class LoginComponent {
     const senhas = this.senhaChecks();
     const senhaValida = senhas.hasMinLength && senhas.hasLetter && senhas.hasNumber && senhas.hasSpecial;
     const nomeValido = this.loginForm || this.nome.valid;
-    return !(senhaValida && nomeValido && this.email.valid);
-    
+    return !(senhaValida && nomeValido && this.email.valid);    
   }
 
   submit() {
@@ -141,7 +138,7 @@ export class LoginComponent {
     } else {
       const nome = this.nome.value;
       if (nome && email && senha) {
-        this.loginService.criarConta({nome,email,senha});
+        this.loginService.criarConta({nome,email,senha,saldo: 0});
       }
     }
   }

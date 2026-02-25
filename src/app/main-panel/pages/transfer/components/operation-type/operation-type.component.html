@@ -1,0 +1,13 @@
+<nav class="d-flex justify-content-center gap-4">
+  @for (item of operationItems; track $index) {
+    <button
+      type="button"
+      class="btn"
+      [disabled]="disabledBtn(item.operation)"
+      (click)="changeOperation(item)"
+    >
+      <mat-icon>{{item.icon}}</mat-icon>
+      {{item.label}}
+    </button>
+  }
+</nav>

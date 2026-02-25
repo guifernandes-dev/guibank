@@ -1,6 +1,6 @@
 
 import { CookieService } from 'ngx-cookie-service';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { APIService } from '../api.services/api.service';
 import { BehaviorSubject, first, Observable } from 'rxjs';
 import { User } from '../models/services.model';
@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root'
 })
 export class LoginService {
-  private user$ = new BehaviorSubject<User | null>(null);
+  private user$ = signal<User | null>(null);
   private snackBar = inject(MatSnackBar);
   private apiService = inject(APIService);
   private cookieService = inject(CookieService);
@@ -20,28 +20,28 @@ export class LoginService {
   // todayISO = `${this.todayLocale[2]}-${this.todayLocale[1]}-${this.todayLocale[0]}`
 
 
-  get user(): Observable<User | null> {
-    return this.user$;
+  get user(): User | null {
+    return this.user$();
   }
 
   searchUserLogged() {
-    this.user.subscribe(user => {
-      if(!user) {
-        this.user$.next(JSON.parse(this.cookieService.get('user')))
-      }
-    })
+    if(!this.user) {
+      this.user$.set(JSON.parse(this.cookieService.get('user')))
+    }
   }
 
   logar(email: string, senha: string) {
     this.apiService
       .getUserByEmailESenha(email,senha)
       .pipe(first())
-      .subscribe(user => {
-        if (user.length) {
+      .subscribe(users => {
+        if (users.length) {
+          const {id, nome, saldo, email} = users[0];
           const userFind: User = {
-            conta: user[0].id,
-            nome: user[0].nome,
-            email: user[0].email
+            conta: id,
+            nome,
+            saldo,
+            email
           }
           this.registrarUser(userFind);
         } else {
@@ -49,14 +49,14 @@ export class LoginService {
             'E-mail ou senha incorreto.','Fechar',
             { duration: this.duration, panelClass: 'snackbar-erro'}
           );
-          this.user$.next(null);
+          this.user$.set(null);
         }
       })
   }
 
   logout() {
     this.cookieService.delete('user');
-    this.user$.next(null);
+    this.user$.set(null);
   }
 
   criarConta(newWuser: User) {
@@ -73,11 +73,12 @@ export class LoginService {
         } else {
           this.apiService.postUser(newWuser)
             .pipe(first())
-            .subscribe(({nome,email,id}) => {
+            .subscribe(({nome,email,id,saldo}) => {
               const user: User = {
                 nome,
                 email,
-                conta: id
+                conta: id,
+                saldo
               };
               this.registrarUser(user);
             });
@@ -91,6 +92,6 @@ export class LoginService {
       JSON.stringify(user),
       { expires: 2 }
     );
-    this.user$.next(user);
+    this.user$.set(user);
   }
 }
