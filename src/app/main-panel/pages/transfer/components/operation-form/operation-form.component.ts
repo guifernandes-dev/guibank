@@ -155,7 +155,9 @@ export class OperationFormComponent {
   }
 
   submit(){
-    const form = this.operationForm.value;
-    console.log(form);
+    if (this.currentOp.operation === Operation.PIX) {
+      const form = this.operationForm.value;
+      console.log(form);
+    }
   }
 }
