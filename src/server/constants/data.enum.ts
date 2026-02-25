@@ -1,9 +1,9 @@
-export enum TipoLanc {
+export enum Operation {
+  PIX = 'pix',
   DEPOSITO = 'deposito',
   SAQUE = 'saque',
   PAGAMENTO = 'pagamento',
   CREDITO = 'credito',
-  PIX = 'pix',
   DEBITO = 'debito'
 }
 

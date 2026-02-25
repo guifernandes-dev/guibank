@@ -1,6 +1,6 @@
 <aside class="sidebar">
   <nav class="container-btn">
-    @for (item of menuItems$ | async; track $index) {
+    @for (item of menuItems$; track $index) {
       <button
         class="btn d-flex gap-1"
         [disabled]="disabledBtn(item.page)"

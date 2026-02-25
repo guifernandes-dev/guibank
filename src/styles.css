@@ -17,10 +17,6 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-html, body {
-  height: 100%;
-}
-
 .btn-padrao {
   background-color: var(--dourado-escuro) !important;
   color: var(--branco) !important;

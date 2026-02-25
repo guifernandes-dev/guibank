@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Pages } from '../../constants/pages.enum';
 import { MenuItem } from '../models/services.model';
 import { BehaviorSubject, first, Observable } from 'rxjs';
@@ -8,7 +8,7 @@ import { BehaviorSubject, first, Observable } from 'rxjs';
 })
 export class RouterService {
   private currentPage$ = new BehaviorSubject<Pages>(Pages.OPERATIONS);
-  private menuItems$ = new BehaviorSubject<MenuItem[]>([
+  private _menuItems: MenuItem[] = [
     {
       label: "Home",
       icon: "home",
@@ -29,23 +29,17 @@ export class RouterService {
       icon: "price_check",
       page: Pages.CREDIT,
     }
-  ]);
+  ];
 
   get currentPage(): Observable<Pages> {
     return this.currentPage$;
   }
 
-  get menuItem(): Observable<MenuItem[]> {
-    return this.menuItems$
+  get menuItem(): MenuItem[] {
+    return this._menuItems;
   }
 
   set currentPage(page: Pages) {
-    const arrayPages = [page]
-    this.currentPage$
-      .pipe(first())
-      .subscribe(page => {
-        arrayPages.push(page);
-      })
     this.currentPage$.next(page);
   }
 }

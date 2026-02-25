@@ -1,11 +1,12 @@
-import { Classificacao, TipoLanc } from "../constants/data.enum"
+import { Classificacao, Operation } from "../constants/data.enum"
 
 export interface Account {
   id: string,
   nome: string,
   email: string,
   saldo: number,
-  senha: string
+  senha: string,
+  limit: number,
 }
 
 export interface Transaction {
@@ -15,7 +16,7 @@ export interface Transaction {
   data: Date,
   descricao: string,
   valor: number,
-  tipo: TipoLanc,
+  tipo: Operation,
   pago: boolean,
   vencimento: Date | null,
   classificacao: Classificacao

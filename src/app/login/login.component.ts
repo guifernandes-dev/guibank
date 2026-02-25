@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge, Observable } from 'rxjs';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import { CookieService } from 'ngx-cookie-service';
-import {MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,12 +12,12 @@ import { User } from '../core/models/services.model';
 
 @Component({
   selector: 'app-login',
-  imports: [MatButtonModule, MatInputModule, MatIcon, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatButtonModule, MatSnackBarModule],
+  imports: [MatButtonModule, MatInputModule, MatIcon, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatSnackBarModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private loginService = inject(LoginService);
   private _loginForm = signal(true);
   user$: Observable<User | null> = this.loginService.user;
@@ -42,10 +41,6 @@ export class LoginComponent implements OnInit {
     merge(this.senha.statusChanges, this.senha.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateSenhaChecks());
-  }
-
-  ngOnInit(): void {
-    
   }
 
   get loginForm() {

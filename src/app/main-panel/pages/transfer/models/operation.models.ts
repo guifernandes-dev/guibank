@@ -1,8 +1,8 @@
-import { Classificacao, TipoLanc } from "../../../../../server/constants/data.enum";
+import { Classificacao, Operation } from "../../../../../server/constants/data.enum";
 
-export interface Operations {
+export interface MenuOperation {
   icon: string,
   label: string,
-  operation: TipoLanc,
+  operation: Operation,
   classificacao: Classificacao
 }
