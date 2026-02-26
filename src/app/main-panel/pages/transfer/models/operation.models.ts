@@ -8,7 +8,8 @@ export interface MenuOperation {
   classificacao: Classificacao
 }
 
-export interface ErrorsObj {
-  key: keyof Transaction,
-  code: string
+export interface ErrorsForm {
+  destino: string,
+  vencimento: string,
+  valor: string
 }

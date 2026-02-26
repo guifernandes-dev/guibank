@@ -14,7 +14,7 @@
         <mat-radio-button value="text">Número</mat-radio-button>
       </mat-radio-group>
     </div>
-    <mat-form-field class="w-100">
+    <mat-form-field appearance="outline" class="w-100">
       <mat-label>Chave de Destino</mat-label>
       <input
         matInput
@@ -22,9 +22,8 @@
         type="text"
         formControlName="destino"
         [maxlength]="tipoConta.value === 'email' ? 40 : 4"
-        (input)="checkError(errosDestino)"
-        (blur)="checkError(errosDestino)"
-        required
+        (blur)="checkError('destino')"
+        [required]="currentOp.operation === operation.PIX"
       />
       @if (operationForm.get('destino')?.invalid) {
         <mat-error>{{mensagemErro.destino}}</mat-error>
@@ -32,33 +31,67 @@
         <mat-hint>Nome: {{userDestino}}</mat-hint>
       }
     </mat-form-field>
-    <mat-form-field class="w-100">
-      <mat-label>Descrição</mat-label>
+  }
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Descrição</mat-label>
+    <input
+      matInput
+      [placeholder]="`Descrição do ${currentOp.operation}`"
+      type="text"
+      formControlName="descricao"
+    />
+  </mat-form-field>
+  @if(currentOp.operation === operation.PAGAMENTO) {
+    <mat-form-field appearance="outline" class="w-50" floatLabel="always">
+      <mat-label>Data de Vencimento</mat-label>
       <input
         matInput
-        [placeholder]="`Descrição do ${currentOp.operation}`"
-        type="text"
-        formControlName="descricao"
+        [matDatepickerFilter]="filtraData"
+        [matDatepicker]="picker"
+        formControlName="vencimento"
+        (dateInput)="checkError('vencimento')"
+        (dateChange)="checkError('vencimento')"
+        (blur)="checkError('vencimento')"
       />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      @if (operationForm.get('vencimento')?.invalid) {
+        <mat-error>{{mensagemErro.vencimento}}</mat-error>
+      }
     </mat-form-field>
   }
   @if (currentOp.operation !== operation.DEPOSITO) {
-    <div class="w-75 container-saldo">
+    <div class="w-100 container-saldo">
       <span class="saldo">
         Saldo: {{saldo! | brCurrency}}
       </span>
-      <button
-        type="button"
-        class="btn"
-        (click)="transfSaldoTotal()"
-      >
-        {{ operationForm.get('valor')?.value === '0,00'
-          ? 'Saldo Total no Valor'
-          : 'Limpar Valor' }}
-      </button>
+      <div class="d-flex gap-1">
+        @if (operationForm.get('valor')?.value !== formataValor(saldo!)) {
+          <button
+            type="button"
+            class="btn"
+            (click)="transfSaldoTotal()"
+          >
+            Saldo Total no Valor
+          </button>
+        }
+        @if (operationForm.get('valor')?.value !== '0,00') {
+          <button
+            type="button"
+            class="btn"
+            (click)="limparValor()"
+          >
+            Limpar Valor
+          </button>
+        }
+      </div>
     </div>
   }
-  <mat-form-field class="w-50" floatLabel="always">
+  <mat-form-field
+    appearance="outline"
+    [class]="currentOp.operation === operation.PAGAMENTO ? 'w-75' :'w-50'"
+    floatLabel="always"
+  >
     <mat-label>Valor</mat-label>
     <input
       matInput
@@ -67,12 +100,16 @@
       step="0.01"
       formControlName="valor"
       (input)="formatar($event)"
-      (focus)="inputFocado=true"
-      (blur)="valorBlur()"
+      (focus)="cursorend($event)"
+      (click)="cursorend($event)"
+      (blur)="checkError('valor')"
       required
     />
-    @if(operationForm.get('valor')?.value || inputFocado) {
-      <span matTextPrefix>R$&nbsp;</span>
+    <span matTextPrefix>R$&nbsp;</span>
+    @if (currentOp.operation === operation.PAGAMENTO) {
+      <mat-slide-toggle matTextSuffix formControlName="pago">
+        Pago
+      </mat-slide-toggle>
     }
     @if (operationForm.get('valor')?.invalid) {
       <mat-error>{{mensagemErro.valor}}</mat-error>
@@ -83,6 +120,7 @@
     extended
     type="submit"
     class="btn-padrao"
+    [disabled]="disabledBtn()"
   >
     <mat-icon>check</mat-icon>
     REALIZAR

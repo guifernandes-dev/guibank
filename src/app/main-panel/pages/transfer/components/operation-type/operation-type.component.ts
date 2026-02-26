@@ -24,5 +24,9 @@ export class OperationTypeComponent {
 
   changeOperation(operation: MenuOperation) {
     this.operationService.currentOp = operation;
+    this.operationService.buildForm(operation);
+    this.operationService.updateErros('destino');
+    this.operationService.updateErros('valor');
+    this.operationService.updateErros('vencimento');
   }
 }

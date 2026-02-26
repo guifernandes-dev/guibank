@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -6,10 +6,13 @@ import { MatRadioModule } from '@angular/material/radio';
 import { OperationService } from '../../services/operation.service';
 import { Operation } from '../../../../../../server/constants/data.enum';
 import { Observable } from 'rxjs';
-import { ErrorsObj } from '../../models/operation.models';
+import { ErrorsForm } from '../../models/operation.models';
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { MatIconModule } from "@angular/material/icon";
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-operation-form',
@@ -18,9 +21,12 @@ import { MatIconModule } from "@angular/material/icon";
     MatInputModule,
     ReactiveFormsModule,
     MatRadioModule,
-    BrCurrencyPipe,
-    MatIconModule
-],
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSlideToggleModule,
+    BrCurrencyPipe
+  ],
   templateUrl: './operation-form.component.html',
   styleUrl: './operation-form.component.css'
 })
@@ -29,37 +35,35 @@ export class OperationFormComponent {
   private loginService = inject(LoginService);
   private _operationForm = this.operationService.operationForm;
   readonly isExpense: Observable<boolean> = this.operationService.isExpense;
-  private inputFocado$ = signal<boolean>(false);
-  errosDestino: ErrorsObj[] = [
-    {key: 'destino', code: 'minlength'},
-    {key: 'destino', code: 'userNotExist'},
-    {key: 'destino', code: 'emailInvalido'},
-    {key: 'destino', code: 'accountLogged'},
-    {key: 'destino', code: 'required'}
-  ];
-  errorValor: ErrorsObj[] = [
-    {key: 'valor', code: 'valueUperSaldo'},
-    {key: 'valor', code: 'invalidValue'}
-  ];
+  // errosDestino: ErrorsObj[] = [
+  //   {key: 'destino', code: 'minlength'},
+  //   {key: 'destino', code: 'userNotExist'},
+  //   {key: 'destino', code: 'emailInvalido'},
+  //   {key: 'destino', code: 'accountLogged'},
+  //   {key: 'destino', code: 'required'}
+  // ];
+  // errorValor: ErrorsObj[] = [
+  //   {key: 'valor', code: 'valueUperSaldo'},
+  //   {key: 'valor', code: 'invalidValue'}
+  // ];
+  filtraData = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    return day !== 0 && day !== 6;
+  };
 
   ngOnInit(): void {
     this.operationService.buildForm(this.currentOp);
+    this.checkError('destino');
+    this.checkError('destino');
+    this.checkError('vencimento');
   }
 
   get userDestino() {
     return this.operationService.userDestino
   }
 
-  get inputFocado() {
-    return this.inputFocado$();
-  }
-
   get saldo() {
     return this.loginService.user?.saldo;
-  }
-
-  set inputFocado(focus: boolean) {
-    this.inputFocado$.set(focus);
   }
 
   get operationForm() {
@@ -91,12 +95,13 @@ export class OperationFormComponent {
   }
 
 
-  checkError(errors: ErrorsObj[]) {
-    errors.forEach(({key, code}) => {
-      if (this.operationForm.get(key)?.hasError(code)) {
-        this.operationService.updateErros(key, code);
-      }
-    })
+  checkError(key: keyof ErrorsForm) {
+    const errors = this.operationForm.get(key)?.errors;
+    if(!errors) {
+      this.operationService.updateErros(key);
+    } else {
+      this.operationService.updateErros(key, Object.keys(errors)[0]);
+    }
   }
 
   formatar(event: Event) {
@@ -129,13 +134,19 @@ export class OperationFormComponent {
 
     // 7. Atualiza o FormControl e coloca o cursor à esquerda
     this.operationForm.get('valor')?.setValue(formatado);
-    input.setSelectionRange(input.value.length, input.value.length);
-    this.checkError(this.errorValor);
+    this.cursorend(event,formatado)
+    this.checkError('valor');
   }
 
-  valorBlur() {
-    this.inputFocado = false;
-    this.checkError(this.errorValor);
+  cursorend(event: Event, value?: string) {
+    const input = event.target as HTMLInputElement;
+    let valor;
+    if (!value) {
+      valor = input.value;
+    } else {
+      valor = value;
+    }
+    input.setSelectionRange(valor.length,valor.length);
   }
 
   formataValor(valor: number) {
@@ -146,18 +157,43 @@ export class OperationFormComponent {
   }
 
   transfSaldoTotal(){
-    if(this.operationForm.get('valor')?.value === '0,00') {
-      const saldoString = this.formataValor(this.saldo!);
-      this.operationForm.get('valor')?.setValue(saldoString);
-    } else {
-      this.operationForm.get('valor')?.setValue('0,00');
-    }
+    const saldoString = this.formataValor(this.saldo!);
+    this.operationForm.get('valor')?.setValue(saldoString);
   }
+
+  limparValor() {
+    this.operationForm.get('valor')?.setValue('0,00');
+  }
+
+  disabledBtn(): boolean {
+    let disabled = false;
+    switch (this.currentOp.operation) {
+      case Operation.PIX:
+        disabled = !this.operationForm.get('destino')?.value?.length;
+        break;
+      case Operation.PAGAMENTO:
+        disabled = !this.operationForm.get('vencimento')?.value;
+        break;
+      }
+    if (this.operationForm.get('valor')?.value === '0,00') {
+      disabled = true;
+    }
+    const errors = this.operationService.errorsForm;
+    Object.values(errors).forEach(mensagem => {
+      if (mensagem) {
+        disabled = true;
+      }
+    });
+    return disabled
+  }
+
 
   submit(){
     if (this.currentOp.operation === Operation.PIX) {
       const form = this.operationForm.value;
       console.log(form);
     }
+    const form = this.operationForm.value;
+    console.log(form);
   }
 }

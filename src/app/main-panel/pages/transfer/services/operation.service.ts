@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Classificacao, Operation } from '../../../../../server/constants/data.enum';
-import { MenuOperation } from '../models/operation.models';
+import { ErrorsForm, MenuOperation } from '../models/operation.models';
 import { BehaviorSubject, catchError, first, map, Observable, of } from 'rxjs';
 import { LoginService } from '../../../../core/login.services/login.service';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
@@ -50,21 +50,18 @@ export class OperationService {
   private _operationForm = new FormGroup({
     origem: new FormControl<string>(''),
     destino: new FormControl<string>('',{asyncValidators: this.validatorDestino()}),
-    data: new FormControl<string>('',[Validators.required]),
+    data: new FormControl<Date>(new Date(),[Validators.required]),
     descricao: new FormControl<string>(''),
     valor: new FormControl<string>('0,00', [this.validatorValor()]),
     tipo: new FormControl<Operation>(Operation.PIX,[Validators.required]),
     pago: new FormControl<boolean>(false),
-    vencimento: new FormControl<string | null>(null),
+    vencimento: new FormControl<Date | null>(null),
     classificacao: new FormControl<Classificacao>(Classificacao.DESPESA,[Validators.required])
   });
-  private _errors = signal({
-    origem: '',
+  private _errors = signal<ErrorsForm>({
     destino: '',
-    data: '',
+    vencimento: '',
     valor: '',
-    tipo: '',
-    classificacao: ''
   });
   private _tipoConta = new FormControl<string>('text');
   private userDestino$ = signal<string | null>(null);
@@ -102,11 +99,7 @@ export class OperationService {
 
   buildForm({operation, classificacao}: MenuOperation): void {
     const user = this.loginService.user;
-    const data = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "America/Sao_Paulo",
-      dateStyle: "short",
-      timeStyle: "short"
-    }).format(new Date()).substring(0,10);
+    const data = new Date();
     this._isExpense.next(classificacao === Classificacao.DESPESA);
     const origem = this._isExpense ? user!.conta : '';
     const destino = !this._isExpense ? user!.conta : '';
@@ -116,6 +109,7 @@ export class OperationService {
       destino,
       data,
       pago,
+      vencimento: data,
       tipo: operation,
       classificacao
     })
@@ -177,12 +171,25 @@ export class OperationService {
     }
   }
 
-  updateErros(key: keyof Transaction, code: string) {
+  updateErros(key: keyof ErrorsForm, code?: string) {
+    let mensagem = '';
+    switch (code) {
+      case 'required':
+        mensagem = 'Campo é obrigatório'
+        break;
+      case 'matDatepickerParse':
+        mensagem = 'Data inválida'
+        break;
+      case undefined:
+        mensagem = ''
+        break;
+      default:
+        mensagem = this.operationForm.get(key)?.getError(code)
+        break;
+    }
     this._errors.update(errs => ({
       ...errs,
-      [key]: code === 'required'
-        ? 'Campo é obrigatório'
-        : this.operationForm.get(key)?.getError(code)
+      [key]: mensagem
     }))
   }
 }

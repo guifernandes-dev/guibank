@@ -23,17 +23,13 @@ input.input-valor::-webkit-inner-spin-button {
 }
 
 .btn {
-  width: 120px;
   font-size: 12px;
   height: 23px;
-  padding: 0;
+  padding: 0 5px;
   border: 1px solid black;
 }
 
 .btn:hover {
-  width: 120px;
-  font-size: 12px;
-  padding: 2px 5px;
   border-color: var(--dourado-escuro);
   color: var(--dourado-escuro)
 }

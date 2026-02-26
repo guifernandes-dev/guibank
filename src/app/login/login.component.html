@@ -7,7 +7,7 @@
   <h3>{{loginForm ? 'Login' : 'Nova Conta'}}</h3>
   <div class="w-100 d-flex flex-column justify-content-center align-items-center">
     @if (!loginForm) {
-      <mat-form-field class="w-75">
+      <mat-form-field appearance="outline" class="w-75">
         <mat-label>Nome</mat-label>
         <input
           matInput
@@ -22,7 +22,7 @@
         }
       </mat-form-field>
     }
-    <mat-form-field class="w-75">
+    <mat-form-field appearance="outline" class="w-75">
       <mat-label>E-mail</mat-label>
       <input
         matInput
@@ -37,7 +37,7 @@
       }
     </mat-form-field>
     <div class="w-75">
-      <mat-form-field class="w-100">
+      <mat-form-field appearance="outline" class="w-100">
         <mat-label>Senha</mat-label>
         <input
           matInput
