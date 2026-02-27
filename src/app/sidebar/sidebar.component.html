@@ -1,15 +1,28 @@
 <aside class="sidebar">
   <nav class="container-btn">
-    @for (item of menuItems$; track $index) {
+    <div class="container-menu">
+      @for (item of menuItems$; track $index) {
+        <button
+          class="btn d-flex gap-1"
+          [disabled]="currentPage() === item.page"
+          (click)="redirectToPage(item.page)"
+        >
+          <mat-icon>
+            {{item.icon}}
+          </mat-icon>
+          {{item.label}}
+        </button>
+      }
+    </div>
+    @if (historyNav().length) {
       <button
         class="btn d-flex gap-1"
-        [disabled]="disabledBtn(item.page)"
-        (click)="redirectToPage(item.page)"
+        (click)="backPage()"
       >
         <mat-icon>
-          {{item.icon}}
+          arrow_back
         </mat-icon>
-        {{item.label}}
+        Voltar
       </button>
     }
   </nav>

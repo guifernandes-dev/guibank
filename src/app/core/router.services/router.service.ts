@@ -1,14 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Pages } from '../../constants/pages.enum';
 import { MenuItem } from '../models/services.model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import { LoginService } from '../login.services/login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouterService {
-  private currentPage$ = new BehaviorSubject<Pages>(Pages.OPERATIONS);
-  private _menuItems: MenuItem[] = [
+  private readonly loginService = inject(LoginService);
+  currentPage$ = signal<Pages>(Pages.DASHBOARD);
+  historyNav$ = signal<Pages[]>([]);
+  private readonly _menuItems: MenuItem[] = [
     {
       label: "Home",
       icon: "home",
@@ -36,15 +40,42 @@ export class RouterService {
     }
   ];
 
-  get currentPage(): Observable<Pages> {
-    return this.currentPage$;
-  }
-
   get menuItem(): MenuItem[] {
     return this._menuItems;
   }
 
-  set currentPage(page: Pages) {
-    this.currentPage$.next(page);
+  removeLastPage() {
+    this.historyNav$.update(pages => {
+      this.setStorage(pages[pages.length-1])
+      return pages.slice(0,-1);
+    });
+  }
+
+  setNavigate(page: Pages) {
+    this.historyNav$.update(pages => ([...pages, this.currentPage$()]));
+    this.setStorage(page);
+  }
+
+  getStorage() {
+    const storagePages = localStorage.getItem('lastpage')
+    if (storagePages) {
+      const {conta} = this.loginService.user()!;
+      const userLastPage = JSON.parse(storagePages)[conta];
+      this.currentPage$.set(userLastPage);
+    }
+  }
+
+  setStorage(page: Pages) {
+    const storagePages = localStorage.getItem('lastpage');
+    let storageObj;
+    if(storagePages) {
+      storageObj = JSON.parse(storagePages);
+    } else {
+      storageObj = {};
+    }
+    localStorage.setItem(
+      'lastpage',
+      JSON.stringify({...storageObj, [this.loginService.user()?.conta!]: page}),
+    );
   }
 }

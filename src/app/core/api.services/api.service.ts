@@ -32,9 +32,9 @@ export class APIService {
   }
 
   getTransactionsByUserOrigin(conta: string): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?origem=${conta}`);
+    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?origem.conta=${conta}`);
   }
   getTransactionsByUserDestination(conta: string): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino=${conta}`);
+    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino.conta=${conta}`);
   }
 }

@@ -5,18 +5,22 @@ import { Pages } from '../constants/pages.enum';
 import { TransferComponent } from "./pages/transfer/transfer.component";
 import { CreditComponent } from "./pages/credit/credit.component";
 import { RouterService } from '../core/router.services/router.service';
-import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 import { DocumentListComponent } from "./pages/document-list/document-list.component";
 
 @Component({
   selector: 'app-main-panel',
-  imports: [DashboardComponent, TransactionsListComponent, TransferComponent, CreditComponent, AsyncPipe, DocumentListComponent],
+  imports: [DashboardComponent, TransactionsListComponent, TransferComponent, CreditComponent, DocumentListComponent],
   templateUrl: './main-panel.component.html',
   styleUrl: './main-panel.component.css'
 })
 export class MainPanelComponent {
   private readonly routerService = inject(RouterService);
-  currentPage$: Observable<Pages> = this.routerService.currentPage;
-  pages = Pages;
+
+  get currentPage() {
+    return this.routerService.currentPage$
+  };
+
+  get pages() {
+    return Pages
+  };
 }
