@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Pages } from '../../constants/pages.enum';
 import { MenuItem } from '../models/services.model';
-import { BehaviorSubject, first, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouterService {
-  private currentPage$ = new BehaviorSubject<Pages>(Pages.OPERATIONS);
+  private currentPage$ = new BehaviorSubject<Pages>(Pages.DASHBOARD);
   private _menuItems: MenuItem[] = [
     {
       label: "Home",
@@ -18,6 +18,11 @@ export class RouterService {
       label: "Extrato",
       icon: "account_balance_wallet",
       page: Pages.STATEMENTS,
+    },
+    {
+      label: "Boletos",
+      icon: "request_quote",
+      page: Pages.DOCUMENTS,
     },
     {
       label: "Operações",

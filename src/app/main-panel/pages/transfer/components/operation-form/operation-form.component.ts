@@ -4,8 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { OperationService } from '../../services/operation.service';
-import { Operation } from '../../../../../../server/constants/data.enum';
-import { Observable } from 'rxjs';
+import { Operation } from '../../../../../../server/constants/operation.enum';
 import { ErrorsForm } from '../../models/operation.models';
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
@@ -13,9 +12,14 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TransactionsService } from '../../../transactions-list/services/transactions.service';
+import { Transaction } from '../../../../../../server/models/db.model';
+import {provideNativeDateAdapter} from '@angular/material/core';
 
 @Component({
   selector: 'app-operation-form',
+  providers: [provideNativeDateAdapter()],
   imports: [
     MatButtonModule,
     MatInputModule,
@@ -25,6 +29,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSlideToggleModule,
+    MatSnackBarModule,
     BrCurrencyPipe
   ],
   templateUrl: './operation-form.component.html',
@@ -32,20 +37,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 })
 export class OperationFormComponent {
   private operationService = inject(OperationService);
+  private transService = inject(TransactionsService);
   private loginService = inject(LoginService);
   private _operationForm = this.operationService.operationForm;
-  readonly isExpense: Observable<boolean> = this.operationService.isExpense;
-  // errosDestino: ErrorsObj[] = [
-  //   {key: 'destino', code: 'minlength'},
-  //   {key: 'destino', code: 'userNotExist'},
-  //   {key: 'destino', code: 'emailInvalido'},
-  //   {key: 'destino', code: 'accountLogged'},
-  //   {key: 'destino', code: 'required'}
-  // ];
-  // errorValor: ErrorsObj[] = [
-  //   {key: 'valor', code: 'valueUperSaldo'},
-  //   {key: 'valor', code: 'invalidValue'}
-  // ];
+  formataValor = this.loginService.formataValor;
   filtraData = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
     return day !== 0 && day !== 6;
@@ -63,7 +58,7 @@ export class OperationFormComponent {
   }
 
   get saldo() {
-    return this.loginService.user?.saldo;
+    return this.transService.saldo;
   }
 
   get operationForm() {
@@ -105,34 +100,7 @@ export class OperationFormComponent {
   }
 
   formatar(event: Event) {
-    const input = event.target as HTMLInputElement;
-    let valor = input.value;
-
-    // 1. Retira qualquer coisa que não for número
-    valor = valor.replace(/[^0-9]/g, '');
-    
-    // 2. verifica se estou apagando
-    if (input.value.length === valor.length+1) {
-      //2.1. adiciona o zero à esquerda
-      valor = '0' + valor
-    // 3. verifica se há zero à esquerda e se o botão apertado pelo usuário é um número
-    } else if(valor[0] === '0' && input.value.length-2 !== valor.length) {
-      // 3.1. remove o primeiro zero à esquerda
-      valor = valor.substring(1);
-    }
-    // 4. Adiciona o "." após os dois últimos dígitos
-    valor = valor.slice(0, -2) + '.' + valor.slice(-2);
-    
-    // 5. transforma a string em number
-    let numero = parseFloat(valor);
-    if (isNaN(numero)) {
-      numero = 0;
-    }
-
-    // 6. Formata no padrão brasileiro: #.###,##
-    const formatado = this.formataValor(numero);
-
-    // 7. Atualiza o FormControl e coloca o cursor à esquerda
+    const formatado = this.loginService.formataValorInput(event);
     this.operationForm.get('valor')?.setValue(formatado);
     this.cursorend(event,formatado)
     this.checkError('valor');
@@ -149,15 +117,8 @@ export class OperationFormComponent {
     input.setSelectionRange(valor.length,valor.length);
   }
 
-  formataValor(valor: number) {
-    return valor.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-  }
-
   transfSaldoTotal(){
-    const saldoString = this.formataValor(this.saldo!);
+    const saldoString = this.formataValor(this.saldo);
     this.operationForm.get('valor')?.setValue(saldoString);
   }
 
@@ -173,6 +134,7 @@ export class OperationFormComponent {
         break;
       case Operation.PAGAMENTO:
         disabled = !this.operationForm.get('vencimento')?.value;
+        disabled = !this.operationForm.get('descricao')?.value;
         break;
       }
     if (this.operationForm.get('valor')?.value === '0,00') {
@@ -187,13 +149,17 @@ export class OperationFormComponent {
     return disabled
   }
 
-
   submit(){
-    if (this.currentOp.operation === Operation.PIX) {
-      const form = this.operationForm.value;
-      console.log(form);
-    }
-    const form = this.operationForm.value;
-    console.log(form);
+    const transaction = {
+      ...this.operationForm.value,
+      valor: this.loginService.formataValorNumero(
+        this.operationForm
+          .get('valor')!
+          .value!
+      )
+    } as Transaction;
+    console.log(transaction);
+    
+    this.operationService.createTransaction(transaction);
   }
 }

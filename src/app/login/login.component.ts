@@ -22,6 +22,7 @@ export class LoginComponent {
   readonly nome = new FormControl('', [Validators.required, Validators.minLength(3)]);
   readonly email = new FormControl('', [Validators.required, Validators.email]);
   readonly senha = new FormControl('', [Validators.required, this.passwordStrengthValidator()]);
+  readonly renda = new FormControl('0,00');
   emailError = signal('');
   nomeError = signal('');
   senhaChecks = signal({
@@ -121,6 +122,25 @@ export class LoginComponent {
     });
   }
 
+  formatar(event: Event) {
+    const formatado = this.loginService.formataValorInput(event);
+
+    // 7. Atualiza o FormControl e coloca o cursor à esquerda
+    this.renda.setValue(formatado);
+    this.cursorend(event,formatado)
+  }
+
+  cursorend(event: Event, value?: string) {
+    const input = event.target as HTMLInputElement;
+    let valor;
+    if (!value) {
+      valor = input.value;
+    } else {
+      valor = value;
+    }
+    input.setSelectionRange(valor.length,valor.length);
+  }
+
   formValido(): boolean {
     const senhas = this.senhaChecks();
     const senhaValida = senhas.hasMinLength && senhas.hasLetter && senhas.hasNumber && senhas.hasSpecial;
@@ -137,8 +157,9 @@ export class LoginComponent {
       }
     } else {
       const nome = this.nome.value;
+      const renda = this.loginService.formataValorNumero(this.renda.value!);
       if (nome && email && senha) {
-        this.loginService.criarConta({nome,email,senha,saldo: 0});
+        this.loginService.criarConta({nome,email,senha,renda});
       }
     }
   }

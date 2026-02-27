@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { OperationService } from '../../services/operation.service';
-import { Operation } from '../../../../../../server/constants/data.enum';
+import { Operation } from '../../../../../../server/constants/operation.enum';
 import { MenuOperation } from '../../models/operation.models';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';

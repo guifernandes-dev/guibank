@@ -39,7 +39,13 @@
       [placeholder]="`Descrição do ${currentOp.operation}`"
       type="text"
       formControlName="descricao"
+      [required]="currentOp.operation === operation.PAGAMENTO"
+      (blur)="checkError('descricao')"
+      (input)="checkError('descricao')"
     />
+    @if (operationForm.get('descricao')?.invalid) {
+      <mat-error>{{mensagemErro.descricao}}</mat-error>
+    }
   </mat-form-field>
   @if(currentOp.operation === operation.PAGAMENTO) {
     <mat-form-field appearance="outline" class="w-50" floatLabel="always">
@@ -63,10 +69,10 @@
   @if (currentOp.operation !== operation.DEPOSITO) {
     <div class="w-100 container-saldo">
       <span class="saldo">
-        Saldo: {{saldo! | brCurrency}}
+        Saldo: {{saldo | brCurrency}}
       </span>
       <div class="d-flex gap-1">
-        @if (operationForm.get('valor')?.value !== formataValor(saldo!)) {
+        @if (operationForm.get('valor')?.value !== formataValor(saldo)) {
           <button
             type="button"
             class="btn"

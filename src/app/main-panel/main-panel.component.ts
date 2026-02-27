@@ -7,10 +7,11 @@ import { CreditComponent } from "./pages/credit/credit.component";
 import { RouterService } from '../core/router.services/router.service';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { DocumentListComponent } from "./pages/document-list/document-list.component";
 
 @Component({
   selector: 'app-main-panel',
-  imports: [DashboardComponent, TransactionsListComponent, TransferComponent, CreditComponent, AsyncPipe],
+  imports: [DashboardComponent, TransactionsListComponent, TransferComponent, CreditComponent, AsyncPipe, DocumentListComponent],
   templateUrl: './main-panel.component.html',
   styleUrl: './main-panel.component.css'
 })

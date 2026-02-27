@@ -1,15 +1,14 @@
-import { Classificacao, Operation } from "../../../../../server/constants/data.enum";
-import { Transaction } from "../../../../../server/models/db.model";
+import { Operation } from "../../../../../server/constants/operation.enum";
 
 export interface MenuOperation {
   icon: string,
   label: string,
-  operation: Operation,
-  classificacao: Classificacao
+  operation: Operation
 }
 
 export interface ErrorsForm {
   destino: string,
+  descricao: string,
   vencimento: string,
   valor: string
 }

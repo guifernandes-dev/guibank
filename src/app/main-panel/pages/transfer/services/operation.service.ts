@@ -1,49 +1,48 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Classificacao, Operation } from '../../../../../server/constants/data.enum';
+import { Operation } from '../../../../../server/constants/operation.enum';
 import { ErrorsForm, MenuOperation } from '../models/operation.models';
-import { BehaviorSubject, catchError, first, map, Observable, of } from 'rxjs';
+import { first, map, Observable, of } from 'rxjs';
 import { LoginService } from '../../../../core/login.services/login.service';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { APIService } from '../../../../core/api.services/api.service';
-import { Account, Transaction } from '../../../../../server/models/db.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TransactionsService } from '../../transactions-list/services/transactions.service';
+import { Transaction } from '../../../../../server/models/db.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OperationService {
+  private readonly duration = 4000;
+  private snackBar = inject(MatSnackBar);
   private loginService = inject(LoginService);
   private apiService = inject(APIService);
-  private _isExpense = new BehaviorSubject<boolean>(true);
+  private transService = inject(TransactionsService);
   private _operationMenu: MenuOperation[] = [
     {
       icon: 'send_money',
       label: 'PIX',
-      operation: Operation.PIX,
-      classificacao: Classificacao.DESPESA
+      operation: Operation.PIX
     },
     {
       icon: 'savings',
       label: 'DEPÓSITO',
-      operation: Operation.DEPOSITO,
-      classificacao: Classificacao.RECEITA
+      operation: Operation.DEPOSITO
     },
     {
       icon: 'payments',
       label: 'SAQUE',
-      operation: Operation.SAQUE,
-      classificacao: Classificacao.DESPESA
+      operation: Operation.SAQUE
     },
     {
       icon: 'money',
       label: 'DÉBITO',
-      operation: Operation.DEBITO,
-      classificacao: Classificacao.DESPESA
+      operation: Operation.DEBITO
     },
     {
       icon: 'request_quote',
       label: 'PAGAMENTO',
-      operation: Operation.PAGAMENTO,
-      classificacao: Classificacao.DESPESA
+      operation: Operation.PAGAMENTO
     }
   ];
   private currentOp$ = signal<MenuOperation>(this.operationMenu[0]);
@@ -55,11 +54,11 @@ export class OperationService {
     valor: new FormControl<string>('0,00', [this.validatorValor()]),
     tipo: new FormControl<Operation>(Operation.PIX,[Validators.required]),
     pago: new FormControl<boolean>(false),
-    vencimento: new FormControl<Date | null>(null),
-    classificacao: new FormControl<Classificacao>(Classificacao.DESPESA,[Validators.required])
+    vencimento: new FormControl<Date | null>(null)
   });
   private _errors = signal<ErrorsForm>({
     destino: '',
+    descricao: '',
     vencimento: '',
     valor: '',
   });
@@ -93,25 +92,22 @@ export class OperationService {
     this.currentOp$.set(currentOp);
   }
 
-  get isExpense() {
-    return this._isExpense;
-  }
-
-  buildForm({operation, classificacao}: MenuOperation): void {
+  buildForm({operation}: MenuOperation, reset: boolean = false): void {
     const user = this.loginService.user;
     const data = new Date();
-    this._isExpense.next(classificacao === Classificacao.DESPESA);
-    const origem = this._isExpense ? user!.conta : '';
-    const destino = !this._isExpense ? user!.conta : '';
+    const isExpense = operation !== Operation.DEPOSITO;
+    const origem = isExpense ? user!.conta : '';
+    const destino = !isExpense ? user!.conta : '';
     const pago = this.currentOp.operation !== Operation.PAGAMENTO;
     this._operationForm.patchValue({
       origem,
       destino,
       data,
       pago,
-      vencimento: data,
-      tipo: operation,
-      classificacao
+      descricao: reset ? '' : this.operationForm.get('descricao')?.value,
+      valor: reset ? '0,00': this.operationForm.get('valor')?.value,
+      vencimento: operation === Operation.PAGAMENTO ? data : null,
+      tipo: operation
     })
   }
 
@@ -160,12 +156,12 @@ export class OperationService {
 
   validatorValor(): ValidatorFn {
     return (control: AbstractControl<string>): ValidationErrors | null => {
-      const saldoConta = this.loginService.user?.saldo
+      const saldoConta = this.transService.saldo
       const value = control.value;
       if (!value) return null;
-      const number = parseFloat(value.replace('.','').replace(',','.'));
+      const number = this.loginService.formataValorNumero(value);
       
-      if (number > saldoConta!) return { valueUperSaldo: 'Valor maior que o saldo'}
+      if (number > saldoConta! && this.currentOp.operation !== Operation.DEPOSITO) return { valueUperSaldo: 'Valor maior que o saldo'}
       if (number < 0.01) return { invalidValue: 'Valor mínimo R$0,01' }
       return null
     }
@@ -191,5 +187,27 @@ export class OperationService {
       ...errs,
       [key]: mensagem
     }))
+  }
+
+  createTransaction(transaction: Transaction) {
+    this.apiService.postTransaction(transaction)
+      .pipe(first())
+      .subscribe(transaction => {
+        if(!transaction) {
+          this.snackBar.open(
+            'Erro ao salvar operação',
+            'Ok',
+            { duration: this.duration, panelClass: 'snackbar-erro'}
+          );
+        } else {
+          this.loginService.userOp().push(transaction);
+          this.buildForm(this.currentOp,true)
+          this.snackBar.open(
+            'Transação salva com sucesso!',
+            'Ok',
+            { duration: this.duration, panelClass: 'snackbar-sucess'}
+          );
+        }
+      });
   }
 }

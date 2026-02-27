@@ -1,29 +1,89 @@
 {
-  "user": [
+  "users": [
     {
       "id": "6770",
       "nome": "Guilherme Fernandes",
       "email": "guifjj92@gmail.com",
-      "saldo": 1000,
       "senha": "gui!27",
-      "limit": 50000
+      "renda": 10000
     },
     {
       "id": "2ef1",
       "nome": "Cristina Dehon",
       "email": "crisdehon67@gmail.com",
-      "saldo": 0,
       "senha": "va!1012",
-      "limit": 1000000
+      "renda": 25000
     },
     {
       "id": "55f3",
       "nome": "Stella Sousa Melo",
       "email": "stellasouzamelo@outlook.com",
-      "saldo": 0,
       "senha": "Stela@26",
-      "limit": 5000
+      "renda": 2000
+    },
+    {
+      "id": "a4da",
+      "nome": "User Teste",
+      "email": "teste@email.com",
+      "senha": "teste!1",
+      "renda": 500
     }
   ],
-  "transactions": []
+  "transactions": [
+    {
+      "id": "0ad2",
+      "origem": "",
+      "destino": "6770",
+      "data": "2026-02-26T21:42:21.937Z",
+      "descricao": "Caixa Eletrônico",
+      "valor": 1000,
+      "tipo": "deposito",
+      "pago": true,
+      "vencimento": null
+    },
+    {
+      "id": "04c3",
+      "origem": "",
+      "destino": "6770",
+      "data": "2026-02-26T21:46:39.556Z",
+      "descricao": "cheque",
+      "valor": 500,
+      "tipo": "deposito",
+      "pago": true,
+      "vencimento": null
+    },
+    {
+      "id": "77e9",
+      "origem": "6770",
+      "destino": "55f3",
+      "data": "2026-02-26T21:47:35.881Z",
+      "descricao": "Lindinha",
+      "valor": 200,
+      "tipo": "pix",
+      "pago": true,
+      "vencimento": null
+    },
+    {
+      "id": "899b",
+      "origem": "6770",
+      "destino": "",
+      "data": "2026-02-26T22:16:08.170Z",
+      "descricao": "CEMIG",
+      "valor": 100,
+      "tipo": "pagamento",
+      "pago": false,
+      "vencimento": "2026-03-03T03:00:00.000Z"
+    },
+    {
+      "id": "31a3",
+      "origem": "6770",
+      "destino": "",
+      "data": "2026-02-26T22:16:21.729Z",
+      "descricao": "CEMIG",
+      "valor": 100,
+      "tipo": "pagamento",
+      "pago": false,
+      "vencimento": "2026-02-03T03:00:00.000Z"
+    }
+  ]
 }

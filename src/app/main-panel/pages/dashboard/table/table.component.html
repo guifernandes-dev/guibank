@@ -1,0 +1,27 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      @for (key of keys; track $index) {
+        <th scope="col">{{key}}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (obj of data; track $index) {
+      <tr>
+        @for (key of keys; track $index) {
+          @if (key === 'valor') {
+            <td [class]="obj.valor>0 ? 'text-success': 'text-danger'">{{obj[key] | brCurrency}}</td>
+          } @else if (key === 'tipo') {
+            <td>
+              <mat-icon>{{obj[key].icon}}</mat-icon>
+              {{obj[key].label}}
+            </td>
+          } @else {
+            <td>{{obj[key]}}</td>
+          }
+        }
+      </tr>
+    }
+  </tbody>
+</table>

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Account } from '../../../server/models/db.model';
 import { User } from '../models/services.model';
+import { Account, Transaction } from '../../../server/models/db.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,18 +12,29 @@ export class APIService {
   private baseUrl = 'http://localhost:3000';
 
   getUserByAccount(conta: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/user?id=${conta}`)
+    return this.http.get<Account[]>(`${this.baseUrl}/users?id=${conta}`)
   }
 
   getUserByEmail(email: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/user?email=${email}`)
+    return this.http.get<Account[]>(`${this.baseUrl}/users?email=${email}`)
   }
 
   getUserByEmailESenha(email: string, senha: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/user?email=${email}&senha=${senha}`)
+    return this.http.get<Account[]>(`${this.baseUrl}/users?email=${email}&senha=${senha}`)
   }
 
   postUser(user: User): Observable<Account> {
-    return this.http.post<Account>(`${this.baseUrl}/user`,user);
+    return this.http.post<Account>(`${this.baseUrl}/users`,user);
+  }
+
+  postTransaction(transaction: Transaction): Observable<Transaction> {
+    return this.http.post<Transaction>(`${this.baseUrl}/transactions`, transaction);
+  }
+
+  getTransactionsByUserOrigin(conta: string): Observable<Transaction[]> {
+    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?origem=${conta}`);
+  }
+  getTransactionsByUserDestination(conta: string): Observable<Transaction[]> {
+    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino=${conta}`);
   }
 }

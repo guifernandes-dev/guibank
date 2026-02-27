@@ -5,7 +5,7 @@
 >
   <img src="/guiBank.png" alt="GuiBank logo" height="150px"/>
   <h3>{{loginForm ? 'Login' : 'Nova Conta'}}</h3>
-  <div class="w-100 d-flex flex-column justify-content-center align-items-center">
+  <div class="w-100 d-flex flex-column justify-content-center align-items-center gap-2">
     @if (!loginForm) {
       <mat-form-field appearance="outline" class="w-75">
         <mat-label>Nome</mat-label>
@@ -20,6 +20,25 @@
         @if (nome.invalid) {
           <mat-error>{{nomeError()}}</mat-error>
         }
+      </mat-form-field>
+      <mat-form-field
+        appearance="outline"
+        class="w-75"
+        floatLabel="always"
+      >
+        <mat-label>Renda</mat-label>
+        <input
+          matInput
+          type="text"
+          class="input-valor"
+          step="0.01"
+          [formControl]="renda"
+          (input)="formatar($event)"
+          (focus)="cursorend($event)"
+          (click)="cursorend($event)"
+          required
+        />
+        <span matTextPrefix>R$&nbsp;</span>
       </mat-form-field>
     }
     <mat-form-field appearance="outline" class="w-75">

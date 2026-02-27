@@ -6,8 +6,3 @@ export enum Operation {
   CREDITO = 'credito',
   DEBITO = 'debito'
 }
-
-export enum Classificacao {
-  RECEITA = 'receita',
-  DESPESA = 'despesa'
-}
