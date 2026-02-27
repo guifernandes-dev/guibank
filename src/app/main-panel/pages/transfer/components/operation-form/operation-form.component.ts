@@ -5,17 +5,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { OperationService } from '../../services/operation.service';
 import { Operation } from '../../../../../../server/constants/operation.enum';
-import { ErrorsForm, TransAccount } from '../../models/operation.models';
-import { LoginService } from '../../../../../core/login.services/login.service';
+import { ErrorsForm } from '../../models/operation.models';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { MatIconModule } from "@angular/material/icon";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { TransactionsService } from '../../../transactions-list/services/transactions.service';
+import { TransactionsService } from '../../../../../core/transactions.services/transactions.service';
 import { Transaction } from '../../../../../../server/models/db.model';
 import {provideNativeDateAdapter} from '@angular/material/core';
+import { UtilService } from '../../../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-operation-form',
@@ -38,12 +38,9 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 export class OperationFormComponent {
   private readonly operationService = inject(OperationService);
   private readonly transService = inject(TransactionsService);
-  private readonly loginService = inject(LoginService);
-  formataValor = this.loginService.formataValor;
-  filtraData = (d: Date | null): boolean => {
-    const day = (d || new Date()).getDay();
-    return day !== 0 && day !== 6;
-  };
+  private readonly utilService = inject(UtilService);
+  formataValor = this.utilService.formataValor;
+  filtraData = this.utilService.filtraData;
 
   ngOnInit(): void {
     this.operationService.buildForm();
@@ -114,7 +111,7 @@ export class OperationFormComponent {
   }
 
   formatar(event: Event) {
-    const formatado = this.loginService.formataValorInput(event);
+    const formatado = this.utilService.formataValorInput(event);
     this.operationForm.get('valor')?.setValue(formatado);
     this.cursorend(event,formatado)
     this.checkError('valor');
@@ -164,7 +161,7 @@ export class OperationFormComponent {
   }
 
   submit(){
-    const valor = this.loginService.formataValorNumero(
+    const valor = this.utilService.formataValorNumero(
       this.operationForm
         .get('valor')!
         .value!

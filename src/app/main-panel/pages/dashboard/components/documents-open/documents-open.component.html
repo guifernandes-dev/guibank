@@ -1,0 +1,18 @@
+@for (trans of data; track $index) {
+  <div
+    appearance="outlined"
+    [class]="`alert ${trans.classCard} m-0 p-0`"
+  >
+  <mat-card-header>
+    <mat-card-title class="d-flex justify-content-between align-items-center gap-1">
+      <mat-icon>{{trans.tipo.icon}}</mat-icon>
+      {{trans.descricao}}
+    </mat-card-title>
+    <mat-card-subtitle>{{trans.valor | brCurrency}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>Vencimento: {{trans.data}}</mat-card-content>
+  <mat-card-actions>
+    <button mat-button class="btn" (click)="pagar(trans)">Pagar</button>
+  </mat-card-actions>
+</div>
+}

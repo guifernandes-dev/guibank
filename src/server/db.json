@@ -102,11 +102,11 @@
         "nome": "Guilherme Fernandes"
       },
       "destino": null,
-      "data": "2026-02-27T12:59:36.525Z",
+      "data": "2026-02-27T21:31:41.944Z",
       "descricao": "CEMIG",
       "valor": 100,
       "tipo": "pagamento",
-      "pago": false,
+      "pago": true,
       "vencimento": "2026-02-03T03:00:00.000Z"
     },
     {

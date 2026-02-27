@@ -1,4 +1,3 @@
-
 import { CookieService } from 'ngx-cookie-service';
 import { inject, Injectable, signal } from '@angular/core';
 import { APIService } from '../api.services/api.service';
@@ -11,11 +10,11 @@ import { Transaction } from '../../../server/models/db.model';
   providedIn: 'root'
 })
 export class LoginService {
+  private readonly apiService = inject(APIService);
+  private cookieService = inject(CookieService);
+  private snackBar = inject(MatSnackBar);
   private user$ = signal<User | null>(null);
   private userOperations$ = signal<Transaction[]>([]);
-  private snackBar = inject(MatSnackBar);
-  private apiService = inject(APIService);
-  private cookieService = inject(CookieService);
   private readonly duration = 4000;
 
   get user() {
@@ -107,45 +106,6 @@ export class LoginService {
             });
         }
       });
-  }
-
-  formataValorInput (event: Event): string {
-    const input = event.target as HTMLInputElement;
-    const text = input.value;
-    // 1. Retira qualquer coisa que não for número
-    let valor = text.replace(/[^0-9]/g, '');
-    
-    // 2. verifica se estou apagando
-    if (input.value.length === valor.length+1) {
-      //2.1. adiciona o zero à esquerda
-      valor = '0' + valor
-    // 3. verifica se há zero à esquerda e se o botão apertado pelo usuário é um número
-    } else if(valor[0] === '0' && input.value.length-2 !== valor.length) {
-      // 3.1. remove o primeiro zero à esquerda
-      valor = valor.substring(1);
-    }
-    // 4. Adiciona o "." após os dois últimos dígitos
-    valor = valor.slice(0, -2) + '.' + valor.slice(-2);
-    
-    // 5. transforma a string em number
-    let numero = parseFloat(valor);
-    if (isNaN(numero)) {
-      numero = 0;
-    }
-
-    // 6. Formata no padrão brasileiro: #.###,##
-    return this.formataValor(numero);
-  }
-
-  formataValor (valor: number): string {
-    return valor.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-  }
-
-  formataValorNumero(valor: string): number {
-    return parseFloat(valor.replace('.','').replace(',','.'))
   }
 
   registrarUser(user: User) {

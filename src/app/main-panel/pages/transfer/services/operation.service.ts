@@ -1,13 +1,14 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Operation } from '../../../../../server/constants/operation.enum';
-import { ErrorsForm, MenuOperation, TransAccount } from '../models/operation.models';
+import { ErrorsForm, MenuOperation } from '../models/operation.models';
 import { first, map, Observable, of } from 'rxjs';
 import { LoginService } from '../../../../core/login.services/login.service';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { APIService } from '../../../../core/api.services/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TransactionsService } from '../../transactions-list/services/transactions.service';
+import { TransactionsService } from '../../../../core/transactions.services/transactions.service';
 import { Transaction } from '../../../../../server/models/db.model';
+import { UtilService } from '../../../../core/util.services/util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class OperationService {
   private readonly loginService = inject(LoginService);
   private readonly apiService = inject(APIService);
   private readonly transService = inject(TransactionsService);
+  private readonly utilService = inject(UtilService);
   operationMenu: MenuOperation[] = [
     {
       icon: 'send_money',
@@ -142,7 +144,7 @@ export class OperationService {
       const saldoConta = this.transService.saldo
       const value = control.value;
       if (!value) return null;
-      const number = this.loginService.formataValorNumero(value);
+      const number = this.utilService.formataValorNumero(value);
       
       if (number > saldoConta! && this.currentOp$().operation !== Operation.DEPOSITO) return { valueUperSaldo: 'Valor maior que o saldo'}
       if (number < 0.01) return { invalidValue: 'Valor mínimo R$0,01' }

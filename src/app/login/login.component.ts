@@ -8,6 +8,7 @@ import {MatInputModule} from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
 import { LoginService } from '../core/login.services/login.service';
+import { UtilService } from '../core/util.services/util.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,8 @@ import { LoginService } from '../core/login.services/login.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  private loginService = inject(LoginService);
+  private readonly loginService = inject(LoginService);
+  private readonly utilService = inject(UtilService);
   private _loginForm = signal(true);
   readonly nome = new FormControl('', [Validators.required, Validators.minLength(3)]);
   readonly email = new FormControl('', [Validators.required, Validators.email]);
@@ -123,7 +125,7 @@ export class LoginComponent {
   }
 
   formatar(event: Event) {
-    const formatado = this.loginService.formataValorInput(event);
+    const formatado = this.utilService.formataValorInput(event);
 
     // 7. Atualiza o FormControl e coloca o cursor à esquerda
     this.renda.setValue(formatado);
@@ -157,7 +159,7 @@ export class LoginComponent {
       }
     } else {
       const nome = this.nome.value;
-      const renda = this.loginService.formataValorNumero(this.renda.value!);
+      const renda = this.utilService.formataValorNumero(this.renda.value!);
       if (nome && email && senha) {
         this.loginService.criarConta({nome,email,senha,renda});
       }

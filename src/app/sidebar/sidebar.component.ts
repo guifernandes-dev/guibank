@@ -35,6 +35,5 @@ export class SidebarComponent implements OnInit {
   redirectToPage(page: Pages): void {
     this.routerService.setNavigate(page);
     this.currentPage.set(page);
-    console.log(this.historyNav());
   }
 }

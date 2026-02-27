@@ -1,9 +1,9 @@
 @switch (currentPage()) {
   @case (pages.DASHBOARD) {
-    <app-dashboard/>
+    <app-dashboard class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
   }
   @case (pages.STATEMENTS) {
-    <app-transactions-list/>
+    <app-transactions-list class="container"/>
   }
   @case (pages.OPERATIONS) {
     <app-transfer class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>

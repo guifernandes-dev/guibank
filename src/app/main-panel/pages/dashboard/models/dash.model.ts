@@ -7,3 +7,12 @@ export interface TableObj {
   recebedor: TransAccount | null,
   tipo: MenuOperation
 }
+
+export interface CardDocuments extends TableObj {
+  classCard: string,
+  id: string,
+}
+
+export interface ListDocuments extends CardDocuments {
+  pago: boolean;
+}

@@ -1,1 +1,54 @@
-<p>document-list works!</p>
+<div class="row">
+  <div class="col">
+    <h3>Documentos em Aberto</h3>
+    <table class="table" style="max-width: 520px;">
+      <tbody>
+        @for (openDoc of openDocs; track $index) {
+          <tr [className]="`${openDoc.classCard}`">
+            <td
+              style="height: 76.4px;"
+              class="d-flex justify-content-center align-items-center"
+            >
+              <div class="p-1 container-icon">
+                <mat-icon>{{openDoc.tipo.icon}}</mat-icon>
+              </div>
+            </td>
+            <td>
+              <div>{{openDoc.descricao}}</div>
+              <div>Vencimento {{openDoc.data}}</div>
+            </td>
+            <td class="valor">
+              {{openDoc.valor | brCurrency}}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <h3>Documentos Pagos</h3>
+    <table class="table" style="max-width: 520px;">
+      <tbody>
+        @for (closeDoc of closeDocs; track $index) {
+          <tr [className]="`${closeDoc.classCard}`">
+            <td
+              style="height: 76.4px;"
+              class="d-flex justify-content-center align-items-center"
+            >
+              <div class="p-1 container-icon">
+                <mat-icon>{{closeDoc.tipo.icon}}</mat-icon>
+              </div>
+            </td>
+            <td>
+              <div>{{closeDoc.descricao}}</div>
+              <div>Vencimento {{closeDoc.data}}</div>
+            </td>
+            <td class="valor">
+              {{closeDoc.valor | brCurrency}}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

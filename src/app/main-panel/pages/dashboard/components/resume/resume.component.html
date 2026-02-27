@@ -1,0 +1,32 @@
+<div class="d-flex w-100 justify-content-between gap-2 container-resumo">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title class="card-title">SALDO</mat-card-title>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content [class]="`card-resume ${saldo > 0 ? 'text-success' : 'text-danger'}`">
+      {{ saldo | brCurrency}}
+    </mat-card-content>
+  </mat-card>
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title class="card-title">RECEITAS</mat-card-title>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content class="card-resume text-success">
+      {{ receitas | brCurrency}}
+    </mat-card-content>
+  </mat-card>
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title class="card-title">DESPESAS</mat-card-title>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content class="card-resume text-danger">
+      {{ despesas | brCurrency}}
+    </mat-card-content>
+  </mat-card>
+</div>

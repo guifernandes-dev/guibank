@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { LoginService } from '../../../../core/login.services/login.service';
-import { BrCurrencyPipe } from '../../../../pipe/br-currency.pipe';
-import { OperationService } from '../../transfer/services/operation.service';
+import { LoginService } from '../../../../../core/login.services/login.service';
+import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
+import { OperationService } from '../../../transfer/services/operation.service';
 import { MatIconModule } from '@angular/material/icon';
-import { TableObj } from '../models/keys-table.model';
-import { MenuOperation, TransAccount } from '../../transfer/models/operation.models';
-import { Operation } from '../../../../../server/constants/operation.enum';
+import { TableObj } from '../../models/dash.model';
+import { MenuOperation, TransAccount } from '../../../transfer/models/operation.models';
+import { Operation } from '../../../../../../server/constants/operation.enum';
+import { UtilService } from '../../../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-table',
@@ -14,8 +15,9 @@ import { Operation } from '../../../../../server/constants/operation.enum';
   styleUrl: './table.component.css'
 })
 export class TableComponent {
-  private loginService = inject(LoginService);
-  private operationService = inject(OperationService);
+  private readonly loginService = inject(LoginService);
+  private readonly operationService = inject(OperationService);
+  private readonly utilService = inject(UtilService);
 
   get user() {
     return this.loginService.user;
@@ -33,19 +35,10 @@ export class TableComponent {
           ? op.origem
           : op.destino;
         const tipo = this.operationService.operationMenu.find(item => item.operation === op.tipo)!;
-        const dataOpDate = new Date(op.data);
         const dataAtual = new Date().toLocaleDateString();
-        const dataOp = dataOpDate.toLocaleDateString();
-        const dataAnterior = dataOpDate.toLocaleString("pt-BR", {
-          day: '2-digit',
-          month: 'long'
-        })
-        const horaOp = dataOpDate.toLocaleString("pt-BR", {
-          hour: "2-digit",
-          minute: "2-digit"
-        });
+        const {dataOp, horaOp, dataOpExt } = this.utilService.formatarDataHora(op.data);
         const descricao = op.descricao;
-        const data = dataOp === dataAtual ? horaOp : dataAnterior;
+        const data = dataOp === dataAtual ? horaOp : dataOpExt;
         return {data, tipo, recebedor, valor, descricao};
       });
   }
@@ -65,17 +58,4 @@ export class TableComponent {
     }
     return tipo.label
   }
-
-  private formatarDataHora(iso: string) {
-    const d = new Date(iso);
-
-    const data = d.toLocaleDateString("pt-BR");
-    const hora = d.toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
-    return { data, hora };
-  }
-
 }

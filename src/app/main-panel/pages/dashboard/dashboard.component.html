@@ -1,52 +1,14 @@
-<main class="d-flex flex-column gap-4 w-100">
-  <h1>Bem-vindo!</h1>
+<main class="d-flex flex-column gap-4 w-100 max">
   <section>
-    <h3>Documentos em Aberto</h3>
-    <div>
-      
-    </div>
+    <h2>Documentos em Aberto</h2>
+    <app-documents-open class="d-flex overflow-auto max gap-2"/>
   </section>
   <section>
     <h3>Resumo</h3>
-    <div class="d-flex w-100 justify-content-center">
-      <div class="d-flex w-100 justify-content-evenly gap-2 container-resumo">
-        <mat-card appearance="outlined">
-          <mat-card-header>
-            <mat-card-title-group>
-              <mat-card-title class="card-title">SALDO</mat-card-title>
-            </mat-card-title-group>
-          </mat-card-header>
-          <mat-card-content [class]="`card-resume ${saldo > 0 ? 'text-success' : 'text-danger'}`">
-            {{ saldo | brCurrency}}
-          </mat-card-content>
-        </mat-card>
-        <mat-card appearance="outlined">
-          <mat-card-header>
-            <mat-card-title-group>
-              <mat-card-title class="card-title">RECEITAS</mat-card-title>
-            </mat-card-title-group>
-          </mat-card-header>
-          <mat-card-content class="card-resume text-success">
-            {{ receitas | brCurrency}}
-          </mat-card-content>
-        </mat-card>
-        <mat-card appearance="outlined">
-          <mat-card-header>
-            <mat-card-title-group>
-              <mat-card-title class="card-title">DESPESAS</mat-card-title>
-            </mat-card-title-group>
-          </mat-card-header>
-          <mat-card-content class="card-resume text-danger">
-            {{ despesas | brCurrency}}
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
+    <app-resume class="d-flex w-100 justify-content-center"/>
   </section>
   <section>
-    <h2>Últimas Transações</h2>
-    <div class="d-flex w-100 justify-content-center">
-      <app-table/>
-    </div>
+    <h3>Últimas Transações</h3>
+    <app-table class="d-flex w-100 justify-content-center"/>
   </section>
 </main>
