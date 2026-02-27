@@ -1,0 +1,27 @@
+.container-icon{
+  border-radius: 100%;
+  border: 3px solid var(--cinza-escuro);
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.valor {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.tipo {
+  font-weight: 500;
+}
+
+.descricao {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.recebedor {
+  font-size: 12px;
+}

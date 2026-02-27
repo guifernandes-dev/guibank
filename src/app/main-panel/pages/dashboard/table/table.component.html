@@ -1,26 +1,34 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      @for (key of keys; track $index) {
-        <th scope="col">{{key}}</th>
-      }
-    </tr>
-  </thead>
+<table class="table" style="max-width: 520px;">
   <tbody>
-    @for (obj of data; track $index) {
+    @for (trans of data; track $index) {
       <tr>
-        @for (key of keys; track $index) {
-          @if (key === 'valor') {
-            <td [class]="obj.valor>0 ? 'text-success': 'text-danger'">{{obj[key] | brCurrency}}</td>
-          } @else if (key === 'tipo') {
-            <td>
-              <mat-icon>{{obj[key].icon}}</mat-icon>
-              {{obj[key].label}}
-            </td>
-          } @else {
-            <td>{{obj[key]}}</td>
+        <td
+          style="width: 66px; height: 76.4px;"
+          class="d-flex justify-content-center align-items-center"
+        >
+          <div class="p-1 container-icon">
+            <mat-icon>{{trans.tipo.icon}}</mat-icon>
+          </div>
+        </td>
+        <td>
+          <div class="tipo">
+            {{`${getTipo(trans)}`}}
+          </div>
+          @if(trans.descricao) {
+            <div class="descricao">
+              {{ trans.descricao }}
+            </div>
           }
-        }
+          <div class="recebedor">
+            {{getRecebedor(trans.recebedor)}}
+          </div>
+        </td>
+        <td style="width: 150px; text-align: end;">
+          <div [class]="`${trans.valor>0 ? 'text-success': 'text-danger'} valor`">
+            {{trans.valor | brCurrency}}
+          </div>
+          <div>{{trans.data}}</div>
+        </td>
       </tr>
     }
   </tbody>

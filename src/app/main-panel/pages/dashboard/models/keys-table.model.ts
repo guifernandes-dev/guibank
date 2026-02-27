@@ -1,8 +1,9 @@
-import { MenuOperation } from "../../transfer/models/operation.models";
+import { MenuOperation, TransAccount } from "../../transfer/models/operation.models";
 
-export interface KeysTable {
+export interface TableObj {
   valor: number,
   data: string,
-  recebedor: string,
+  descricao: string,
+  recebedor: TransAccount | null,
   tipo: MenuOperation
 }

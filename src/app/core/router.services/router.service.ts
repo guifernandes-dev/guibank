@@ -60,8 +60,11 @@ export class RouterService {
     const storagePages = localStorage.getItem('lastpage')
     if (storagePages) {
       const {conta} = this.loginService.user()!;
-      const userLastPage = JSON.parse(storagePages)[conta];
-      this.currentPage$.set(userLastPage);
+      const pages = JSON.parse(storagePages);
+      const userLastPage = pages[conta]
+      if(userLastPage) {
+        this.currentPage$.set(userLastPage);
+      }
     }
   }
 
