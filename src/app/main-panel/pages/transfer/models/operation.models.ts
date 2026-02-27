@@ -7,8 +7,15 @@ export interface MenuOperation {
 }
 
 export interface ErrorsForm {
-  destino: string,
+  conta: string,
+  email: string,
   descricao: string,
   vencimento: string,
   valor: string
+}
+
+export interface TransAccount {
+  conta: string,
+  email: string,
+  nome: string,
 }

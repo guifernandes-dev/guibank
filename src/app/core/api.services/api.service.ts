@@ -23,7 +23,7 @@ export class APIService {
     return this.http.get<Account[]>(`${this.baseUrl}/users?email=${email}&senha=${senha}`)
   }
 
-  postUser(user: User): Observable<Account> {
+  postUser(user: Omit<User,'conta'>): Observable<Account> {
     return this.http.post<Account>(`${this.baseUrl}/users`,user);
   }
 

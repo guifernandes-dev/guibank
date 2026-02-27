@@ -17,15 +17,23 @@ export class OperationTypeComponent {
   get operationItems() {
     return this.operationService.operationMenu;
   }
+  
+  get destinoNumero() {
+    return this.operationService.tipoConta.value === 'num';
+  }
+
 
   disabledBtn(operation: Operation): boolean {
-    return this.operationService.currentOp.operation === operation;
+    return this.operationService.currentOp$().operation === operation;
   }
 
   changeOperation(operation: MenuOperation) {
-    this.operationService.currentOp = operation;
-    this.operationService.buildForm(operation);
-    this.operationService.updateErros('destino');
+    this.operationService.currentOp$.set(operation);
+    this.operationService.operationForm.get('destino')?.get('conta')?.reset('');
+    this.operationService.operationForm.get('destino')?.get('email')?.reset('');
+    this.operationService.operationForm.get('destino')?.get('nome')?.reset('');
+    this.operationService.buildForm();
+    this.operationService.updateErros(this.destinoNumero ? 'conta' : 'email');
     this.operationService.updateErros('valor');
     this.operationService.updateErros('vencimento');
   }

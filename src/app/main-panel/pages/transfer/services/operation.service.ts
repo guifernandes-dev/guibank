@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Operation } from '../../../../../server/constants/operation.enum';
-import { ErrorsForm, MenuOperation } from '../models/operation.models';
+import { ErrorsForm, MenuOperation, TransAccount } from '../models/operation.models';
 import { first, map, Observable, of } from 'rxjs';
 import { LoginService } from '../../../../core/login.services/login.service';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
@@ -15,10 +15,10 @@ import { Transaction } from '../../../../../server/models/db.model';
 export class OperationService {
   private readonly duration = 4000;
   private snackBar = inject(MatSnackBar);
-  private loginService = inject(LoginService);
-  private apiService = inject(APIService);
-  private transService = inject(TransactionsService);
-  private _operationMenu: MenuOperation[] = [
+  private readonly loginService = inject(LoginService);
+  private readonly apiService = inject(APIService);
+  private readonly transService = inject(TransactionsService);
+  operationMenu: MenuOperation[] = [
     {
       icon: 'send_money',
       label: 'PIX',
@@ -45,10 +45,18 @@ export class OperationService {
       operation: Operation.PAGAMENTO
     }
   ];
-  private currentOp$ = signal<MenuOperation>(this.operationMenu[0]);
-  private _operationForm = new FormGroup({
-    origem: new FormControl<string>(''),
-    destino: new FormControl<string>('',{asyncValidators: this.validatorDestino()}),
+  currentOp$ = signal<MenuOperation>(this.operationMenu[0]);
+  operationForm = new FormGroup({
+    origem: new FormGroup({
+      conta: new FormControl<string>(''),
+      email: new FormControl<string>(''),
+      nome: new FormControl<string>('')
+    }),
+    destino: new FormGroup({
+      conta: new FormControl<string>('', {asyncValidators: this.validatorDestino()}),
+      email: new FormControl<string>('', {asyncValidators: this.validatorDestino()}),
+      nome: new FormControl<string>('')
+    }),
     data: new FormControl<Date>(new Date(),[Validators.required]),
     descricao: new FormControl<string>(''),
     valor: new FormControl<string>('0,00', [this.validatorValor()]),
@@ -56,73 +64,46 @@ export class OperationService {
     pago: new FormControl<boolean>(false),
     vencimento: new FormControl<Date | null>(null)
   });
-  private _errors = signal<ErrorsForm>({
-    destino: '',
+  errorsForm$ = signal<ErrorsForm>({
+    conta: '',
+    email: '',
     descricao: '',
     vencimento: '',
     valor: '',
   });
-  private _tipoConta = new FormControl<string>('text');
-  private userDestino$ = signal<string | null>(null);
+  tipoConta = new FormControl<string>('num');
 
-  get userDestino() {
-    return this.userDestino$();
-  }
-
-  get errorsForm() {
-    return this._errors();
-  }
-  get tipoConta() {
-    return this._tipoConta;
-  }
-
-  get operationForm() {
-    return this._operationForm;
-  }
-  
-  get operationMenu() {
-    return this._operationMenu;
-  }
-
-  get currentOp(): MenuOperation {
-    return this.currentOp$();
-  }
-
-  set currentOp(currentOp: MenuOperation) {
-    this.currentOp$.set(currentOp);
-  }
-
-  buildForm({operation}: MenuOperation, reset: boolean = false): void {
-    const user = this.loginService.user;
+  buildForm(reset: boolean = false): void {
+    const operation = this.currentOp$().operation
     const data = new Date();
     const isExpense = operation !== Operation.DEPOSITO;
-    const origem = isExpense ? user!.conta : '';
-    const destino = !isExpense ? user!.conta : '';
-    const pago = this.currentOp.operation !== Operation.PAGAMENTO;
-    this._operationForm.patchValue({
-      origem,
-      destino,
+    const {nome, conta, email} = this.loginService.user()!;
+    const user = {conta, email, nome};
+    const INITIAL_FORM = {
+      origem: isExpense ? user : {conta: '', email: '', nome: ''},
+      destino: !isExpense ? user : {conta: '', email: '', nome: ''},
       data,
-      pago,
       descricao: reset ? '' : this.operationForm.get('descricao')?.value,
       valor: reset ? '0,00': this.operationForm.get('valor')?.value,
+      tipo: operation,
+      pago: operation !== Operation.PAGAMENTO,
       vencimento: operation === Operation.PAGAMENTO ? data : null,
-      tipo: operation
-    })
+    };
+    this.operationForm.reset(INITIAL_FORM);
   }
 
   validatorDestino(): AsyncValidatorFn  {
     return (control: AbstractControl<string>): Observable<ValidationErrors | null> => {
       const value = control.value;
-      const user = this.loginService.user;
+      const user = this.loginService.user();
 
       if(user?.conta === value || user?.email === value) {
-        return of({ accountLogged: 'Não pode ser o próprio usuário.'})
+        return of({ accountLogged: 'Não pode ser o próprio usuário'})
       }
       if (!value) {
         return of(null);
       }
-      if (this.tipoConta?.value === 'text') {
+      if (this.tipoConta?.value === 'num') {
         if (value.length !== 4) return of({minlength: 'Número de Conta deve ter 4 dígitos'})
         return this.apiService
           .getUserByAccount(value)
@@ -130,7 +111,8 @@ export class OperationService {
             first(),
             map(contas => {
               if(contas.length) {
-                this.userDestino$.set(contas[0].nome)
+                const {nome, id, email} = contas[0];
+                this.operationForm.patchValue({destino: {nome, conta: id, email}});
                 return null;
               }
               return { userNotExist: 'Usuário não encontrado'}
@@ -145,7 +127,8 @@ export class OperationService {
           first(),
           map(contas => {        
             if(contas.length) {
-              this.userDestino$.set(contas[0].nome)
+              const {nome, id, email} = contas[0];
+              this.operationForm.patchValue({destino: {nome, conta: id, email}});
               return null;
             }
             return { userNotExist: 'Usuário não encontrado'}
@@ -161,7 +144,7 @@ export class OperationService {
       if (!value) return null;
       const number = this.loginService.formataValorNumero(value);
       
-      if (number > saldoConta! && this.currentOp.operation !== Operation.DEPOSITO) return { valueUperSaldo: 'Valor maior que o saldo'}
+      if (number > saldoConta! && this.currentOp$().operation !== Operation.DEPOSITO) return { valueUperSaldo: 'Valor maior que o saldo'}
       if (number < 0.01) return { invalidValue: 'Valor mínimo R$0,01' }
       return null
     }
@@ -180,10 +163,12 @@ export class OperationService {
         mensagem = ''
         break;
       default:
-        mensagem = this.operationForm.get(key)?.getError(code)
+        mensagem = key === 'conta' || key === 'email'
+          ? this.operationForm.get('destino')?.get(key)?.getError(code)
+          : this.operationForm.get(key)?.getError(code);
         break;
     }
-    this._errors.update(errs => ({
+    this.errorsForm$.update(errs => ({
       ...errs,
       [key]: mensagem
     }))
@@ -201,7 +186,7 @@ export class OperationService {
           );
         } else {
           this.loginService.userOp().push(transaction);
-          this.buildForm(this.currentOp,true)
+          this.buildForm(this.currentOp$().operation !== Operation.PAGAMENTO);
           this.snackBar.open(
             'Transação salva com sucesso!',
             'Ok',

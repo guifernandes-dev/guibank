@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { OperationService } from '../../services/operation.service';
 import { Operation } from '../../../../../../server/constants/operation.enum';
-import { ErrorsForm } from '../../models/operation.models';
+import { ErrorsForm, TransAccount } from '../../models/operation.models';
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { MatIconModule } from "@angular/material/icon";
@@ -36,10 +36,9 @@ import {provideNativeDateAdapter} from '@angular/material/core';
   styleUrl: './operation-form.component.css'
 })
 export class OperationFormComponent {
-  private operationService = inject(OperationService);
-  private transService = inject(TransactionsService);
-  private loginService = inject(LoginService);
-  private _operationForm = this.operationService.operationForm;
+  private readonly operationService = inject(OperationService);
+  private readonly transService = inject(TransactionsService);
+  private readonly loginService = inject(LoginService);
   formataValor = this.loginService.formataValor;
   filtraData = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
@@ -47,14 +46,10 @@ export class OperationFormComponent {
   };
 
   ngOnInit(): void {
-    this.operationService.buildForm(this.currentOp);
-    this.checkError('destino');
-    this.checkError('destino');
+    this.operationService.buildForm();
+    this.checkError(this.destinoNumero ? 'conta' : 'email');
+    this.checkError(this.destinoNumero ? 'conta' : 'email');
     this.checkError('vencimento');
-  }
-
-  get userDestino() {
-    return this.operationService.userDestino
   }
 
   get saldo() {
@@ -62,7 +57,7 @@ export class OperationFormComponent {
   }
 
   get operationForm() {
-    return this._operationForm;
+    return this.operationService.operationForm;
   }
 
   get operation() {
@@ -70,7 +65,11 @@ export class OperationFormComponent {
   }
 
   get tipoConta() {
-    return this.operationService.tipoConta;
+    return this.operationService.tipoConta
+  }
+
+  get destinoNumero() {
+    return this.tipoConta.value === 'num';
   }
 
   get operationItems() {
@@ -78,20 +77,35 @@ export class OperationFormComponent {
   }
 
   get currentOp() {
-    return this.operationService.currentOp;
+    return this.operationService.currentOp$;
   }
 
-  get mensagemErro() {
-    return this.operationService.errorsForm;
+  get errorsForm() {
+    return this.operationService.errorsForm$;
+  }
+
+  get destino() {
+    return this.operationForm.get('destino')
+  }
+
+  get origem() {
+    return this.operationForm.get('origem')
   }
 
   resetDestino() {
-    this.operationForm.get('destino')?.setValue('');
+    this.destino?.get('nome')?.reset('');
+    this.destino?.get('email')?.reset('');
+    this.destino?.get('conta')?.reset('');
+    this.errorsForm.update( erros => ({
+      ...erros,
+      conta: '',
+      email: '',
+    }))
   }
 
 
-  checkError(key: keyof ErrorsForm) {
-    const errors = this.operationForm.get(key)?.errors;
+  checkError(key: keyof ErrorsForm, destino: boolean = false) {
+    const errors = destino ? this.operationForm.get('destino')?.get(key)?.errors : this.operationForm.get(key)?.errors;
     if(!errors) {
       this.operationService.updateErros(key);
     } else {
@@ -128,9 +142,9 @@ export class OperationFormComponent {
 
   disabledBtn(): boolean {
     let disabled = false;
-    switch (this.currentOp.operation) {
+    switch (this.currentOp().operation) {
       case Operation.PIX:
-        disabled = !this.operationForm.get('destino')?.value?.length;
+        disabled = !this.destino?.get('conta')?.value?.length;
         break;
       case Operation.PAGAMENTO:
         disabled = !this.operationForm.get('vencimento')?.value;
@@ -140,7 +154,7 @@ export class OperationFormComponent {
     if (this.operationForm.get('valor')?.value === '0,00') {
       disabled = true;
     }
-    const errors = this.operationService.errorsForm;
+    const errors = this.errorsForm();
     Object.values(errors).forEach(mensagem => {
       if (mensagem) {
         disabled = true;
@@ -150,16 +164,22 @@ export class OperationFormComponent {
   }
 
   submit(){
+    const valor = this.loginService.formataValorNumero(
+      this.operationForm
+        .get('valor')!
+        .value!
+    );
+    const isExpense = this.currentOp().operation !== Operation.DEPOSITO;
+    const isPix = this.currentOp().operation === Operation.PIX;
+    const origem = isExpense ? this.origem?.value : null;
+    const destino = !isExpense || isPix ? this.destino?.value : null;
     const transaction = {
       ...this.operationForm.value,
-      valor: this.loginService.formataValorNumero(
-        this.operationForm
-          .get('valor')!
-          .value!
-      )
+      data: new Date(),
+      origem,
+      destino,
+      valor
     } as Transaction;
-    console.log(transaction);
-    
     this.operationService.createTransaction(transaction);
   }
 }

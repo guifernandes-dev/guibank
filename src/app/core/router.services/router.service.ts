@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RouterService {
-  private currentPage$ = new BehaviorSubject<Pages>(Pages.DASHBOARD);
+  private currentPage$ = new BehaviorSubject<Pages>(Pages.OPERATIONS);
   private _menuItems: MenuItem[] = [
     {
       label: "Home",

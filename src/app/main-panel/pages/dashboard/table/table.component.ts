@@ -21,9 +21,9 @@ export class TableComponent {
       .filter(op => op.pago)
       .slice(-4)
       .map((op): KeysTable  => {
-        const userConta = this.loginService.user?.conta;
-        const valor = op.valor * (op.origem === userConta ? -1 : 1);
-        const recebedor = op.destino !== userConta ? op.destino : '';
+        const userConta = this.loginService.user()?.conta;
+        const valor = op.valor * (op.origem?.conta === userConta ? -1 : 1);
+        const recebedor = op.destino?.conta !== userConta ? op.destino?.nome || '' : '';
         const tipo = this.operationService.operationMenu.find(item => item.operation === op.tipo)!;
         const data = new Date(op.data).toLocaleString("pt-BR", {
           day: "2-digit",

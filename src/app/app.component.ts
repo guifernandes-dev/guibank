@@ -18,7 +18,7 @@ import { AsyncPipe } from '@angular/common';
 export class AppComponent implements OnInit {
   private loginService = inject(LoginService);
 
-  get user(): User | null {
+  get user() {
     return this.loginService.user;
   }
 

@@ -18,8 +18,8 @@ export class LoginService {
   private cookieService = inject(CookieService);
   private readonly duration = 4000;
 
-  get user(): User | null {
-    return this.user$();
+  get user() {
+    return this.user$;
   }
 
   get userOp() {
@@ -29,12 +29,12 @@ export class LoginService {
   setUserOp(): void {
     if(this.userOp.length) return;
     this.apiService
-      .getTransactionsByUserOrigin(this.user?.conta!)
+      .getTransactionsByUserOrigin(this.user()?.conta!)
       .pipe(first())
       .subscribe(operations => {
         this.userOperations$.set([...this.userOperations$(),...operations]);
         this.apiService
-          .getTransactionsByUserDestination(this.user?.conta!)
+          .getTransactionsByUserDestination(this.user()?.conta!)
           .pipe(first())
           .subscribe(operations => {
             this.userOperations$.set([...this.userOperations$(),...operations]);
@@ -43,7 +43,7 @@ export class LoginService {
   }
 
   searchUserLogged() {
-    if(!this.user) {
+    if(!this.user()) {
       const userCookie: string = this.cookieService.get('user');
       if(userCookie) {
         this.user$.set(JSON.parse(userCookie));
@@ -82,7 +82,7 @@ export class LoginService {
     this.userOperations$.set([]);
   }
 
-  criarConta(newWuser: User) {
+  criarConta(newWuser: Omit<User,'conta'>) {
     this.apiService
       .getUserByEmail(newWuser.email)
       .pipe(first())

@@ -1,3 +1,4 @@
+import { TransAccount } from "../../app/main-panel/pages/transfer/models/operation.models"
 import { Operation } from "../constants/operation.enum"
 
 export interface Account {
@@ -11,8 +12,8 @@ export interface Account {
 
 export interface Transaction {
   id?: string,
-  origem: string,
-  destino: string,
+  origem: TransAccount | null,
+  destino: TransAccount | null,
   data: Date,
   descricao: string,
   valor: number,

@@ -9,9 +9,9 @@ export class TransactionsService {
 
   get saldos(): {rec: number, desp: number} {
     return this.loginService.userOp().reduce((saldo,trans)=>{
-      if (trans.destino === this.loginService.user?.conta && trans.pago) {
+      if (trans.destino?.conta === this.loginService.user()?.conta && trans.pago) {
         return {...saldo, rec: saldo.rec+trans.valor }
-      } else if (trans.origem === this.loginService.user?.conta && trans.pago) {
+      } else if (trans.origem?.conta === this.loginService.user()?.conta && trans.pago) {
         return {...saldo, desp: saldo.desp+trans.valor }
       }
       return saldo

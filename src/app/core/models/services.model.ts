@@ -7,7 +7,7 @@ export interface MenuItem {
 }
 
 export interface User {
-  conta?: string,
+  conta: string,
   nome: string,
   email: string,
   renda: number,
