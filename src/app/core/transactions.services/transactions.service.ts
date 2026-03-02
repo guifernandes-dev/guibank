@@ -6,6 +6,7 @@ import { DialogPayComponent } from '../../shared/dialog-pay-document/dialog-pay-
 import { first } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Transaction } from '../../../server/models/db.model';
+import { DialogDeleteComponent } from '../../shared/dialog-delete/dialog-delete.component';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +63,28 @@ export class TransactionsService {
               'Ok',
               { duration: this.duration, panelClass: 'snackbar-sucess'}
             );
+          });
+      }
+    });
+  }
+
+  deleteTrans(trans: Transaction) {
+    const dialogRef = this.dialog.open(DialogDeleteComponent, {
+      data: trans,
+    });
+
+    dialogRef.afterClosed().subscribe((resp: { id: string}) => {
+      if (resp) {
+        const {id} = resp;
+        this.apiService
+          .deleteTransactionById(id)
+          .pipe(first())
+          .subscribe(trans => {
+            this.loginService.userOp.update(userOps => {
+              const opIndex = userOps.findIndex(op => op.id === id);
+              delete userOps[opIndex];
+              return userOps;
+            });
           });
       }
     });

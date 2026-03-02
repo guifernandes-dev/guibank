@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { first, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from '../models/services.model';
 import { Account, Transaction } from '../../../server/models/db.model';
 
@@ -40,5 +40,9 @@ export class APIService {
 
   patchTransactionById(id: string, transaction: Partial<Transaction>): Observable<Transaction> {
     return this.http.patch<Transaction>(`${this.baseUrl}/transactions/${id}`, transaction);
+  }
+
+  deleteTransactionById(id: string): Observable<Transaction> {
+    return this.http.delete<Transaction>(`${this.baseUrl}/transactions/${id}`);
   }
 }

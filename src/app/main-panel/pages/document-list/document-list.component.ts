@@ -41,4 +41,8 @@ export class DocumentListComponent {
   pagar(trans: Transaction) {
     this.transService.patchTrans(trans);
   }
+
+  deletar(trans: Transaction) {
+    this.transService.deleteTrans(trans);
+  }
 }

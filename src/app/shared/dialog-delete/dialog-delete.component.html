@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>DELETAR</h2>
+<mat-dialog-content>
+  <p>Deseja realmente deletar o documento {{trans.descricao}}?</p>
+  <h4>{{trans.valor | brCurrency}}</h4>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="deletar()" cdkFocusInitial>DELETAR</button>
+  <button mat-button (click)="fechar()">Cancelar</button>
+</mat-dialog-actions>

@@ -1,11 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginService } from '../../../../../core/login.services/login.service';
-import { OperationService } from '../../../transfer/services/operation.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
-import { UtilService } from '../../../../../core/util.services/util.service';
 import { TransactionsService } from '../../../../../core/transactions.services/transactions.service';
 import { Transaction } from '../../../../../../server/models/db.model';
 import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';
@@ -21,8 +19,6 @@ import { AlertClassPipe } from '../../../../../pipe/alert-class.pipe';
 })
 export class DocumentsOpenComponent {
   private readonly loginService = inject(LoginService);
-  private readonly operationService = inject(OperationService);
-  private readonly utilService = inject(UtilService);
   private readonly transService = inject(TransactionsService);
   
   get dateFormats() {
@@ -47,6 +43,4 @@ export class DocumentsOpenComponent {
   pagar(trans: Transaction): void {
     this.transService.patchTrans(trans);
   }
-
-  
 }
