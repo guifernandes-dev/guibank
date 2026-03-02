@@ -1,1 +1,48 @@
-<p>transactions-list works!</p>
+<main class="d-flex flex-column gap-1 w-100 max">
+  <h3>Extrato</h3>
+  <table class="table">
+    @for (ops of operations; track $index) {
+      <thead>
+        <tr>
+          <th colspan="3" class="header-table">
+            {{ops.data | dateTrans : dateFormats.HEAD_TRANS_LIST}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (trans of ops.dados; track $index) {
+          <tr>
+            <td style="width: 60px;">
+              <div class="p-1 container-icon">
+                <mat-icon>{{(trans | tipoTrans).icon}}</mat-icon>
+              </div>
+            </td>
+            <td>
+            <div class="tipo">
+              {{(trans | tipoTrans).label}}
+            </div>
+            @if(trans.descricao) {
+              <div class="descricao">
+                {{ trans.descricao }}
+              </div>
+            }
+            <div class="recebedor">
+              {{trans | recebedor}}
+            </div>
+            <td style="width: 150px; text-align: end;">
+              <div [class]="`${
+                trans.origem?.conta !== user()?.conta
+                  ? 'text-success'
+                  : 'text-danger'
+                } valor`">
+                {{trans.valor | brCurrency : trans.origem?.conta === user()?.conta}}
+              </div>
+              <div>{{trans.data | dateTrans : dateFormats.TRANS_LIST}}</div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    }
+  </table>
+</main>
+

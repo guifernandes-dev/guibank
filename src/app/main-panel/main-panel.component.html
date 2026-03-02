@@ -3,16 +3,16 @@
     <app-dashboard class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
   }
   @case (pages.STATEMENTS) {
-    <app-transactions-list class="container"/>
+    <app-transactions-list class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
+  }
+  @case (pages.DOCUMENTS) {
+    <app-document-list class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
   }
   @case (pages.OPERATIONS) {
     <app-transfer class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
   }
   @case (pages.CREDIT) {
     <app-credit/>
-  }
-  @case (pages.DOCUMENTS) {
-    <app-document-list/>
   }
   @default {
     <p>404 - NOT FOUND</p>

@@ -2,10 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { LoginService } from '../login.services/login.service';
 import { APIService } from '../api.services/api.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CardDocuments } from '../../main-panel/pages/dashboard/models/dash.model';
 import { DialogPayComponent } from '../../shared/dialog-pay-document/dialog-pay-document.component';
 import { first } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Transaction } from '../../../server/models/db.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +40,7 @@ export class TransactionsService {
     return this.saldos.desp;
   }
 
-  patchTrans(trans: CardDocuments) {
+  patchTrans(trans: Partial<Transaction>) {
     const dialogRef = this.dialog.open(DialogPayComponent, {
       data: trans,
     });

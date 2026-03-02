@@ -2,17 +2,14 @@
   <tbody>
     @for (trans of data; track $index) {
       <tr>
-        <td
-          style="height: 76.4px;"
-          class="d-flex justify-content-center align-items-center"
-        >
+        <td style="width: 60px;">
           <div class="p-1 container-icon">
-            <mat-icon>{{trans.tipo.icon}}</mat-icon>
+            <mat-icon>{{(trans | tipoTrans).icon}}</mat-icon>
           </div>
         </td>
         <td>
           <div class="tipo">
-            {{`${getTipo(trans)}`}}
+            {{(trans | tipoTrans).label}}
           </div>
           @if(trans.descricao) {
             <div class="descricao">
@@ -20,14 +17,18 @@
             </div>
           }
           <div class="recebedor">
-            {{getRecebedor(trans.recebedor)}}
+            {{trans | recebedor}}
           </div>
         </td>
         <td style="width: 150px; text-align: end;">
-          <div [class]="`${trans.valor>0 ? 'text-success': 'text-danger'} valor`">
-            {{trans.valor | brCurrency}}
+          <div [class]="`${
+            trans.origem?.conta !== user()?.conta
+              ? 'text-success'
+              : 'text-danger'
+            } valor`">
+            {{trans.valor | brCurrency : trans.origem?.conta === user()?.conta}}
           </div>
-          <div>{{trans.data}}</div>
+          <div>{{trans.data | dateTrans : dateFormats.RESUME_TRANS}}</div>
         </td>
       </tr>
     }

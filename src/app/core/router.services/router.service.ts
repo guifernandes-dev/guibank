@@ -24,7 +24,7 @@ export class RouterService {
       page: Pages.STATEMENTS,
     },
     {
-      label: "Boletos",
+      label: "Documentos",
       icon: "request_quote",
       page: Pages.DOCUMENTS,
     },

@@ -31,12 +31,26 @@ export class LoginService {
       .getTransactionsByUserOrigin(this.user()?.conta!)
       .pipe(first())
       .subscribe(operations => {
-        this.userOperations$.set([...this.userOperations$(),...operations]);
+        this.userOperations$.set([
+          ...this.userOperations$(),
+          ...operations.map(op => ({
+            ...op,
+            data: new Date(op.data),
+            vencimento: op.vencimento ? new Date(op.vencimento) : null,
+          }))
+        ]);
         this.apiService
           .getTransactionsByUserDestination(this.user()?.conta!)
           .pipe(first())
           .subscribe(operations => {
-            this.userOperations$.set([...this.userOperations$(),...operations]);
+            this.userOperations$.set([
+              ...this.userOperations$(),
+              ...operations.map(op => ({
+                ...op,
+                data: new Date(op.data),
+                vencimento: op.vencimento ? new Date(op.vencimento) : null,
+              }))
+            ]);
           });
       });
   }

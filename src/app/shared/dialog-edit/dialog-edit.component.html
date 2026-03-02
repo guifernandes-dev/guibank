@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>PAGAR</h2>
+<mat-dialog-content>
+  <p>Deseja realmente pagar {{trans.descricao}}?</p>
+  <h4>{{trans.valor | brCurrency}}</h4>
+</mat-dialog-content>
+<!-- <mat-form-field appearance="outline" class="w-75 mt-2 mx-auto" floatLabel="always" [formGroup]="form">
+  <mat-label>Data de Pagamento</mat-label>
+  <input
+    matInput
+    [matDatepickerFilter]="filtraData"
+    [matDatepicker]="picker"
+    formControlName="data"
+    (dateInput)="checkError()"
+    (dateChange)="checkError()"
+    (blur)="checkError()"
+  />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+  @if (this.form.get('data')?.invalid) {
+    <mat-error>{{erroMessage()}}</mat-error>
+  }
+</mat-form-field> -->
+<mat-dialog-actions>
+  <button mat-button (click)="pagar()" cdkFocusInitial>PAGAR AGORA</button>
+  <button mat-button (click)="fechar()">Cancelar</button>
+</mat-dialog-actions>

@@ -11,6 +11,7 @@
 .valor {
   font-weight: 700;
   font-size: 18px;
+  width: 140px;
 }
 
 .tipo {
@@ -24,4 +25,8 @@
 
 .recebedor {
   font-size: 12px;
+}
+
+.max {
+  max-width: 800px;
 }

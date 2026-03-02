@@ -4,42 +4,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UtilService {
-  formatarDataHora(iso: string | Date) {
-    let data: Date;
-    const LOCALE = "pt-BR";
-    if (typeof iso === 'string') {
-      data = new Date(iso);
-    } else {
-      data = iso;
-    }
-    const dataOp = data.toLocaleDateString(LOCALE);
-    const dataOpExt = data.toLocaleString(LOCALE, {
-          day: '2-digit',
-          month: 'long'
-        })
-    const horaOp = data.toLocaleTimeString(LOCALE, {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
-    const dataOpShort = data.toLocaleString(LOCALE, {
-      day: '2-digit',
-      month: '2-digit'
-    })
-
-    const dataOpShortYear = data.toLocaleString(LOCALE, {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    })
-
-    return { dataOp, horaOp, dataOpExt, dataOpShort, dataOpShortYear };
-  }
-
-  normalizeData(data: Date): Date {
-    return new Date(data.getFullYear(), data.getMonth(), data.getDay());
-  }
-
   formataValorInput (event: Event): string {
     const input = event.target as HTMLInputElement;
     const text = input.value;
@@ -83,21 +47,4 @@ export class UtilService {
     const day = (date || new Date()).getDay();
     return day !== 0 && day !== 6;
   };
-
-  filtraDataPG = (date: Date | null): boolean => {
-    const day = (date || new Date()).getDay();
-    const todayTime = new Date().getTime();
-    const dateTime = (date || new Date()).getTime();
-    return day !== 0 && day !== 6 && dateTime <= todayTime;
-  };
-
-  alertClass(data: Date, pago?: boolean, prefix: string = 'alert'): string {
-    const hoje = new Date();
-    const hojeTime = this.normalizeData(hoje).getTime();
-    const vencimento = this.normalizeData(data).getTime();
-    if(pago) return `${prefix}-secondary`;
-    if(hojeTime > vencimento) return `${prefix}-danger`;
-    if(hojeTime < vencimento) return `${prefix}-secondary`;
-    return `${prefix}-warning`;
-  }
 }

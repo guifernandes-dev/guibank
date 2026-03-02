@@ -1,54 +1,52 @@
-<div class="row">
-  <div class="col">
-    <h3>Documentos em Aberto</h3>
-    <table class="table" style="max-width: 520px;">
-      <tbody>
-        @for (openDoc of openDocs; track $index) {
-          <tr [className]="`${openDoc.classCard}`">
-            <td
-              style="height: 76.4px;"
-              class="d-flex justify-content-center align-items-center"
-            >
-              <div class="p-1 container-icon">
-                <mat-icon>{{openDoc.tipo.icon}}</mat-icon>
-              </div>
-            </td>
-            <td>
-              <div>{{openDoc.descricao}}</div>
-              <div>Vencimento {{openDoc.data}}</div>
-            </td>
-            <td class="valor">
-              {{openDoc.valor | brCurrency}}
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-  <div class="col">
-    <h3>Documentos Pagos</h3>
-    <table class="table" style="max-width: 520px;">
-      <tbody>
-        @for (closeDoc of closeDocs; track $index) {
-          <tr [className]="`${closeDoc.classCard}`">
-            <td
-              style="height: 76.4px;"
-              class="d-flex justify-content-center align-items-center"
-            >
-              <div class="p-1 container-icon">
-                <mat-icon>{{closeDoc.tipo.icon}}</mat-icon>
-              </div>
-            </td>
-            <td>
-              <div>{{closeDoc.descricao}}</div>
-              <div>Vencimento {{closeDoc.data}}</div>
-            </td>
-            <td class="valor">
-              {{closeDoc.valor | brCurrency}}
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-</div>
+<main class="d-flex flex-column gap-4 w-100 max">
+  <h3>Documentos em Aberto</h3>
+  <table class="table">
+    <tbody>
+      @for (trans of docs; track $index) {
+        <tr [className]="`${trans | alertClass : 'table'}`">
+          <td style="width: 60px;">
+            <div class="p-1 container-icon">
+              <mat-icon>{{(trans | tipoTrans).icon}}</mat-icon>
+            </div>
+          </td>
+          <td>
+            <div>{{trans.descricao}}</div>
+            <div>
+              Vencimento: {{trans.vencimento! | dateTrans : dateFormats.DOCS_LIST }}
+            </div>
+          </td>
+          <td class="valor">
+            {{trans.valor | brCurrency}}
+          </td>
+          <td style="width: 150px;">
+            <div class="d-flex justify-content-between">
+              <button
+                mat-icon-button
+                type="button"
+                class="text-success"
+                (click)="pagar(trans)"
+              >
+                <mat-icon>payments</mat-icon>
+              </button>
+              @if (trans.vencimento!.getTime() > hojeTime) {
+                <button
+                  mat-icon-button
+                  type="button"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="text-danger"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</main>

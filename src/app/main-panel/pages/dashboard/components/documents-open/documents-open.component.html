@@ -1,18 +1,25 @@
-@for (trans of data; track $index) {
-  <div
-    appearance="outlined"
-    [class]="`alert ${trans.classCard} m-0 p-0`"
-  >
-  <mat-card-header>
-    <mat-card-title class="d-flex justify-content-between align-items-center gap-1">
-      <mat-icon>{{trans.tipo.icon}}</mat-icon>
-      {{trans.descricao}}
-    </mat-card-title>
-    <mat-card-subtitle>{{trans.valor | brCurrency}}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>Vencimento: {{trans.data}}</mat-card-content>
-  <mat-card-actions>
-    <button mat-button class="btn" (click)="pagar(trans)">Pagar</button>
-  </mat-card-actions>
-</div>
+@if (documents.length > 0) {
+  <h2>Próximos Pagamentos</h2>
+  <div class="d-flex overflow-auto max gap-2">
+    @for (trans of documents; track $index) {
+      <div
+        appearance="outlined"
+        [class]="`alert ${trans | alertClass } m-0 p-0 card-container`"
+      >
+      <mat-card-header>
+        <mat-card-title class="d-flex justify-content-between align-items-center gap-1">
+          <mat-icon>{{(trans | tipoTrans).icon}}</mat-icon>
+          {{trans.descricao}}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{trans.valor | brCurrency }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>Vencimento: {{trans.vencimento! | dateTrans : dateFormats.DOCS_CARD}}</mat-card-content>
+      <mat-card-actions>
+        <button mat-button class="btn" (click)="pagar(trans)">Pagar</button>
+      </mat-card-actions>
+    </div>
+    }
+  </div>
 }
