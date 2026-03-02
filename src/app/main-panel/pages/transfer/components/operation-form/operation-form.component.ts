@@ -100,7 +100,6 @@ export class OperationFormComponent {
     }))
   }
 
-
   checkError(key: keyof ErrorsForm, destino: boolean = false) {
     const errors = destino ? this.operationForm.get('destino')?.get(key)?.errors : this.operationForm.get(key)?.errors;
     if(!errors) {
@@ -148,7 +147,13 @@ export class OperationFormComponent {
         disabled = !this.operationForm.get('descricao')?.value;
         break;
       }
-    if (this.operationForm.get('valor')?.value === '0,00') {
+    if (
+      this.operationForm.get('valor')?.value === '0,00'
+      || (
+        this.operationForm.get('pago')?.value
+        && this.operationForm.get('valor')?.value === this.formataValor(this.saldo)
+      )
+    ) {
       disabled = true;
     }
     const errors = this.errorsForm();

@@ -9,6 +9,8 @@ import { TipoTransPipe } from '../../../pipe/tipo-trans.pipe';
 import { DateTransPipe } from '../../../pipe/date-trans.pipe';
 import { DateFormats } from '../../../constants/pages.enum';
 import { AlertClassPipe } from '../../../pipe/alert-class.pipe';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UtilService } from '../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-document-list',
@@ -17,11 +19,17 @@ import { AlertClassPipe } from '../../../pipe/alert-class.pipe';
   styleUrl: './document-list.component.css'
 })
 export class DocumentListComponent {
+  private readonly utilService = inject(UtilService);
   private readonly loginService = inject(LoginService);
   private readonly transService = inject(TransactionsService);
+  private snackBar = inject(MatSnackBar);
 
   get user() {
     return this.loginService.user;
+  }
+
+  get saldo() {
+    return this.transService.saldo;
   }
 
   get dateFormats() {
@@ -39,7 +47,22 @@ export class DocumentListComponent {
   }
 
   pagar(trans: Transaction) {
-    this.transService.patchTrans(trans);
+    if(trans.valor > this.saldo) {
+      this.snackBar.open(
+        'Saldo inferior ao valor do documento!',
+        'Ok',
+        {
+          duration: this.utilService.duration,
+          panelClass: 'snackbar-erro'
+        }
+      );
+      return;
+    }
+    this.transService.payTrans(trans);
+  }
+
+  editar(trans: Transaction) {
+    this.transService.editTrans(trans);
   }
 
   deletar(trans: Transaction) {

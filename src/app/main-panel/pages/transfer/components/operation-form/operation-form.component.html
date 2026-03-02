@@ -86,7 +86,10 @@
       }
     </mat-form-field>
   }
-  @if (currentOp().operation !== operation.DEPOSITO) {
+  @if (
+    currentOp().operation !== operation.DEPOSITO
+    && currentOp().operation !== operation.PAGAMENTO
+  ) {
     <div class="w-100 container-saldo">
       <span class="saldo">
         Saldo: {{saldo | brCurrency}}
@@ -126,14 +129,14 @@
       step="0.01"
       formControlName="valor"
       (input)="formatar($event)"
-      (focus)="cursorend($event)"
-      (click)="cursorend($event)"
-      (blur)="checkError('valor')"
+      (focus)="formatar($event)"
+      (click)="formatar($event)"
+      (blur)="formatar($event)"
       required
     />
     <span matTextPrefix>R$&nbsp;</span>
     @if (currentOp().operation === operation.PAGAMENTO) {
-      <mat-slide-toggle matTextSuffix formControlName="pago">
+      <mat-slide-toggle matTextSuffix formControlName="pago" (change)="checkError('valor')">
         Pago
       </mat-slide-toggle>
     }

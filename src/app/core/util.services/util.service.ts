@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UtilService {
+  readonly duration = 5000;
   formataValorInput (event: Event): string {
     const input = event.target as HTMLInputElement;
     const text = input.value;

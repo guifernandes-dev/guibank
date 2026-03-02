@@ -1,26 +1,84 @@
-<h2 mat-dialog-title>PAGAR</h2>
-<mat-dialog-content>
-  <p>Deseja realmente pagar {{trans.descricao}}?</p>
-  <h4>{{trans.valor | brCurrency}}</h4>
-</mat-dialog-content>
-<!-- <mat-form-field appearance="outline" class="w-75 mt-2 mx-auto" floatLabel="always" [formGroup]="form">
-  <mat-label>Data de Pagamento</mat-label>
-  <input
-    matInput
-    [matDatepickerFilter]="filtraData"
-    [matDatepicker]="picker"
-    formControlName="data"
-    (dateInput)="checkError()"
-    (dateChange)="checkError()"
-    (blur)="checkError()"
-  />
-  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker #picker></mat-datepicker>
-  @if (this.form.get('data')?.invalid) {
-    <mat-error>{{erroMessage()}}</mat-error>
-  }
-</mat-form-field> -->
-<mat-dialog-actions>
-  <button mat-button (click)="pagar()" cdkFocusInitial>PAGAR AGORA</button>
-  <button mat-button (click)="fechar()">Cancelar</button>
-</mat-dialog-actions>
+<h2 mat-dialog-title>EDITAR</h2>
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <mat-dialog-content
+    class="d-flex flex-column justify-content-center align-items-center w-100 px-4 py-2 container gap-2"
+  >
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Descrição</mat-label>
+      <input
+        matInput
+        placeholder="Descrição do Pagamento"
+        type="text"
+        formControlName="descricao"
+        required
+        (blur)="checkError('descricao')"
+        (input)="checkError('descricao')"
+      />
+      @if (form.get('descricao')?.invalid) {
+        <mat-error>{{erroMessage$().descricao}}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field
+      appearance="outline"
+      class="w-75 mt-2 mx-auto"
+      floatLabel="always"
+      [formGroup]="form"
+    >
+      <mat-label>Data de Vencimento</mat-label>
+      <input
+        matInput
+        [matDatepickerFilter]="filtraData"
+        [matDatepicker]="picker"
+        formControlName="vencimento"
+        (dateInput)="checkError('vencimento')"
+        (dateChange)="checkError('vencimento')"
+        (blur)="checkError('vencimento')"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      @if (this.form.get('data')?.invalid) {
+        <mat-error>{{erroMessage$()}}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field
+      appearance="outline"
+      class="w-75"
+      floatLabel="always"
+    >
+      <mat-label>Valor</mat-label>
+      <input
+        matInput
+        type="text"
+        class="input-valor"
+        step="0.01"
+        formControlName="valor"
+        (input)="formatar($event)"
+        (focus)="formatar($event)"
+        (click)="formatar($event)"
+        (blur)="formatar($event)"
+        required
+      />
+      <span matTextPrefix>R$&nbsp;</span>
+      <mat-slide-toggle matTextSuffix formControlName="pago" (change)="checkError('valor')">
+        Pago
+      </mat-slide-toggle>
+      @if (form.get('valor')?.invalid) {
+        <mat-error>{{erroMessage$().valor}}</mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-button
+      cdkFocusInitial
+      type="submit"
+      [disabled]="disabledBtn()"
+    >
+      SALVAR
+    </button>
+    <button mat-button type="button" (click)="fechar()">Cancelar</button>
+  </mat-dialog-actions>
+</form>

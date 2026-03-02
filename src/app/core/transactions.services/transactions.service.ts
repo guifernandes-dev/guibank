@@ -7,16 +7,18 @@ import { first } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Transaction } from '../../../server/models/db.model';
 import { DialogDeleteComponent } from '../../shared/dialog-delete/dialog-delete.component';
+import { UtilService } from '../util.services/util.service';
+import { DialogEditComponent } from '../../shared/dialog-edit/dialog-edit.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionsService {
-  private loginService = inject(LoginService);
-  private readonly duration = 5000;
-  private snackBar = inject(MatSnackBar);
+  private readonly loginService = inject(LoginService);
   private readonly apiService = inject(APIService);
+  private readonly utilService = inject(UtilService);
   private readonly dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   get saldos(): {rec: number, desp: number} {
     return this.loginService.userOp().reduce((saldo,trans)=>{
@@ -41,7 +43,7 @@ export class TransactionsService {
     return this.saldos.desp;
   }
 
-  patchTrans(trans: Partial<Transaction>) {
+  payTrans(trans: Partial<Transaction>) {
     const dialogRef = this.dialog.open(DialogPayComponent, {
       data: trans,
     });
@@ -61,7 +63,40 @@ export class TransactionsService {
             this.snackBar.open(
               'Documento pago com sucesso!',
               'Ok',
-              { duration: this.duration, panelClass: 'snackbar-sucess'}
+              {
+                duration: this.utilService.duration,
+                panelClass: 'snackbar-sucess'
+              }
+            );
+          });
+      }
+    });
+  }
+
+  editTrans(trans: Partial<Transaction>) {
+    const dialogRef = this.dialog.open(DialogEditComponent, {
+      data: trans,
+    });
+
+    dialogRef.afterClosed().subscribe((resp: Transaction) => {
+      if (resp && resp.id) {
+        const {id} = resp;
+        this.apiService
+          .patchTransactionById(id,resp)
+          .pipe(first())
+          .subscribe(trans => {
+            this.loginService.userOp.update(userOps => {
+              const opIndex = userOps.findIndex(op => op.id === id);
+              userOps[opIndex] = trans;
+              return userOps;
+            });
+            this.snackBar.open(
+              'Documento pago com sucesso!',
+              'Ok',
+              {
+                duration: this.utilService.duration,
+                panelClass: 'snackbar-sucess'
+              }
             );
           });
       }

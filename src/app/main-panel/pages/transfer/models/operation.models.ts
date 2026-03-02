@@ -6,12 +6,15 @@ export interface MenuOperation {
   operation: Operation
 }
 
-export interface ErrorsForm {
-  conta: string,
-  email: string,
+export interface ErrorsDialog {
   descricao: string,
   vencimento: string,
   valor: string
+}
+
+export interface ErrorsForm extends ErrorsDialog {
+  conta: string,
+  email: string
 }
 
 export interface TransAccount {

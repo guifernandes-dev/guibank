@@ -9,9 +9,12 @@ export class AlertClassPipe implements PipeTransform {
     return new Date(data.getFullYear(), data.getMonth(), data.getDay());
   }
 
-  transform(trans: Transaction, prefix: string = 'alert'): unknown {
+  transform(trans: Transaction, prefix: string = 'alert'): string {
     const hoje = new Date();
-    const data = trans.vencimento!;
+    const data = trans.vencimento;
+    if(!data) {
+      return '';
+    }
     const {pago} = trans;
     const hojeTime = this.normalizeData(hoje).getTime();
     const vencimento = this.normalizeData(data).getTime();

@@ -14,12 +14,11 @@ import { UtilService } from '../../../../core/util.services/util.service';
   providedIn: 'root'
 })
 export class OperationService {
-  private readonly duration = 4000;
-  private snackBar = inject(MatSnackBar);
   private readonly loginService = inject(LoginService);
   private readonly apiService = inject(APIService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
+  private snackBar = inject(MatSnackBar);
   operationMenu: MenuOperation[] = [
     {
       icon: 'send_money',
@@ -146,7 +145,14 @@ export class OperationService {
       if (!value) return null;
       const number = this.utilService.formataValorNumero(value);
       
-      if (number > saldoConta! && this.currentOp$().operation !== Operation.DEPOSITO) return { valueUperSaldo: 'Valor maior que o saldo'}
+      if (
+        number > saldoConta!
+        && this.currentOp$().operation !== Operation.DEPOSITO
+        && (
+          this.currentOp$().operation !== Operation.PAGAMENTO
+          || this.operationForm.get('pago')?.value
+        )
+      ) return { valueUperSaldo: 'Valor maior que o saldo'}
       if (number < 0.01) return { invalidValue: 'Valor mínimo R$0,01' }
       return null
     }
@@ -184,7 +190,10 @@ export class OperationService {
           this.snackBar.open(
             'Erro ao salvar operação',
             'Ok',
-            { duration: this.duration, panelClass: 'snackbar-erro'}
+            {
+              duration: this.utilService.duration,
+              panelClass: 'snackbar-erro'
+            }
           );
         } else {
           this.loginService.userOp().push(transaction);
@@ -192,7 +201,10 @@ export class OperationService {
           this.snackBar.open(
             'Transação salva com sucesso!',
             'Ok',
-            { duration: this.duration, panelClass: 'snackbar-sucess'}
+            {
+              duration: this.utilService.duration,
+              panelClass: 'snackbar-sucess'
+            }
           );
         }
       });

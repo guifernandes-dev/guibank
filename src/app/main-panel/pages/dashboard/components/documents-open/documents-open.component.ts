@@ -10,6 +10,8 @@ import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';
 import { DateTransPipe } from '../../../../../pipe/date-trans.pipe';
 import { DateFormats } from '../../../../../constants/pages.enum';
 import { AlertClassPipe } from '../../../../../pipe/alert-class.pipe';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UtilService } from '../../../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-documents-open',
@@ -20,6 +22,8 @@ import { AlertClassPipe } from '../../../../../pipe/alert-class.pipe';
 export class DocumentsOpenComponent {
   private readonly loginService = inject(LoginService);
   private readonly transService = inject(TransactionsService);
+  private readonly utilService = inject(UtilService);
+  private snackBar = inject(MatSnackBar);
   
   get dateFormats() {
     return DateFormats;
@@ -27,6 +31,10 @@ export class DocumentsOpenComponent {
 
   get user() {
     return this.loginService.user;
+  }
+
+  get saldo() {
+    return this.transService.saldo;
   }
 
   get documents() {
@@ -41,6 +49,18 @@ export class DocumentsOpenComponent {
   }
 
   pagar(trans: Transaction): void {
-    this.transService.patchTrans(trans);
+    console.log(trans.valor, this.saldo);
+    if(trans.valor > this.saldo) {
+      this.snackBar.open(
+        'Saldo inferior ao valor do documento!',
+        'Ok',
+        {
+          duration: this.utilService.duration,
+          panelClass: 'snackbar-erro'
+        }
+      );
+      return;
+    }
+    this.transService.payTrans(trans);
   }
 }

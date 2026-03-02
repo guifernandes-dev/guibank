@@ -5,6 +5,7 @@ import { first } from 'rxjs';
 import { User } from '../models/services.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Transaction } from '../../../server/models/db.model';
+import { UtilService } from '../util.services/util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +13,10 @@ import { Transaction } from '../../../server/models/db.model';
 export class LoginService {
   private readonly apiService = inject(APIService);
   private cookieService = inject(CookieService);
+  private utilService = inject(UtilService);
   private snackBar = inject(MatSnackBar);
   private user$ = signal<User | null>(null);
   private userOperations$ = signal<Transaction[]>([]);
-  private readonly duration = 4000;
 
   get user() {
     return this.user$;
@@ -82,7 +83,10 @@ export class LoginService {
         } else {
           this.snackBar.open(
             'E-mail ou senha incorreto.','Fechar',
-            { duration: this.duration, panelClass: 'snackbar-erro'}
+            {
+              duration: this.utilService.duration,
+              panelClass: 'snackbar-erro'
+            }
           );
           this.user$.set(null);
         }
@@ -104,7 +108,10 @@ export class LoginService {
           this.snackBar.open(
             'E-mail já cadastrado',
             'Ok',
-            { duration: this.duration, panelClass: 'snackbar-erro'}
+            {
+              duration: this.utilService.duration,
+              panelClass: 'snackbar-erro'
+            }
           );
         } else {
           this.apiService.postUser(newWuser)
