@@ -22,6 +22,7 @@
             <div class="d-flex justify-content-between">
               <button
                 mat-icon-button
+                matTooltip="Pagar"
                 type="button"
                 class="text-success"
                 (click)="pagar(trans)"
@@ -31,6 +32,7 @@
               @if (trans.vencimento!.getTime() > hojeTime) {
                 <button
                   mat-icon-button
+                  matTooltip="Editar"
                   type="button"
                   (click)="editar(trans)"
                 >
@@ -38,6 +40,7 @@
                 </button>
                 <button
                   mat-icon-button
+                  matTooltip="Deletar"
                   type="button"
                   class="text-danger"
                   (click)="deletar(trans)"

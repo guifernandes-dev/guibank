@@ -11,10 +11,11 @@ import { DateFormats } from '../../../constants/front.enum';
 import { AlertClassPipe } from '../../../pipe/alert-class.pipe';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UtilService } from '../../../core/util.services/util.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-document-list',
-  imports: [MatIconModule, BrCurrencyPipe, MatButtonModule, TipoTransPipe, DateTransPipe, AlertClassPipe],
+  imports: [MatIconModule, BrCurrencyPipe, MatButtonModule, TipoTransPipe, DateTransPipe, AlertClassPipe, MatTooltipModule],
   templateUrl: './document-list.component.html',
   styleUrl: './document-list.component.css'
 })
