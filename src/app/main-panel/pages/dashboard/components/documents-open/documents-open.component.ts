@@ -8,7 +8,7 @@ import { TransactionsService } from '../../../../../core/transactions.services/t
 import { Transaction } from '../../../../../../server/models/db.model';
 import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';
 import { DateTransPipe } from '../../../../../pipe/date-trans.pipe';
-import { DateFormats } from '../../../../../constants/pages.enum';
+import { DateFormats } from '../../../../../constants/front.enum';
 import { AlertClassPipe } from '../../../../../pipe/alert-class.pipe';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UtilService } from '../../../../../core/util.services/util.service';
@@ -49,7 +49,6 @@ export class DocumentsOpenComponent {
   }
 
   pagar(trans: Transaction): void {
-    console.log(trans.valor, this.saldo);
     if(trans.valor > this.saldo) {
       this.snackBar.open(
         'Saldo inferior ao valor do documento!',

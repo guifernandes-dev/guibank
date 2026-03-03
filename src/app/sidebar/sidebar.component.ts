@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Pages } from '../constants/pages.enum';
+import { Pages } from '../constants/front.enum';
 import { MenuItem } from '../core/models/services.model';
 import { RouterService } from '../core/router.services/router.service';
 import {MatIconModule} from '@angular/material/icon';

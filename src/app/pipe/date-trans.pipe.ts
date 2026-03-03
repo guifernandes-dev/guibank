@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DateFormats } from '../constants/pages.enum';
+import { DateFormats } from '../constants/front.enum';
 
 @Pipe({
   name: 'dateTrans'

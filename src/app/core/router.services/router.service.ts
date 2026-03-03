@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Pages } from '../../constants/pages.enum';
+import { Pages } from '../../constants/front.enum';
 import { MenuItem } from '../models/services.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';

@@ -44,12 +44,11 @@ export class DialogEditComponent implements OnInit{
   trans = inject<Transaction>(MAT_DIALOG_DATA);
 
   form = new FormGroup({
-    id: new FormControl<string>(''),
     descricao: new FormControl<string>('', [Validators.required]),
     vencimento: new FormControl<Date | null>(new Date(), [Validators.required]),
     pago: new FormControl<boolean>(false),
     valor: new FormControl('0,00', [Validators.required])
-  })
+  });
   erroMessage$ = signal<ErrorsDialog>({
     descricao: '',
     vencimento: '',
@@ -142,6 +141,7 @@ export class DialogEditComponent implements OnInit{
     const trans = {
       ...this.trans,
       ...this.form.value,
+      valor: this.utilService.formataValorNumero(this.form.get('valor')?.value!),
       data: new Date(),
     }
     this.dialogRef.close(trans);

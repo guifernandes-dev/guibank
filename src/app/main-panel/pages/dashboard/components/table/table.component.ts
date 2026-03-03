@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { DateFormats } from '../../../../../constants/pages.enum';
+import { DateFormats } from '../../../../../constants/front.enum';
 import { RecebedorPipe } from '../../../../../pipe/recebedor.pipe';
 import { DateTransPipe } from '../../../../../pipe/date-trans.pipe';
 import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';

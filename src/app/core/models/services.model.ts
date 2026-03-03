@@ -1,4 +1,4 @@
-import { Pages } from "../../constants/pages.enum";
+import { Pages } from "../../constants/front.enum";
 
 export interface MenuItem {
   label: string,
@@ -12,4 +12,11 @@ export interface User {
   email: string,
   renda: number,
   senha?: string
+}
+
+export type KeyType = 'pay' | 'edit' | 'delete';
+
+export interface OptionChangeDocs {
+  type: KeyType,
+  mensagem: string
 }

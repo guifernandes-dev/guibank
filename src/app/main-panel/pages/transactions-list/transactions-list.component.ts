@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { BrCurrencyPipe } from '../../../pipe/br-currency.pipe';
 import { DateTransPipe } from '../../../pipe/date-trans.pipe';
 import { LoginService } from '../../../core/login.services/login.service';
-import { DateFormats } from '../../../constants/pages.enum';
+import { DateFormats } from '../../../constants/front.enum';
 import { TipoTransPipe } from '../../../pipe/tipo-trans.pipe';
 import { AlertClassPipe } from '../../../pipe/alert-class.pipe';
 import { RecebedorPipe } from '../../../pipe/recebedor.pipe';

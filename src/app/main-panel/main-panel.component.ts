@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { DashboardComponent } from "./pages/dashboard/dashboard.component";
 import { TransactionsListComponent } from "./pages/transactions-list/transactions-list.component";
-import { Pages } from '../constants/pages.enum';
+import { Pages } from '../constants/front.enum';
 import { TransferComponent } from "./pages/transfer/transfer.component";
 import { CreditComponent } from "./pages/credit/credit.component";
 import { RouterService } from '../core/router.services/router.service';
