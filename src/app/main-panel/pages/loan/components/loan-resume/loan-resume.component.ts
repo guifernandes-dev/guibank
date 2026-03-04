@@ -2,30 +2,32 @@ import { Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { LoanService } from '../../services/loan.service';
+import { PercentPipe } from '@angular/common';
+import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 
 @Component({
   selector: 'app-loan-resume',
-  imports: [MatCardModule, BrCurrencyPipe],
+  imports: [MatCardModule, BrCurrencyPipe, BrPercentPipe],
   templateUrl: './loan-resume.component.html',
   styleUrl: './loan-resume.component.css'
 })
 export class LoanResumeComponent {
   private readonly loanService = inject(LoanService);
+
+  get taxa() {
+    return this.loanService.tax;
+  }
   
   get limiteTotal() {
     return this.loanService.limiteTotal;
   }
 
   get limiteDisp() {
-    return this.limiteTotal;
+    return this.loanService.limiteDisp;
   }
 
   get parcelasMax() {
-    const numParcMax = this.loanService.numParcelasMax;
-    const vrParcMin = this.loanService.vrParcelaMin;
-    const parc = this.limiteDisp/numParcMax;
-    if(parc >= vrParcMin) return numParcMax 
-    return Math.floor(this.limiteDisp/vrParcMin);
+    return this.loanService.parcelasMax;
   }
 
   get valorEmprestimos() {

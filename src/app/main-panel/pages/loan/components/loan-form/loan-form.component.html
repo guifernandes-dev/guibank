@@ -1,1 +1,64 @@
-<p>loan-form works!</p>
+<form
+  class="d-flex flex-column justify-content-center align-items-center px-4 py-2 rounded border border-secondary container gap-2 w-100"
+  (ngSubmit)="submit()"
+>
+  <h5>CONTRATAÇÃO</h5>
+  <div class="w-100 d-flex gap-2 justify-content-evenly">
+    <mat-form-field
+      appearance="outline"
+      class="w-50"
+      floatLabel="always"
+    >
+      <mat-label>Valor</mat-label>
+      <input
+        matInput
+        type="text"
+        class="input-valor"
+        step="0.01"
+        [formControl]="valor"
+        (input)="formatar($event)"
+        (focus)="formatar($event)"
+        (click)="formatar($event)"
+        (blur)="formatar($event)"
+        required
+      />
+      <span matTextPrefix>R$&nbsp;</span>
+      @if (valor.invalid) {
+        <mat-error>{{erroMensagem$().valor}}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field
+      appearance="outline"
+      class="w-50"
+    >
+      <mat-label>Sistema de Amortização</mat-label>
+      <mat-select [formControl]="sistema">
+        <mat-option [value]="sisCredito.PRICE">PRICE</mat-option>
+        <mat-option [value]="sisCredito.SAC">SAC</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="d-flex flex-column w-75">
+    <label for="parcelas" class="container-slider">
+      <span class="slider-label">Quantidade de Parcelas*</span>
+      <mat-slider
+        min="1"
+        [max]="parcelasMax"
+        step="1"
+      >
+        <input matSliderThumb id="parcelas" [value]="parcelas" [formControl]="parcelas"/>
+      </mat-slider>
+      <span class="hint">{{parcelas.value}} parcelas</span>
+    </label>
+  </div>
+  <button
+    mat-fab
+    extended
+    class="btn-padrao"
+    type="submit"
+    [disabled]="disabledBtn()"
+  >
+    <mat-icon>attach_money</mat-icon>
+    CONTRATAR
+  </button>
+</form>

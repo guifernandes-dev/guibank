@@ -7,6 +7,7 @@
   --branco: #ffffff;
   --hover-menu-btn: #2a73a0;
   --cinza-escuro: #d4d4d4;
+  --preto: #212529;
 }
 
 * {
@@ -53,4 +54,9 @@ body {
 
 .max {
   max-width: 600px;
+}
+
+input.input-valor::-webkit-outer-spin-button,
+input.input-valor::-webkit-inner-spin-button {
+  display: none;
 }

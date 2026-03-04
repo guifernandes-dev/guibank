@@ -117,14 +117,7 @@ export class OperationFormComponent {
   }
 
   cursorend(event: Event, value?: string) {
-    const input = event.target as HTMLInputElement;
-    let valor;
-    if (!value) {
-      valor = input.value;
-    } else {
-      valor = value;
-    }
-    input.setSelectionRange(valor.length,valor.length);
+    this.utilService.cursorend(event, value);
   }
 
   transfSaldoTotal(){

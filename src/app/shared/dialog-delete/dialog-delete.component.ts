@@ -23,7 +23,6 @@ import { Transaction } from '../../../server/models/db.model';
   styleUrl: './dialog-delete.component.css'
 })
 export class DialogDeleteComponent {
-  private readonly utilService = inject(UtilService);
   readonly dialogRef = inject(MatDialogRef<DialogDeleteComponent>);
   trans = inject<Transaction>(MAT_DIALOG_DATA);
 

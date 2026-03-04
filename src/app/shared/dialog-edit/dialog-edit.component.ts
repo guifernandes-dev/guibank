@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogModule, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -76,19 +76,27 @@ export class DialogEditComponent implements OnInit{
     this.checkError('valor');
   }
 
-  cursorend(event: Event, value?: string) {
-    const input = event.target as HTMLInputElement;
-    let valor;
-    if (!value) {
-      valor = input.value;
-    } else {
-      valor = value;
+  validatorValor(): ValidatorFn {
+    return (control: AbstractControl<string>): ValidationErrors | null => {
+      const saldoConta = this.transService.saldo
+      const value = control.value;
+      if (!value) return null;
+      const number = this.utilService.formataValorNumero(value);
+      
+      if (number > saldoConta! && this.form.get('pago')?.value) {
+        return { valueUperSaldo: 'Valor maior que o saldo'}
+      }
+      if (number < 0.01) return { invalidValue: 'Valor mínimo R$0,01' }
+      return null
     }
-    input.setSelectionRange(valor.length,valor.length);
   }
 
-  checkError(key: keyof ErrorsDialog, destino: boolean = false) {
-    const errors = destino ? this.form.get('destino')?.get(key)?.errors : this.form.get(key)?.errors;
+  cursorend(event: Event, value?: string) {
+    this.utilService.cursorend(event, value);
+  }
+
+  checkError(key: keyof ErrorsDialog) {
+    const errors = this.form.get(key)?.errors;
     if(!errors) {
       this.updateErros(key);
     } else {

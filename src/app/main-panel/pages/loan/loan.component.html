@@ -3,19 +3,21 @@
   <app-loan-resume class="d-flex justify-content-between w-100"/>
   @if (isList() && loans().length) {
     <div class="d-flex justify-content-center">
-      <button
-        mat-fab
-        extended
-        class="mt-3"
-        class="btn-padrao w-75"
-        type="button"
-      >
-        <mat-icon>add</mat-icon>
-        SOLICITAR EMPRÉSTIMO
-      </button>
+      @if (limiteDisp > (vrParcelaMin * (1 + tax()))) {
+        <button
+          mat-fab
+          extended
+          class="mt-3"
+          class="btn-padrao w-75"
+          type="button"
+        >
+          <mat-icon>add</mat-icon>
+          SOLICITAR EMPRÉSTIMO
+        </button>
+      }
     </div>
     <app-loan-list/>
   } @else {
-    <app-loan-form/>
+    <app-loan-form class="d-flex justify-content-center w-100"/>
   }
 </main>

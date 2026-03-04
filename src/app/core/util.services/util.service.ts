@@ -48,4 +48,19 @@ export class UtilService {
     const day = (date || new Date()).getDay();
     return day !== 0 && day !== 6;
   };
+
+  converteTax(iaa: number, fator: number): number {
+    return (((1+iaa/100)**(1/12))-1)*fator;
+  }
+
+  cursorend(event: Event, value?: string) {
+    const input = event.target as HTMLInputElement;
+    let valor;
+    if (!value) {
+      valor = input.value;
+    } else {
+      valor = value;
+    }
+    input.setSelectionRange(valor.length,valor.length);
+  }
 }

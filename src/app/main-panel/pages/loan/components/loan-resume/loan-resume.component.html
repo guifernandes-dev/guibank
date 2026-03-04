@@ -7,19 +7,23 @@
     </mat-card-header>
     <mat-card-content class="card-resume">
       <div>
-        <mat-card-subtitle>LIMITE</mat-card-subtitle>
+        <mat-card-subtitle>Limite</mat-card-subtitle>
         {{ limiteDisp | brCurrency}}
       </div>
       <div>
-        <mat-card-subtitle>PARCELAS</mat-card-subtitle>
+        <mat-card-subtitle>Parcelas</mat-card-subtitle>
         {{ parcelasMax }}
+      </div>
+      <div>
+        <mat-card-subtitle>Juros</mat-card-subtitle>
+        {{ taxa() | brPercent }}
       </div>
     </mat-card-content>
   </mat-card>
   <mat-card appearance="outlined">
     <mat-card-header>
       <mat-card-title-group>
-        <mat-card-title class="card-title">TOTAL DE EMPRÉSTIMOS</mat-card-title>
+        <mat-card-title class="card-title">SALDO DEVEDOR TOTAL</mat-card-title>
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content class="card-resume-valor">

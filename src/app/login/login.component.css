@@ -6,11 +6,6 @@
   color: #666;
 }
 
-input.input-valor::-webkit-outer-spin-button,
-input.input-valor::-webkit-inner-spin-button {
-  display: none;
-}
-
 .req {
   font-size: 12px;
   display: flex;
