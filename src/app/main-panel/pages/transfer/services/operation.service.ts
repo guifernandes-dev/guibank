@@ -140,9 +140,9 @@ export class OperationService {
 
   validatorValor(): ValidatorFn {
     return (control: AbstractControl<string>): ValidationErrors | null => {
-      const saldoConta = this.transService.saldo
       const value = control.value;
       if (!value) return null;
+      const saldoConta = this.transService.saldo
       const number = this.utilService.formataValorNumero(value);
       
       if (

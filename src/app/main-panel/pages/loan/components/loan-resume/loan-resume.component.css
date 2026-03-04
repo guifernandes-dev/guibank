@@ -6,6 +6,11 @@
   font-weight: 700;
 }
 
+.no-limit-container {
+  max-width: 50%;
+  justify-content: center;
+}
+
 .card-resume-valor{
   display: flex;
   justify-content: center;

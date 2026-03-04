@@ -18,6 +18,8 @@
     </div>
     <app-loan-list/>
   } @else {
-    <app-loan-form class="d-flex justify-content-center w-100"/>
+    @if (limiteDisp>0) {
+      <app-loan-form class="d-flex justify-content-center w-100"/>
+    }
   }
 </main>

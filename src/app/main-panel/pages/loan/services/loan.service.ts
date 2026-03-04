@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { LoginService } from '../../../../core/login.services/login.service';
-import { Loan } from '../../../../../server/models/db.model';
+import { Installment, Loan } from '../../../../../server/models/db.model';
 import { APIService } from '../../../../core/api.services/api.service';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { first } from 'rxjs';
@@ -19,6 +19,11 @@ export class LoanService {
   private isList$ = signal<boolean>(true);
   private userLoans$ = signal<Loan[]>([]);
   private tax$ = signal<number>(0);
+  private loanTable$ = signal<Installment[]>([]);
+
+  get loanTable() {
+    return this.loanTable$;
+  }
 
   get tax() {
     return this.tax$;

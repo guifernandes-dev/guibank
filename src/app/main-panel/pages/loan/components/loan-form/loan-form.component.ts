@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { SisCredito } from '../../../../../../server/constants/db.enum';
 import { MatSliderModule } from '@angular/material/slider';
@@ -7,9 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { UtilService } from '../../../../../core/util.services/util.service';
-import { ErrorsLoan } from '../../models/loan.models';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from "@angular/material/icon";
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-loan-form',
@@ -17,16 +17,17 @@ import { MatIconModule } from "@angular/material/icon";
   templateUrl: './loan-form.component.html',
   styleUrl: './loan-form.component.css'
 })
-export class LoanFormComponent implements OnInit {
+export class LoanFormComponent {
   private readonly loanService = inject(LoanService);
   private readonly utilService = inject(UtilService);
-  valor = new FormControl<string>(this.limiteDispString,[this.validatorValor()]);
-  parcelas = new FormControl<number>(1);
-  sistema = new FormControl<SisCredito>(SisCredito.PRICE,[Validators.required]);
-  erroMensagem$ = signal<ErrorsLoan>({
-    valor: '',
-    parcelas: ''
-  });
+  form = new FormGroup({
+    valor: new FormControl<string>(this.limiteDispString,[this.validatorValor()]),
+    parcelas: new FormControl<number>(1,[Validators.required]),
+    sistema: new FormControl<SisCredito>(SisCredito.PRICE,[Validators.required]),
+  })
+  erroValor$ = signal<string>('');
+  valor$ = toSignal(this.form.get('valor')!.valueChanges);
+  parcelasMax = signal(1);
 
   get sisCredito() {
     return SisCredito;
@@ -36,67 +37,58 @@ export class LoanFormComponent implements OnInit {
     return this.utilService.formataValor(this.loanService.limiteDisp);
   }
 
-  ngOnInit(): void {
-    this.setParcela();
+  constructor () {
+    this.setParcelasMax(this.loanService.limiteDisp);
+    effect(()=> {
+      const valorText = this.valor$() || this.limiteDispString;
+      const valor = this.utilService.formataValorNumero(valorText);
+      this.setParcelasMax(valor);
+    });
   }
 
-  get parcelasMax(): number {
-    const value = this.utilService.formataValorNumero(this.valor.value!);
+  setParcelasMax(value: number) {
     const vrParcelaMin = this.loanService.vrParcelaMin;
     const qtParcMaxLimite = this.loanService.parcelasMax;
     const qtParcMaxValor = Math.floor(value/vrParcelaMin);
-    return qtParcMaxValor<qtParcMaxLimite ? qtParcMaxValor : qtParcMaxLimite;
+    const max = qtParcMaxValor<qtParcMaxLimite
+      ? qtParcMaxValor
+      : qtParcMaxLimite
+    if(!max || max === 1) {
+      this.form.controls['parcelas'].patchValue(1)
+      this.parcelasMax.set(1);
+      return;
+    }
+    this.form.controls['parcelas'].patchValue(
+      Math.floor(max/2),
+      { emitEvent: false }
+    );
+    this.parcelasMax.set(max);
   }
 
   formatar(event: Event) {
     const formatado = this.utilService.formataValorInput(event);
-    this.valor.setValue(formatado);
-    this.setParcela()
+    this.form.controls['valor'].setValue(formatado);
     this.cursorend(event,formatado);
-    this.checkError('valor');
-    this.checkError('parcelas');
-  }
-
-  setParcela() {
-    const max = Math.floor(this.parcelasMax);
-    if(!max || max === 1) {
-      this.parcelas.setValue(1);
-      return;
-    }
-    this.parcelas.setValue(Math.floor(max/2));
+    this.checkError();
   }
 
   cursorend(event: Event, value?: string) {
     this.utilService.cursorend(event, value);
   }
 
-  checkError(key: keyof ErrorsLoan) {
-    const errors = key === 'valor' ? this.valor.errors : this.parcelas.errors;
+  checkError() {
+    const errors = this.form.controls['valor'].errors;
     if(!errors) {
-      this.updateErros(key);
+      this.erroValor$.set('');
     } else {
-      this.updateErros(key, Object.keys(errors)[0]);
+      const code = Object.keys(errors)[0]
+      if (this.form.controls['valor'].hasError('required')) {
+        this.erroValor$.set('Campo é obrigatório');
+      } else {
+        this.erroValor$.set(this.form.controls['valor'].getError(code));
+      }
     }
   }
-
-  updateErros(key: keyof ErrorsLoan, code?: string) {
-      let mensagem = '';
-      switch (code) {
-        case 'required':
-          mensagem = 'Campo é obrigatório'
-          break;
-        case undefined:
-          mensagem = ''
-          break;
-        default:
-          mensagem = (key === 'valor' ? this.valor : this.parcelas).getError(code);
-          break;
-      }
-      this.erroMensagem$.update(errs => ({
-        ...errs,
-        [key]: mensagem
-      }))
-    }
 
   validatorValor(): ValidatorFn {
     return (control: AbstractControl<string>): ValidationErrors | null => {
@@ -123,6 +115,19 @@ export class LoanFormComponent implements OnInit {
   }
 
   disabledBtn() {
-
+    let disabled = false;
+    if (this.form.get('valor')?.value === '0,00') {
+      disabled = true;
+    }
+    if (!this.form.get('parcelas')?.value) {
+      disabled = true;
+    }
+    const errors = this.erroValor$();
+    Object.values(errors).forEach(mensagem => {
+      if (mensagem) {
+        disabled = true;
+      }
+    });
+    return disabled
   }
 }

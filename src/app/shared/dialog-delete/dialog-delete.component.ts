@@ -5,6 +5,8 @@ import { BrCurrencyPipe } from '../../pipe/br-currency.pipe';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { UtilService } from '../../core/util.services/util.service';
 import { Transaction } from '../../../server/models/db.model';
+import { DateTransPipe } from '../../pipe/date-trans.pipe';
+import { DateFormats } from '../../constants/front.enum';
 
 @Component({
   selector: 'app-dialog-delete',
@@ -14,7 +16,8 @@ import { Transaction } from '../../../server/models/db.model';
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    BrCurrencyPipe
+    BrCurrencyPipe,
+    DateTransPipe
   ],
   providers: [
     provideNativeDateAdapter()
@@ -25,6 +28,10 @@ import { Transaction } from '../../../server/models/db.model';
 export class DialogDeleteComponent {
   readonly dialogRef = inject(MatDialogRef<DialogDeleteComponent>);
   trans = inject<Transaction>(MAT_DIALOG_DATA);
+
+  get dateFormats() {
+    return DateFormats;
+  }
 
   deletar() {
     this.dialogRef.close({id: this.trans.id, data: new Date()});

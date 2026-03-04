@@ -125,8 +125,7 @@ export class DialogEditComponent implements OnInit{
 
   disabledBtn(): boolean {
     let disabled = false;
-    disabled = !this.form.get('vencimento')?.value;
-    disabled = !this.form.get('descricao')?.value;
+    disabled = !this.form.get('vencimento')?.value || !this.form.get('descricao')?.value;
     if (
       this.form.get('valor')?.value === '0,00'
       || (
