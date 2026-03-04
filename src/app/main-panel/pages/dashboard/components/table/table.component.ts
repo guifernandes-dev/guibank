@@ -6,7 +6,7 @@ import { DateFormats } from '../../../../../constants/front.enum';
 import { RecebedorPipe } from '../../../../../pipe/recebedor.pipe';
 import { DateTransPipe } from '../../../../../pipe/date-trans.pipe';
 import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';
-import { Operation } from '../../../../../../server/constants/operation.enum';
+import { Operation } from '../../../../../../server/constants/db.enum';
 
 @Component({
   selector: 'app-table',

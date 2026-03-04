@@ -1,0 +1,29 @@
+<div class="d-flex w-100 justify-content-evenly gap-2">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title class="card-title">DISPONÍVEL</mat-card-title>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content class="card-resume">
+      <div>
+        <mat-card-subtitle>LIMITE</mat-card-subtitle>
+        {{ limiteDisp | brCurrency}}
+      </div>
+      <div>
+        <mat-card-subtitle>PARCELAS</mat-card-subtitle>
+        {{ parcelasMax }}
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title class="card-title">TOTAL DE EMPRÉSTIMOS</mat-card-title>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content class="card-resume-valor">
+      {{ valorEmprestimos | brCurrency}}
+    </mat-card-content>
+  </mat-card>
+</div>

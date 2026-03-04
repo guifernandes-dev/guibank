@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../models/services.model';
-import { Account, Transaction } from '../../../server/models/db.model';
+import { Account, CDIType, Loan, Transaction } from '../../../server/models/db.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +44,13 @@ export class APIService {
 
   deleteTransactionById(id: string): Observable<Transaction> {
     return this.http.delete<Transaction>(`${this.baseUrl}/transactions/${id}`);
+  }
+
+  getLoansByUserId(id: string): Observable<Loan[]> {
+    return this.http.get<Loan[]>(`${this.baseUrl}/loans`)
+  }
+
+  getCDI(): Observable<CDIType> {
+    return this.http.get<CDIType>('https://brasilapi.com.br/api/taxas/v1/CDI');
   }
 }

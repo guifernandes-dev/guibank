@@ -6,3 +6,8 @@ export enum Operation {
   CREDITO = 'credito',
   DEBITO = 'debito'
 }
+
+export enum SisCredito {
+  SAC = 'sac',
+  PRICE = 'price'
+}

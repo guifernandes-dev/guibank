@@ -1,5 +1,4 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Operation } from '../../../../../server/constants/operation.enum';
 import { ErrorsForm, MenuOperation } from '../models/operation.models';
 import { first, map, Observable, of } from 'rxjs';
 import { LoginService } from '../../../../core/login.services/login.service';
@@ -9,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionsService } from '../../../../core/transactions.services/transactions.service';
 import { Transaction } from '../../../../../server/models/db.model';
 import { UtilService } from '../../../../core/util.services/util.service';
+import { Operation } from '../../../../../server/constants/db.enum';
 
 @Injectable({
   providedIn: 'root'

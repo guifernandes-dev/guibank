@@ -1,0 +1,17 @@
+.card-resume {
+  display: flex;
+  gap: 20px;
+  justify-content: space-evenly;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card-resume-valor{
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.card-title {
+  font-weight: 500;
+}

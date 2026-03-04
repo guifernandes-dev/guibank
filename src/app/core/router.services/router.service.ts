@@ -34,9 +34,9 @@ export class RouterService {
       page: Pages.OPERATIONS,
     },
     {
-      label: "Crédito",
+      label: "Empréstimos",
       icon: "price_check",
-      page: Pages.CREDIT,
+      page: Pages.LOAN,
     }
   ];
 

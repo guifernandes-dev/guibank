@@ -1,0 +1,37 @@
+<h3>Contratos</h3>
+<table class="table">
+  <tbody>
+    @for (loan of loans(); track $index) {
+      <tr>
+        <td style="width: 60px;">
+          <div class="p-1 container-icon">
+            <mat-icon>price_check</mat-icon>
+          </div>
+        </td>
+        <td>
+          <div class="tipo">
+            {{loan.data | dateTrans : dateFormats.DOCS_LIST}}
+          </div>
+        </td>
+        <!-- @if(loan.descricao) {
+          <div class="descricao">
+            {{ loan.descricao }}
+          </div>
+        }
+        <div class="recebedor">
+          {{trans | recebedor}}
+        </div>
+        <td style="width: 150px; text-align: end;">
+          <div [class]="`${
+            trans.origem?.conta !== user()?.conta
+              ? 'text-success'
+              : 'text-danger'
+            } valor`">
+            {{trans.valor | brCurrency : trans.origem?.conta === user()?.conta}}
+          </div>
+          <div>{{trans.data | dateTrans : dateFormats.TRANS_LIST}}</div> -->
+      </tr>
+    }
+  </tbody>
+</table>
+

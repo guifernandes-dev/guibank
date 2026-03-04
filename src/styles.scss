@@ -47,6 +47,10 @@ body {
 }
 
 .snackbar-erro {
-  background: #f44336 !important;
+  background-color: #f44336 !important;
   color: white !important;
+}
+
+.max {
+  max-width: 600px;
 }

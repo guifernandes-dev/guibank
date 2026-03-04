@@ -3,7 +3,7 @@ export enum Pages {
   STATEMENTS = 'statements',
   OPERATIONS = 'operations',
   DOCUMENTS = 'documents',
-  CREDIT = 'credit',
+  LOAN = 'loan',
 }
 
 export enum DateFormats {

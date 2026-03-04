@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { OperationService } from '../../services/operation.service';
-import { Operation } from '../../../../../../server/constants/operation.enum';
+import { Operation } from '../../../../../../server/constants/db.enum';
 import { ErrorsForm } from '../../models/operation.models';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { MatIconModule } from "@angular/material/icon";

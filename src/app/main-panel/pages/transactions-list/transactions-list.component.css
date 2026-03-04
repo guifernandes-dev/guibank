@@ -27,10 +27,6 @@
   font-size: 12px;
 }
 
-.max {
-  max-width: 600px;
-}
-
 .header-table {
   background-color: var(--menu-background);
 }

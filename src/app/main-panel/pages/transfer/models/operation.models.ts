@@ -1,4 +1,4 @@
-import { Operation } from "../../../../../server/constants/operation.enum";
+import { Operation } from "../../../../../server/constants/db.enum";
 
 export interface MenuOperation {
   icon: string,
