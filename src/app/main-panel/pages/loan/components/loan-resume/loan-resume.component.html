@@ -1,37 +1,11 @@
 <div class="d-flex w-100 justify-content-evenly gap-2">
-  @if (limiteDisp !== 0) {
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <mat-card-title-group>
-          <mat-card-title class="card-title">DISPONÍVEL</mat-card-title>
-        </mat-card-title-group>
-      </mat-card-header>
-      <mat-card-content class="card-resume">
-        <!-- <div matTooltip="Valor disponível de limite baseado na parcela possível em relação à sua renda (30% da renda)">
-          <mat-card-subtitle>Limite Total</mat-card-subtitle>
-          {{ limiteDisp | brCurrency}}
-        </div> -->
-        <div matTooltip="Quantidade de parcelas máximas disponíveis">
-          <mat-card-subtitle>Parcelas</mat-card-subtitle>
-          {{ parcelasMax }}
-        </div>
-        <div matTooltip="Taxa ao mês">
-          <div class="d-flex align-items-end gap-1">
-            <mat-card-subtitle>Taxa</mat-card-subtitle>
-            <span style="font-size: 11px; padding-bottom: 2px;">
-              (a.m.)
-            </span>
-          </div>
-          {{ taxa() | brPercent }}
-        </div>
-      </mat-card-content>
-    </mat-card>
-  } @else {
+  @if (limiteDisp === 0) {
     <mat-card appearance="outlined" class="no-limit-container">
       <mat-card-content class="card-resume">
         <mat-card-title class="card-title">NÃO HÁ LIMITE DISPONÍVEL PARA NOVOS EMPRÉSTIMOS</mat-card-title>
       </mat-card-content>
     </mat-card>
+
   }
   <mat-card
     appearance="outlined"
