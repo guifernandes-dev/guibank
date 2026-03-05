@@ -19,6 +19,6 @@ export class LoanListComponent {
   }
 
   get loans() {
-    return this.loanService.loans;
+    return this.loanService.userLoans$;
   }
 }

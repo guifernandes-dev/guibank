@@ -4,9 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MainPanelComponent } from "./main-panel/main-panel.component";
 import { LoginComponent } from "./login/login.component";
-import { User } from './core/models/services.model';
 import { LoginService } from './core/login.services/login.service';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +18,10 @@ export class AppComponent implements OnInit {
 
   get user() {
     return this.loginService.user;
+  }
+
+  get loadingUser() {
+    return this.loginService.loadingUser;
   }
 
   ngOnInit() {

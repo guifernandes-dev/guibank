@@ -1,13 +1,23 @@
-@if (user()) {
-  <div class="menu">
-    <app-header/>
-  </div>
-  <main class="content">
-    <app-sidebar/>
-    <app-main-panel/>
+@if (loadingUser()) {
+  <main class="loading-initial">
+    <img src="/guiBank2.png" alt="GuiBank logo" height="80px"/>
+    <div class="d-flex align-items-end">
+      CARREGANDO
+      <img src="/loading-icon.gif" alt=". . ." class="loading-icon"/>
+    </div>
   </main>
 } @else {
-    <app-login
-      class="d-flex justify-content-center align-items-center vh-100 vw-100"
-    />
+  @if (user()) {
+    <div class="menu">
+      <app-header/>
+    </div>
+    <main class="content">
+      <app-sidebar/>
+      <app-main-panel/>
+    </main>
+  } @else {
+      <app-login
+        class="d-flex justify-content-center align-items-center vh-100 vw-100"
+      />
+  }
 }

@@ -34,7 +34,7 @@ export class UtilService {
   }
 
   formataValorNumero(valor: string): number {
-    return parseFloat(valor.replace('.','').replace(',','.'))
+    return parseFloat(valor.replaceAll('.','').replaceAll(',','.'))
   }
 
   formataValor (valor: number): string {
@@ -49,8 +49,8 @@ export class UtilService {
     return day !== 0 && day !== 6;
   };
 
-  converteTax(iaa: number, fator: number): number {
-    return (((1+iaa/100)**(1/12))-1)*fator;
+  converteTax(iaa: number, fator: number, nt: number = 12, nq: number = 1): number {
+    return (((1+iaa)**(nq/nt))-1)*fator;
   }
 
   cursorend(event: Event, value?: string) {
@@ -62,5 +62,10 @@ export class UtilService {
       valor = value;
     }
     input.setSelectionRange(valor.length,valor.length);
+  }
+
+  round(n: number, digits: number): number {
+    const mult = 1 * 10 ** digits;
+    return Math.ceil(n*mult)/mult;
   }
 }

@@ -196,7 +196,13 @@ export class OperationService {
             }
           );
         } else {
-          this.loginService.userOp().push(transaction);
+          this.loginService.userOp().push({
+                ...transaction,
+                data: new Date(transaction.data),
+                vencimento: transaction.vencimento
+                  ? new Date(transaction.vencimento)
+                  : null,
+              });
           this.buildForm(this.currentOp$().operation !== Operation.PAGAMENTO);
           this.snackBar.open(
             'Transação salva com sucesso!',

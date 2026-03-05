@@ -15,7 +15,7 @@ export class LoanResumeComponent {
   private readonly loanService = inject(LoanService);
 
   get taxa() {
-    return this.loanService.tax;
+    return this.loanService.tax$;
   }
   
   get limiteTotal() {

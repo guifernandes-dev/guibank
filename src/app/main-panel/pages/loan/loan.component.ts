@@ -28,14 +28,14 @@ export class LoanComponent implements OnInit {
   }
 
   get tax() {
-    return this.loanService.tax;
+    return this.loanService.tax$;
   }
 
   get loans() {
-    return this.loanService.loans;
+    return this.loanService.userLoans$;
   }
 
   get isList() {
-    return this.loanService.isList;
+    return this.loanService.isList$;
   }
 }

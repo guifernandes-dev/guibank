@@ -23,19 +23,28 @@ export interface Transaction {
 }
 
 export interface Installment {
+  item: number,
   amortizacao: number,
   juros: number,
   parcela: number
 }
 
 export interface Loan {
-  id: string,
+  id?: string,
   data: Date,
   conta: TransAccount,
   valor: number,
   sistema: SisCredito,
-  juros: number,
+  totais: LoanTotal,
+  taxa: number,
   parcelas: Installment[]
+}
+
+export interface LoanTotal {
+  juros: number,
+  amortizacao: number,
+  parcela: number,
+  taxa: number
 }
 
 export interface CDIType {

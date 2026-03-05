@@ -1,9 +1,10 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { LoginService } from '../../../../core/login.services/login.service';
-import { Installment, Loan } from '../../../../../server/models/db.model';
+import { Loan } from '../../../../../server/models/db.model';
 import { APIService } from '../../../../core/api.services/api.service';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { first } from 'rxjs';
+import { SisCredito } from '../../../../../server/constants/db.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -12,30 +13,22 @@ export class LoanService {
   private readonly NUM_PARCELAS_MAX = 120;
   private readonly VR_PARCELA_MIN = 100;
   private readonly PARCELA_MAX_RENDA = 0.3;
-  private readonly FATOR_MULT_JUROS = 2.6;
+  private readonly FATOR_MULT_JUROS = 20;
   private readonly loginService = inject(LoginService);
   private readonly apiService = inject(APIService);
   private readonly utilService = inject(UtilService);
-  private isList$ = signal<boolean>(true);
-  private userLoans$ = signal<Loan[]>([]);
-  private tax$ = signal<number>(0);
-  private loanTable$ = signal<Installment[]>([]);
-
-  get loanTable() {
-    return this.loanTable$;
-  }
-
-  get tax() {
-    return this.tax$;
-  }
-
-  get isList() {
-    return this.isList$;
-  }
-
-  get loans() {
-    return this.userLoans$;
-  }
+  readonly isList$ = signal<boolean>(true);
+  readonly userLoans$ = signal<Loan[]>([]);
+  readonly tax$ = signal<number>(0);
+  readonly loan$ = signal<Loan>({
+    conta: this.loginService.user()!,
+    data: new Date(),
+    taxa: 0,
+    totais: {juros: 0, amortizacao: 0, parcela: 0, taxa: 0},
+    parcelas: [],
+    sistema: SisCredito.PRICE,
+    valor: 0,
+  });
 
   get valorLoans() {
     return this.userLoans$().reduce((sum, loan) =>{
@@ -80,15 +73,16 @@ export class LoanService {
     this.apiService.getLoansByUserId(id)
       .pipe(first())
       .subscribe(loans => {
-        this.loans.set(loans);
+        this.userLoans$.set(loans);
         this.apiService.getCDI()
           .pipe(first())
           .subscribe(cdi =>{
             const cdiam = this.utilService.converteTax(
-              cdi.valor,
+              cdi.valor/100,
               this.FATOR_MULT_JUROS
             );
-            this.tax.set(cdiam);
+            const cdiamround = this.utilService.round(cdiam,4);
+            this.tax$.set(cdiamround);
           })
       });
   }

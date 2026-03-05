@@ -4,7 +4,7 @@ import { APIService } from '../api.services/api.service';
 import { first } from 'rxjs';
 import { User } from '../models/services.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Transaction } from '../../../server/models/db.model';
+import { Account, Transaction } from '../../../server/models/db.model';
 import { UtilService } from '../util.services/util.service';
 
 @Injectable({
@@ -17,6 +17,7 @@ export class LoginService {
   private snackBar = inject(MatSnackBar);
   private user$ = signal<User | null>(null);
   private userOperations$ = signal<Transaction[]>([]);
+  private loadingUser$ = signal<boolean>(true);
 
   get user() {
     return this.user$;
@@ -26,43 +27,65 @@ export class LoginService {
     return this.userOperations$;
   }
 
+  get loadingUser() {
+    return this.loadingUser$;
+  }
+
   setUserOp(): void {
     if(this.userOp.length) return;
     this.apiService
-      .getTransactionsByUserOrigin(this.user()?.conta!)
+      .getTransactionsByUser(this.user()?.conta!)
       .pipe(first())
       .subscribe(operations => {
-        this.userOperations$.set([
-          ...this.userOperations$(),
-          ...operations.map(op => ({
-            ...op,
-            data: new Date(op.data),
-            vencimento: op.vencimento ? new Date(op.vencimento) : null,
-          }))
-        ]);
-        this.apiService
-          .getTransactionsByUserDestination(this.user()?.conta!)
-          .pipe(first())
-          .subscribe(operations => {
-            this.userOperations$.set([
-              ...this.userOperations$(),
-              ...operations.map(op => ({
-                ...op,
-                data: new Date(op.data),
-                vencimento: op.vencimento ? new Date(op.vencimento) : null,
-              }))
-            ]);
-          });
+        this.userOperations$.set(operations.map(op => ({
+          ...op,
+          data: new Date(op.data),
+          vencimento: op.vencimento ? new Date(op.vencimento) : null,
+        })));
       });
   }
 
   searchUserLogged() {
     if(!this.user()) {
-      const userCookie: string = this.cookieService.get('user');
-      if(userCookie) {
-        this.user$.set(JSON.parse(userCookie));
-        this.setUserOp();
+      const accountCookie: string = this.cookieService.get('accountLogged');
+      if(accountCookie) {
+        const accountLogged = JSON.parse(accountCookie)
+        this.apiService.getUserByAccount(accountLogged)
+          .pipe(first())
+          .subscribe({
+            next: user => {
+              this.setUser(user, 'Conta não encontrada');
+              this.setUserOp();
+            },
+            complete: () => {
+              this.loadingUser$.set(false);
+            }
+          })
+      } else {
+        this.loadingUser$.set(false);
       }
+    }
+  }
+
+  setUser = (users: Account[], errorMessage: string = '') => {
+    if (users.length) {
+      const {id, nome, renda, email} = users[0];
+      const userFind: User = {
+        conta: id,
+        nome,
+        renda,
+        email
+      }
+      this.registrarUser(userFind);
+    } else {
+      this.snackBar.open(
+        errorMessage,'Fechar',
+        {
+          duration: this.utilService.duration,
+          panelClass: 'snackbar-erro'
+        }
+      );
+      this.user$.set(null);
     }
   }
 
@@ -71,30 +94,12 @@ export class LoginService {
       .getUserByEmailESenha(email,senha)
       .pipe(first())
       .subscribe(users => {
-        if (users.length) {
-          const {id, nome, renda, email} = users[0];
-          const userFind: User = {
-            conta: id,
-            nome,
-            renda,
-            email
-          }
-          this.registrarUser(userFind);
-        } else {
-          this.snackBar.open(
-            'E-mail ou senha incorreto.','Fechar',
-            {
-              duration: this.utilService.duration,
-              panelClass: 'snackbar-erro'
-            }
-          );
-          this.user$.set(null);
-        }
+        this.setUser(users, 'Usuário ou E-mail incorreto.')
       })
   }
 
   logout() {
-    this.cookieService.delete('user');
+    this.cookieService.delete('accountLogged');
     this.user$.set(null);
     this.userOperations$.set([]);
   }
@@ -131,8 +136,8 @@ export class LoginService {
 
   registrarUser(user: User) {
     this.cookieService.set(
-      'user',
-      JSON.stringify(user),
+      'accountLogged',
+      JSON.stringify(user.conta),
       { expires: 2 }
     );
     this.user$.set(user);

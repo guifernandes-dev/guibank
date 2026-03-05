@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { forkJoin, map, Observable } from 'rxjs';
 import { User } from '../models/services.model';
 import { Account, CDIType, Loan, Transaction } from '../../../server/models/db.model';
 
@@ -31,8 +31,13 @@ export class APIService {
     return this.http.post<Transaction>(`${this.baseUrl}/transactions`, transaction);
   }
 
-  getTransactionsByUserOrigin(conta: string): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?origem.conta=${conta}`);
+  getTransactionsByUser(conta: string): Observable<Transaction[]> {
+    return forkJoin([
+      this.http.get<Transaction[]>(`${this.baseUrl}/transactions?origem.conta=${conta}`),
+      this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino.conta=${conta}`)
+    ]).pipe(
+      map(([destino, origem]) => [...destino, ...origem])
+    );
   }
   getTransactionsByUserDestination(conta: string): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino.conta=${conta}`);
