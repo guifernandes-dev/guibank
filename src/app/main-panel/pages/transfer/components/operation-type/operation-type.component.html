@@ -3,8 +3,10 @@
     <button
       type="button"
       class="btn"
-      [disabled]="disabledBtn(item.operation)"
-      (click)="changeOperation(item)"
+      [routerLink]="item.operation"
+      routerLinkActive="active"
+      #rla="routerLinkActive"
+      [disabled]="rla.isActive"
     >
       <mat-icon>{{item.icon}}</mat-icon>
       {{item.label}}

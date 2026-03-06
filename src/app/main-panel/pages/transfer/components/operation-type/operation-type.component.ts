@@ -5,16 +5,18 @@ import { MenuOperation } from '../../models/operation.models';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '../../../../../core/login.services/login.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-operation-type',
-  imports: [MatIconModule, MatButtonModule],
+  imports: [MatIconModule, MatButtonModule, RouterModule],
   templateUrl: './operation-type.component.html',
   styleUrl: './operation-type.component.css'
 })
 export class OperationTypeComponent {
   private operationService = inject(OperationService);
   private loginService = inject(LoginService);
+  
 
   get operationItems() {
     return this.operationService.operationMenu;
@@ -23,7 +25,6 @@ export class OperationTypeComponent {
   get destinoNumero() {
     return this.operationService.tipoConta.value === 'num';
   }
-
 
   disabledBtn(operation: Operation): boolean {
     return this.operationService.currentOp$().operation === operation;

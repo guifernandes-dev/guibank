@@ -10,6 +10,7 @@ import { Transaction } from '../../../../../server/models/db.model';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { Operation } from '../../../../../server/constants/db.enum';
 import { User } from '../../../../core/models/services.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class OperationService {
   private readonly apiService = inject(APIService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
+  private readonly route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
   operationMenu: MenuOperation[] = [
     {

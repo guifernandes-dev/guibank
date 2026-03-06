@@ -20,7 +20,6 @@ export class LoginService {
   private readonly router = inject(Router);
   private user$ = signal<User | null>(null);
   private userOperations$ = signal<Transaction[]>([]);
-  private loadingUser$ = signal<boolean>(true);
 
   get user() {
     return this.user$;
@@ -28,10 +27,6 @@ export class LoginService {
 
   get userOp() {
     return this.userOperations$;
-  }
-
-  get loadingUser() {
-    return this.loadingUser$;
   }
 
   setUserOp(): void {
@@ -61,12 +56,10 @@ export class LoginService {
             this.setUser(user, 'Conta não encontrada', route);
             this.setUserOp();
           },
-          complete: () => {
-            this.loadingUser$.set(false);
+          error: err => {
+            console.error(err);
           }
         })
-    } else {
-      this.loadingUser$.set(false);
     }
   }
 

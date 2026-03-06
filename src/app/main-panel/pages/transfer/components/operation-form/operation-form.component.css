@@ -2,10 +2,6 @@
   pointer-events: none;
 }
 
-form {
-  max-width: 400px;
-}
-
 .saldo {
   font-size: 13px;
 }

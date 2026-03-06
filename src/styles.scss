@@ -9,6 +9,7 @@
   --cinza-escuro: #d4d4d4;
   --preto: #212529;
   --wmp: 800px;
+  --border-container-color: #c6c6c6;
 }
 
 * {
@@ -51,6 +52,13 @@ body {
 .max {
   max-width: 650px;
   width: 80%;
+}
+
+.max-form {
+  border: 0.8px solid var(--border-container-color);
+  border-radius: 10px;
+  max-width: 500px;
+  width: 95%;
 }
 
 .snackbar-erro {

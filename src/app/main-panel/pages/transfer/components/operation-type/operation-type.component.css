@@ -7,7 +7,7 @@
   padding: 3px 0;
   font-size: 13px;
   border-radius: 8px;
-  border: 1px solid black;
+  border: 0.8px solid var(--border-container-color);
   width: 110px;
 }
 

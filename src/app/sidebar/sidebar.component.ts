@@ -39,8 +39,4 @@ export class SidebarComponent {
       page: Pages.LOAN,
     }
   ];
-
-  get activeUrl() {
-    return this.router.url;
-  }
 }
