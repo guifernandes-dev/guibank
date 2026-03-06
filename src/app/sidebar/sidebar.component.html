@@ -1,11 +1,13 @@
 <aside class="sidebar">
   <nav class="container-btn">
     <div class="container-menu">
-      @for (item of menuItems$; track $index) {
+      @for (item of menuItems; track $index) {
         <button
           class="btn d-flex gap-1"
-          [disabled]="currentPage() === item.page"
-          (click)="redirectToPage(item.page)"
+          [routerLink]="item.page"
+          routerLinkActive="active"
+          #rla="routerLinkActive"
+          [disabled]="rla.isActive"
         >
           <mat-icon>
             {{item.icon}}
@@ -14,16 +16,5 @@
         </button>
       }
     </div>
-    @if (historyNav().length) {
-      <button
-        class="btn d-flex gap-1"
-        (click)="backPage()"
-      >
-        <mat-icon>
-          arrow_back
-        </mat-icon>
-        Voltar
-      </button>
-    }
   </nav>
 </aside>

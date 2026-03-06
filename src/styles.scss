@@ -8,6 +8,7 @@
   --hover-menu-btn: #2a73a0;
   --cinza-escuro: #d4d4d4;
   --preto: #212529;
+  --wmp: 800px;
 }
 
 * {
@@ -47,13 +48,14 @@ body {
   background: rgba(160, 142, 42, 0.1) !important;
 }
 
+.max {
+  max-width: 650px;
+  width: 80%;
+}
+
 .snackbar-erro {
   background-color: #f44336 !important;
   color: white !important;
-}
-
-.max {
-  max-width: 600px;
 }
 
 input.input-valor::-webkit-outer-spin-button,

@@ -25,6 +25,8 @@ export interface Transaction {
 export interface Installment {
   item: number,
   amortizacao: number,
+  vencimento: Date,
+  pago: boolean,
   juros: number,
   parcela: number
 }

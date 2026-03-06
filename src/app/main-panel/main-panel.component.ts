@@ -1,26 +1,18 @@
 import { Component, inject } from '@angular/core';
-import { DashboardComponent } from "./pages/dashboard/dashboard.component";
-import { TransactionsListComponent } from "./pages/transactions-list/transactions-list.component";
-import { Pages } from '../constants/front.enum';
-import { TransferComponent } from "./pages/transfer/transfer.component";
-import { LoanComponent } from "./pages/loan/loan.component";
-import { RouterService } from '../core/router.services/router.service';
-import { DocumentListComponent } from "./pages/document-list/document-list.component";
+import { RouterModule } from '@angular/router';
+import { SidebarComponent } from "../sidebar/sidebar.component";
+import { HeaderComponent } from "../header/header.component";
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-main-panel',
-  imports: [DashboardComponent, TransactionsListComponent, TransferComponent, LoanComponent, DocumentListComponent],
+  standalone: true,
+  imports: [RouterModule, SidebarComponent, HeaderComponent, MatSidenavModule, MatIconModule, MatButtonModule],
   templateUrl: './main-panel.component.html',
   styleUrl: './main-panel.component.css'
 })
 export class MainPanelComponent {
-  private readonly routerService = inject(RouterService);
-
-  get currentPage() {
-    return this.routerService.currentPage$
-  };
-
-  get pages() {
-    return Pages
-  };
+  opened: boolean = false;
 }

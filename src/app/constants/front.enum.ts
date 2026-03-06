@@ -1,5 +1,5 @@
 export enum Pages {
-  DASHBOARD = 'home',
+  DASHBOARD = 'dashboard',
   STATEMENTS = 'statements',
   OPERATIONS = 'operations',
   DOCUMENTS = 'documents',

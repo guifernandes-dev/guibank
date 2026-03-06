@@ -3,7 +3,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogModule, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { BrCurrencyPipe } from '../../pipe/br-currency.pipe';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { UtilService } from '../../core/util.services/util.service';
 import { Transaction } from '../../../server/models/db.model';
 import { DateTransPipe } from '../../pipe/date-trans.pipe';
 import { DateFormats } from '../../constants/front.enum';

@@ -9,6 +9,7 @@ import { TransactionsService } from '../../../../core/transactions.services/tran
 import { Transaction } from '../../../../../server/models/db.model';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { Operation } from '../../../../../server/constants/db.enum';
+import { User } from '../../../../core/models/services.model';
 
 @Injectable({
   providedIn: 'root'
@@ -74,11 +75,12 @@ export class OperationService {
   });
   tipoConta = new FormControl<string>('num');
 
-  buildForm(reset: boolean = false): void {
+  buildForm(userLogged: User | null, reset: boolean = false): void {
+    if(!userLogged) return;
+    const {nome, conta, email} = userLogged;
     const operation = this.currentOp$().operation
     const data = new Date();
     const isExpense = operation !== Operation.DEPOSITO;
-    const {nome, conta, email} = this.loginService.user()!;
     const user = {conta, email, nome};
     const INITIAL_FORM = {
       origem: isExpense ? user : {conta: '', email: '', nome: ''},
@@ -203,7 +205,8 @@ export class OperationService {
                   ? new Date(transaction.vencimento)
                   : null,
               });
-          this.buildForm(this.currentOp$().operation !== Operation.PAGAMENTO);
+          const user = this.loginService.user();
+          this.buildForm(user, this.currentOp$().operation !== Operation.PAGAMENTO);
           this.snackBar.open(
             'Transação salva com sucesso!',
             'Ok',

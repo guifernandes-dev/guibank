@@ -1,20 +1,25 @@
-@switch (currentPage()) {
-  @case (pages.DASHBOARD) {
-    <app-dashboard class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
-  }
-  @case (pages.STATEMENTS) {
-    <app-transactions-list class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
-  }
-  @case (pages.DOCUMENTS) {
-    <app-document-list class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
-  }
-  @case (pages.OPERATIONS) {
-    <app-transfer class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
-  }
-  @case (pages.LOAN) {
-    <app-loan class="d-flex w-100 justify-content-center align-items-center flex-column gap-4"/>
-  }
-  @default {
-    <p>404 - NOT FOUND</p>
-  }
-}
+<div class="menu">
+  <app-header/>
+</div>
+<mat-sidenav-container class="content" [hasBackdrop]="true">
+  <mat-sidenav
+    #sidenav
+    mode="over"
+    [(opened)]="opened"
+  >
+    <div class="sidebar">
+      <div class="p-3">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <app-sidebar class="w-100"/>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content class="main">
+    <button mat-icon-button (click)="sidenav.toggle()" class="toggle-menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <router-outlet/>
+  </mat-sidenav-content>
+</mat-sidenav-container>

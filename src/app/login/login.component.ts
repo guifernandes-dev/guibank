@@ -126,8 +126,6 @@ export class LoginComponent {
 
   formatar(event: Event) {
     const formatado = this.utilService.formataValorInput(event);
-
-    // 7. Atualiza o FormControl e coloca o cursor à esquerda
     this.renda.setValue(formatado);
     this.cursorend(event,formatado)
   }

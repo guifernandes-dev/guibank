@@ -3,7 +3,7 @@
   <table class="table">
     <tbody>
       @for (trans of docs; track $index) {
-        <tr [className]="`${trans | alertClass : 'table'}`">
+        <tr [className]="trans | alertClass : 'table'">
           <td style="width: 60px;">
             <div class="p-1 container-icon">
               <mat-icon>{{(trans | tipoTrans).icon}}</mat-icon>

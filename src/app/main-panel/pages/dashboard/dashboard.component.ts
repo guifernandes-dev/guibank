@@ -5,6 +5,7 @@ import { DocumentsOpenComponent } from './components/documents-open/documents-op
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
   imports: [TableComponent, ResumeComponent, DocumentsOpenComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'

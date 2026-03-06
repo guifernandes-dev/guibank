@@ -10,9 +10,11 @@ import { UtilService } from '../../../../../core/util.services/util.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from "@angular/material/icon";
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Installment } from '../../../../../../server/models/db.model';
+import { Installment, Loan } from '../../../../../../server/models/db.model';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogLoanTableComponent } from '../../../../../shared/dialog-loan-table/dialog-loan-table.component';
 
 @Component({
   selector: 'app-loan-form',
@@ -23,6 +25,7 @@ import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 export class LoanFormComponent implements OnInit {
   private readonly loanService = inject(LoanService);
   private readonly utilService = inject(UtilService);
+  private readonly dialog = inject(MatDialog);
   erroValor$ = signal<string>('');
   form = new FormGroup({
     valor: new FormControl<string>(this.limiteDispString,[this.validatorValor()]),
@@ -79,20 +82,26 @@ export class LoanFormComponent implements OnInit {
   createPriceTable(i: number) {
     const c = this.utilService.formataValorNumero(this.form.controls['valor'].value!);
     const n = this.form.controls['parcelas'].value!;
-    const parcela = c * i*((1+i)**n)/(((1+i)**n)-1);
+    const parcela = c * i*((1+i)**n)/(((1+i)**n)-1); //
     if(parcela) {
       const parcelaRound = this.utilService.round(parcela,2);
       let parcelas = [];
       let saldoDev = c;
       const totais = {juros: 0, amortizacao: 0, parcela: 0, taxa: 0};
+      const hoje = new Date();
+      hoje.setHours(23, 59, 59, 999);
       for (let index = 1; index <= n; index++) {
         const juros = this.utilService.round(saldoDev*i,2);
         const amortizacao = this.utilService.round(parcelaRound-juros,2);
+        const vencimento = new Date(hoje);
+        vencimento.setMonth(hoje.getMonth() + index);
         const installment: Installment = {
           item: index,
+          pago: false,
           juros,
           amortizacao,
           parcela: parcelaRound,
+          vencimento,
         }
         totais.juros += juros;
         totais.amortizacao += amortizacao;
@@ -106,7 +115,17 @@ export class LoanFormComponent implements OnInit {
         saldoDev -= amortizacao
         parcelas.push(installment);
       }
-      this.loanService.loan$.update(loan => ({...loan, parcelas, totais}));
+      this.loanService.loan$.update(loan => {
+        const loanAjust: Loan = {
+          ...loan,
+          taxa: i,
+          valor: c,
+          parcelas,
+          totais
+        };
+        console.log(loanAjust);
+        return loanAjust;
+      });
     }
   }
 
@@ -117,14 +136,19 @@ export class LoanFormComponent implements OnInit {
     let parcelas = [];
     let saldoDev = c;
     const totais = {juros: 0, amortizacao: 0, parcela: 0, taxa: 0};
+    const hoje = new Date();
     for (let index = 1; index <= n; index++) {
       const juros = this.utilService.round(saldoDev*i,2);
       const parcela = amortizacao+juros;
+      const vencimento = new Date(hoje);
+      vencimento.setMonth(hoje.getMonth() + index);
       const installment: Installment = {
         item: index,
+        pago: false,
         juros,
         amortizacao,
         parcela,
+        vencimento,
       };
       totais.juros += juros;
       totais.amortizacao += amortizacao;
@@ -138,7 +162,17 @@ export class LoanFormComponent implements OnInit {
       saldoDev -= amortizacao
       parcelas.push(installment);
     }
-    this.loanService.loan$.update(loan => ({...loan, parcelas, totais}));
+    this.loanService.loan$.update(loan => {
+      const loanAjust: Loan = {
+        ...loan,
+        taxa: i,
+        valor: c,
+        parcelas,
+        totais
+      };
+      console.log(loanAjust);
+      return loanAjust;
+    });
   }
 
   setParcelasMax(value: number) {
@@ -201,6 +235,12 @@ export class LoanFormComponent implements OnInit {
       }
       return null
     }
+  }
+
+  viewTable() {
+    const dialogRef = this.dialog.open(DialogLoanTableComponent, {
+      data: this.loan(),
+    });
   }
 
   submit() {

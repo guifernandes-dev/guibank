@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Transaction } from '../../server/models/db.model';
+import { Installment, Transaction } from '../../server/models/db.model';
 
 @Pipe({
   name: 'alertClass'
@@ -9,7 +9,7 @@ export class AlertClassPipe implements PipeTransform {
     return new Date(data.getFullYear(), data.getMonth(), data.getDay());
   }
 
-  transform(trans: Transaction, prefix: string = 'alert'): string {
+  transform(trans: Transaction | Installment, prefix: string = 'alert'): string {
     const hoje = new Date();
     const data = trans.vencimento;
     if(!data) {

@@ -1,0 +1,41 @@
+.content {
+  margin-top: 64px;
+  width: 100%;
+  height: calc(100vh - 64px);
+  display: flex;
+}
+
+.toggle-menu {
+  position: fixed;
+  left: 10px;
+  top: 74px;
+}
+
+.loading-initial {
+  font-size: 50px;
+  font-weight: 900;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100vw;
+  height: 100vh;
+}
+
+.loading-icon {
+  margin-left: 10px;
+}
+
+.sidebar {
+  background-color: var(--menu-background);
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: end;
+}
+
+.main {
+  padding: 20px 0;
+  width: 100vw;
+}

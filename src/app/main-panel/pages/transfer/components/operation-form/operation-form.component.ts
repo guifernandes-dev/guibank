@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +16,7 @@ import { TransactionsService } from '../../../../../core/transactions.services/t
 import { Transaction } from '../../../../../../server/models/db.model';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { UtilService } from '../../../../../core/util.services/util.service';
+import { LoginService } from '../../../../../core/login.services/login.service';
 
 @Component({
   selector: 'app-operation-form',
@@ -39,11 +40,18 @@ export class OperationFormComponent {
   private readonly operationService = inject(OperationService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
+  private readonly loginService = inject(LoginService);
   formataValor = this.utilService.formataValor;
   filtraData = this.utilService.filtraData;
 
+  constructor() {
+    effect(()=>{
+      const user = this.loginService.user();
+      this.operationService.buildForm(user);
+    });
+  }
+
   ngOnInit(): void {
-    this.operationService.buildForm();
     this.checkError(this.destinoNumero ? 'conta' : 'email');
     this.checkError(this.destinoNumero ? 'conta' : 'email');
     this.checkError('vencimento');

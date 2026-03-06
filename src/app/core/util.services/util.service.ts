@@ -66,6 +66,6 @@ export class UtilService {
 
   round(n: number, digits: number): number {
     const mult = 1 * 10 ** digits;
-    return Math.ceil(n*mult)/mult;
+    return Math.round(n*mult)/mult;
   }
 }

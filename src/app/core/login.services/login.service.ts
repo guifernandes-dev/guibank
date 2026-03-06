@@ -6,15 +6,18 @@ import { User } from '../models/services.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Account, Transaction } from '../../../server/models/db.model';
 import { UtilService } from '../util.services/util.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Pages } from '../../constants/front.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   private readonly apiService = inject(APIService);
-  private cookieService = inject(CookieService);
-  private utilService = inject(UtilService);
-  private snackBar = inject(MatSnackBar);
+  private readonly utilService = inject(UtilService);
+  private readonly cookieService = inject(CookieService);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
   private user$ = signal<User | null>(null);
   private userOperations$ = signal<Transaction[]>([]);
   private loadingUser$ = signal<boolean>(true);
@@ -45,29 +48,31 @@ export class LoginService {
       });
   }
 
-  searchUserLogged() {
+  searchUserLogged(
+    accountCookie: string = this.cookieService.get('accountLogged'),
+    route: string =''
+  ) {
     if(!this.user()) {
-      const accountCookie: string = this.cookieService.get('accountLogged');
-      if(accountCookie) {
-        const accountLogged = JSON.parse(accountCookie)
-        this.apiService.getUserByAccount(accountLogged)
-          .pipe(first())
-          .subscribe({
-            next: user => {
-              this.setUser(user, 'Conta não encontrada');
-              this.setUserOp();
-            },
-            complete: () => {
-              this.loadingUser$.set(false);
-            }
-          })
-      } else {
-        this.loadingUser$.set(false);
-      }
+      const accountLogged = JSON.parse(accountCookie)
+      this.apiService.getUserByAccount(accountLogged)
+        .pipe(first())
+        .subscribe({
+          next: user => {
+            this.setUser(user, 'Conta não encontrada', route);
+            this.setUserOp();
+          },
+          complete: () => {
+            this.loadingUser$.set(false);
+          }
+        })
+    } else {
+      this.loadingUser$.set(false);
     }
   }
 
-  setUser = (users: Account[], errorMessage: string = '') => {
+  setUser = (users: Account[], errorMessage: string = '', route: string ='') => {
+    console.log();
+    
     if (users.length) {
       const {id, nome, renda, email} = users[0];
       const userFind: User = {
@@ -77,6 +82,9 @@ export class LoginService {
         email
       }
       this.registrarUser(userFind);
+      if (route) {
+        this.router.navigate([`/${Pages.DASHBOARD}`]);
+      }
     } else {
       this.snackBar.open(
         errorMessage,'Fechar',
@@ -86,6 +94,9 @@ export class LoginService {
         }
       );
       this.user$.set(null);
+      if (!route) {
+        this.router.navigate(['/login']);
+      }
     }
   }
 
@@ -94,7 +105,7 @@ export class LoginService {
       .getUserByEmailESenha(email,senha)
       .pipe(first())
       .subscribe(users => {
-        this.setUser(users, 'Usuário ou E-mail incorreto.')
+        this.setUser(users, 'Usuário ou E-mail incorreto.', 'login');
       })
   }
 
@@ -102,6 +113,7 @@ export class LoginService {
     this.cookieService.delete('accountLogged');
     this.user$.set(null);
     this.userOperations$.set([]);
+    this.router.navigate(['/login'])
   }
 
   criarConta(newWuser: Omit<User,'conta'>) {
@@ -129,6 +141,7 @@ export class LoginService {
                 renda
               };
               this.registrarUser(user);
+              this.router.navigate([`/${Pages.DASHBOARD}`])
             });
         }
       });

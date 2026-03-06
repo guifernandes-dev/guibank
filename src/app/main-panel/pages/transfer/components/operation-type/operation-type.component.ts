@@ -4,6 +4,7 @@ import { Operation } from '../../../../../../server/constants/db.enum';
 import { MenuOperation } from '../../models/operation.models';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { LoginService } from '../../../../../core/login.services/login.service';
 
 @Component({
   selector: 'app-operation-type',
@@ -13,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class OperationTypeComponent {
   private operationService = inject(OperationService);
+  private loginService = inject(LoginService);
 
   get operationItems() {
     return this.operationService.operationMenu;
@@ -32,7 +34,7 @@ export class OperationTypeComponent {
     this.operationService.operationForm.get('destino')?.get('conta')?.reset('');
     this.operationService.operationForm.get('destino')?.get('email')?.reset('');
     this.operationService.operationForm.get('destino')?.get('nome')?.reset('');
-    this.operationService.buildForm();
+    this.operationService.buildForm(this.loginService.user());
     this.operationService.updateErros(this.destinoNumero ? 'conta' : 'email');
     this.operationService.updateErros('valor');
     this.operationService.updateErros('vencimento');

@@ -1,3 +1,5 @@
-.max {
-  max-width: 600px;
+:host {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

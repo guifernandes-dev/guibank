@@ -10,7 +10,7 @@ import { SisCredito } from '../../../../../server/constants/db.enum';
   providedIn: 'root'
 })
 export class LoanService {
-  private readonly NUM_PARCELAS_MAX = 120;
+  private readonly NUM_PARCELAS_MAX = 480;
   private readonly VR_PARCELA_MIN = 100;
   private readonly PARCELA_MAX_RENDA = 0.3;
   private readonly FATOR_MULT_JUROS = 20;

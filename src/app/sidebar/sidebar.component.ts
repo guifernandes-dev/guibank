@@ -1,39 +1,46 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Pages } from '../constants/front.enum';
 import { MenuItem } from '../core/models/services.model';
-import { RouterService } from '../core/router.services/router.service';
 import {MatIconModule} from '@angular/material/icon';
+import { Router, RouterModule } from "@angular/router";
 
 @Component({
   selector: 'app-sidebar',
-  imports: [MatIconModule],
+  imports: [MatIconModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent implements OnInit {
-  private readonly routerService = inject(RouterService);
-  menuItems$: MenuItem[] = this.routerService.menuItem;
+export class SidebarComponent {
+  private readonly router = inject(Router);
+  readonly menuItems: MenuItem[] = [
+    {
+      label: "Dashboard",
+      icon: "dashboard",
+      page: Pages.DASHBOARD,
+    },
+    {
+      label: "Extrato",
+      icon: "account_balance_wallet",
+      page: Pages.STATEMENTS,
+    },
+    {
+      label: "Documentos",
+      icon: "request_quote",
+      page: Pages.DOCUMENTS,
+    },
+    {
+      label: "Operações",
+      icon: "currency_exchange",
+      page: Pages.OPERATIONS,
+    },
+    {
+      label: "Empréstimos",
+      icon: "price_check",
+      page: Pages.LOAN,
+    }
+  ];
 
-  ngOnInit(): void {
-    this.routerService.getStorage();
-  }
-
-  get historyNav() {
-    return this.routerService.historyNav$;
-  }
-
-  get currentPage() {
-    return this.routerService.currentPage$;
-  }
-
-  backPage() {
-    const pages = this.historyNav();
-    this.currentPage.set(pages[pages.length-1]);
-    this.routerService.removeLastPage();
-  }
-
-  redirectToPage(page: Pages): void {
-    this.routerService.setNavigate(page);
-    this.currentPage.set(page);
+  get activeUrl() {
+    return this.router.url;
   }
 }
