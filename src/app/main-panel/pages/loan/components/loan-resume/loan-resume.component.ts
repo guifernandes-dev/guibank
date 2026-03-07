@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { LoanService } from '../../services/loan.service';
@@ -7,15 +7,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoanListComponent } from "../loan-list/loan-list.component";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from '@angular/material/button';
+import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 
 @Component({
   selector: 'app-loan-resume',
-  imports: [MatCardModule, BrCurrencyPipe, MatTooltipModule, MatIconModule, LoanListComponent, RouterLink, MatButtonModule],
+  imports: [MatCardModule, BrCurrencyPipe, MatTooltipModule, MatIconModule, LoanListComponent, RouterLink, MatButtonModule, BrPercentPipe],
   templateUrl: './loan-resume.component.html',
   styleUrl: './loan-resume.component.css'
 })
-export class LoanResumeComponent {
+export class LoanResumeComponent implements OnInit {
   private readonly loanService = inject(LoanService);
+
+  ngOnInit(): void {
+    this.loanService.initTax();
+  }
 
   get taxa() {
     return this.loanService.tax$;
@@ -41,7 +46,7 @@ export class LoanResumeComponent {
     return this.loanService.vrParcelaMin;
   }
 
-  get tax() {
-    return this.loanService.tax$;
+  get userLoans() {
+    return this.loanService.userLoans$;
   }
 }

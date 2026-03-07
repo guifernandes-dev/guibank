@@ -69,8 +69,8 @@ export class LoanService {
     return Math.floor(this.limiteDisp/vrParcMin);
   }
 
-  initLoan(user: User | null) {
-    if(!user?.conta) return;
+  initTax() {
+    if(this.tax$()) return;
     this.apiService.getCDI()
       .pipe(first())
       .subscribe(cdi =>{
@@ -81,11 +81,6 @@ export class LoanService {
         const cdiamround = Math.round(cdiam*100000)/100000;
         this.tax$.set(cdiamround);
       })
-    // this.apiService.getLoansByUserId(conta)
-    //   .pipe(first())
-    //   .subscribe(loans => {
-    //     this.userLoans$.set(loans);
-    //   });
   }
 
   calcularPMT(PV: number, i: number, n: number): number {

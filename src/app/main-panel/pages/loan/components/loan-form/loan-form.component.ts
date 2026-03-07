@@ -9,7 +9,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { UtilService } from '../../../../../core/util.services/util.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from "@angular/material/icon";
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db.model';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
@@ -36,7 +35,6 @@ export class LoanFormComponent implements OnInit {
     parcelas: new FormControl<number>(1,[Validators.required]),
     sistema: new FormControl<SisCredito>(SisCredito.PRICE,[Validators.required]),
   })
-  // valor$ = toSignal(this.form.get('valor')!.valueChanges);
   parcelasMax = signal(1);
 
   get sisCredito() {
@@ -60,16 +58,11 @@ export class LoanFormComponent implements OnInit {
   }
 
   constructor () {
-    // effect(()=> {
-    //   const valorText = this.valor$() || this.limiteDispString;
-    //   const valor = this.utilService.formataValorNumero(valorText);
-    //   this.setParcelasMax(valor);
-    // });
     effect(()=> {
       this.loanService.tax$();
       const user = this.loginService.user();
       if(user?.conta) {
-        this.loanService.initLoan(user);
+        this.loanService.initTax();
         this.form.patchValue({
           valor: this.utilService.formataValor(this.loanService.limiteDisp),
           parcelas: this.parcMaxLimite / 2,

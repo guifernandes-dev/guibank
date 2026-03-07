@@ -1,26 +1,54 @@
 <div class="d-flex w-100 justify-content-evenly gap-2">
   @if (limiteDisp === 0) {
     <mat-card appearance="outlined" class="no-limit-container">
-      <mat-card-content class="card-resume">
+      <mat-card-content class="card-resume-no-limit">
         <mat-card-title class="card-title">NÃO HÁ LIMITE DISPONÍVEL PARA NOVOS EMPRÉSTIMOS</mat-card-title>
       </mat-card-content>
     </mat-card>
+  } @else {
+    <mat-card
+      appearance="outlined"
+      matTooltip="Valores máximos disponíveis para simulação de empréstimo."
+      class="no-limit-container"
+    >
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title class="card-title">DISPONÍVEL</mat-card-title>
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content class="card-resume-limit">
+        <div class="container-disp-text">
+          <span class="w-100">Valor</span>
+          <span class="w-100">{{ limiteDisp | brCurrency}}</span>
+        </div>
+        <div class="container-disp-text">
+          <span class="w-100">Parcelas</span>
+          <span class="w-100">{{ parcelasMax }}</span>
+        </div>
+        <div class="container-disp-text">
+          <span class="w-100">Taxa (a.m)</span>
+          <span class="w-100">{{ taxa() | brPercent }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
   }
-  <mat-card
-    appearance="outlined"
-    matTooltip="Saldo devedor considera o total com juros se não houver antecipação"
-  >
-    <mat-card-header>
-      <mat-card-title-group>
-        <mat-card-title class="card-title">SALDO DEVEDOR TOTAL</mat-card-title>
-      </mat-card-title-group>
-    </mat-card-header>
-    <mat-card-content class="card-resume-valor">
-      {{ valorEmprestimos | brCurrency}}
-    </mat-card-content>
-  </mat-card>
+  @if (valorEmprestimos>0) {
+    <mat-card
+      appearance="outlined"
+      matTooltip="Saldo devedor considera o total com juros do contrato."
+    >
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title class="card-title">SALDO DEVEDOR TOTAL</mat-card-title>
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content class="card-resume-valor">
+        {{ valorEmprestimos | brCurrency}}
+      </mat-card-content>
+    </mat-card>
+  }
 </div>
-@if (limiteDisp > (vrParcelaMin * (1 + tax()))) {
+@if (limiteDisp > (vrParcelaMin * (1 + taxa()))) {
   <button
     mat-fab
     extended
@@ -30,7 +58,9 @@
     routerLink="simular"
   >
     <mat-icon>add</mat-icon>
-    SOLICITAR EMPRÉSTIMO
+    SIMULAR
   </button>
 }
-<app-loan-list/>
+@if (userLoans().length) {
+  <app-loan-list/>
+}
