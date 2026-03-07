@@ -1,0 +1,19 @@
+.font-size {
+  font-size: 11px;
+}
+
+.fixed-head {
+  top: -1px;
+  font-size: 13px;
+}
+
+.pay-icon {
+  height: 20px;
+  width: 20px;
+}
+
+.pay-btn {
+  height: 20px;
+  width: 20px;
+  padding: 0;
+}

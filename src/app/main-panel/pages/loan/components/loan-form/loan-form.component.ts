@@ -146,6 +146,7 @@ export class LoanFormComponent implements OnInit {
         ...loan,
         sistema,
         taxa: taxa,
+        atuais: {...loan.atuais, saldo: totais.amortizacao + totais.juros},
         valor: vp,
         parcelas,
         totais

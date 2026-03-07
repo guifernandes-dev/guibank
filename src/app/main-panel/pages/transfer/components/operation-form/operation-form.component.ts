@@ -140,7 +140,8 @@ export class OperationFormComponent {
 
   disabledBtn(): boolean {
     let disabled = false;
-    switch (this.currentOp().operation) {
+    const curOp = this.currentOp().operation;
+    switch (curOp) {
       case Operation.PIX:
         disabled = !this.destino?.get('conta')?.value?.length;
         break;
@@ -153,7 +154,10 @@ export class OperationFormComponent {
       this.operationForm.get('valor')?.value === '0,00'
       || (
         this.operationForm.get('pago')?.value
-        && this.operationForm.get('valor')?.value === this.formataValor(this.saldo)
+        && (
+          this.operationForm.get('valor')?.value === this.formataValor(this.saldo)
+          && curOp !== Operation.DEPOSITO
+        )
       )
     ) {
       disabled = true;

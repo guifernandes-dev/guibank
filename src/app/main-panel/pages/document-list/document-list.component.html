@@ -1,6 +1,6 @@
 <main class="d-flex flex-column gap-4 w-100 max">
   <h3>Documentos em Aberto</h3>
-  <table class="table">
+  <table class="table table-hover table-sm">
     <tbody>
       @for (trans of docs; track $index) {
         <tr [className]="trans | alertClass : 'table'">

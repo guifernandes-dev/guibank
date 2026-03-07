@@ -70,3 +70,13 @@ input.input-valor::-webkit-outer-spin-button,
 input.input-valor::-webkit-inner-spin-button {
   display: none;
 }
+
+.container-icon{
+  border-radius: 100%;
+  border: 3px solid var(--cinza-escuro);
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

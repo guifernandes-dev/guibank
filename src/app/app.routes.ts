@@ -15,6 +15,8 @@ import { OperationFormComponent } from './main-panel/pages/transfer/components/o
 import { operationGuard } from './core/guards/operation.guard';
 import { LoanResumeComponent } from './main-panel/pages/loan/components/loan-resume/loan-resume.component';
 import { LoanFormComponent } from './main-panel/pages/loan/components/loan-form/loan-form.component';
+import { LoanListComponent } from './main-panel/pages/loan/components/loan-list/loan-list.component';
+import { InstallmentsTableComponent } from './main-panel/pages/loan/components/installments-table/installments-table.component';
 
 export const routes: Routes = [
   {
@@ -77,12 +79,18 @@ export const routes: Routes = [
           {
             path: '',
             component: LoanResumeComponent,
-            canActivate: []
           },
           {
             path: 'simular',
             component: LoanFormComponent,
-            canActivate: []
+          },
+          {
+            path: 'contratos',
+            component: LoanListComponent,
+          },
+          {
+            path: 'contratos/:id',
+            component: InstallmentsTableComponent,
           }
         ]
       },

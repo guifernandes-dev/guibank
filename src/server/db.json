@@ -191,6 +191,21 @@
       "tipo": "pix",
       "pago": true,
       "vencimento": null
+    },
+    {
+      "id": "a0db",
+      "origem": null,
+      "destino": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "data": "2026-03-07T16:04:47.477Z",
+      "descricao": "Caixa eletrônico",
+      "valor": 1000,
+      "tipo": "deposito",
+      "pago": true,
+      "vencimento": null
     }
   ],
   "loans": [
@@ -203,6 +218,13 @@
       },
       "data": "2026-03-07T05:11:30.914Z",
       "taxa": 0.03027,
+      "pago": false,
+      "atuais": {
+        "juros": 0,
+        "amortizacao": 0,
+        "parcela": 0,
+        "saldo": 5869.6048763064456
+      },
       "totais": {
         "juros": 869.6048763064456,
         "amortizacao": 5000,
@@ -313,6 +335,13 @@
       },
       "data": "2026-03-07T05:26:48.792Z",
       "taxa": 0.03027,
+      "pago": false,
+      "atuais": {
+        "juros": 0,
+        "amortizacao": 0,
+        "parcela": 0,
+        "saldo": 1090.81
+      },
       "totais": {
         "juros": 90.81,
         "amortizacao": 1000,
@@ -378,6 +407,13 @@
       },
       "data": "2026-03-07T05:28:28.107Z",
       "taxa": 0.03027,
+      "pago": false,
+      "atuais": {
+        "juros": 0,
+        "amortizacao": 0,
+        "parcela": 0,
+        "saldo": 1090.81
+      },
       "totais": {
         "juros": 92.61466217754368,
         "amortizacao": 1000,
@@ -443,6 +479,13 @@
       },
       "data": "2026-03-07T05:36:41.971Z",
       "taxa": 0.03027,
+      "pago": false,
+      "atuais": {
+        "juros": 0,
+        "amortizacao": 0,
+        "parcela": 0,
+        "saldo": 2727.025
+      },
       "totais": {
         "juros": 227.025,
         "amortizacao": 2500,

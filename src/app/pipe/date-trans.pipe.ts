@@ -38,6 +38,12 @@ export class DateTransPipe implements PipeTransform {
           ? {day: "2-digit",month: "long"}
           : {day: "2-digit",month: "long", year: "numeric"}
         return value.toLocaleDateString(this.LOCALE, objDate);;
+      case DateFormats.LOAN_LIST:
+        return value.toLocaleString(this.LOCALE, {
+          day: 'numeric',
+          month: 'numeric',
+          year: '2-digit'
+        })
       default:
         return 'error';
     }

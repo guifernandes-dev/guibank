@@ -4,20 +4,9 @@
   justify-content: center;
 }
 
-.container-icon{
-  border-radius: 100%;
-  border: 3px solid var(--cinza-escuro);
-  width: 45px;
-  height: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .valor {
   font-weight: 700;
   font-size: 18px;
-  width: 140px;
 }
 
 .tipo {

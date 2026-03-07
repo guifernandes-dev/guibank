@@ -9,6 +9,7 @@ import { User } from '../../../../core/models/services.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogConfirmLoanComponent } from '../../../../shared/dialog-confirm-loan/dialog-confirm-loan.component';
 import { Router } from '@angular/router';
+import { ComponentType } from '@angular/cdk/overlay';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,8 @@ export class LoanService {
     destino: {conta: '', email: '', nome: ''},
     data: new Date(),
     taxa: 0,
+    pago: false,
+    atuais: {juros: 0, amortizacao: 0, parcela: 0, saldo: 0},
     totais: {juros: 0, amortizacao: 0, parcela: 0, saldo: 0},
     parcelas: [],
     sistema: SisCredito.PRICE,
@@ -96,6 +99,15 @@ export class LoanService {
       })
   }
 
+  openedDialog<T>(
+    fn: ()=> void,
+    dialogClass: ComponentType<T>,
+    data: any
+  ) {
+    const dialogRef = this.dialog.open(dialogClass,{data});
+    dialogRef.afterClosed().subscribe(fn)
+  }
+
   createLoan() {
     const loan = this.loan$();
     const dialogRef = this.dialog.open(DialogConfirmLoanComponent,{
@@ -104,10 +116,6 @@ export class LoanService {
 
     dialogRef.afterClosed().subscribe((loan: Loan) => {
       if(loan) {
-        const loanDate = {
-          ...this.loan$(),
-          data: new Date()
-        };
         this.apiService.postLoan(loan)
           .pipe(first())
           .subscribe(loan => {

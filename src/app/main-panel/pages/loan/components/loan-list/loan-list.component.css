@@ -1,0 +1,23 @@
+.descricao {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.valor {
+  font-weight: 700;
+}
+
+.tipo {
+  font-weight: 500;
+}
+
+.form-title {
+  margin: 0;
+  line-height: 1.2;
+  padding-right: 56px;
+}
+
+.icon-td {
+  width: 60px;
+  padding-bottom: 0;
+}

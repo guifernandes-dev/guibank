@@ -4,7 +4,6 @@ import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { LoanService } from '../../services/loan.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
-import { LoanListComponent } from "../loan-list/loan-list.component";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from '@angular/material/button';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
@@ -12,7 +11,7 @@ import { LoginService } from '../../../../../core/login.services/login.service';
 
 @Component({
   selector: 'app-loan-resume',
-  imports: [MatCardModule, BrCurrencyPipe, MatTooltipModule, MatIconModule, LoanListComponent, RouterLink, MatButtonModule, BrPercentPipe],
+  imports: [MatCardModule, BrCurrencyPipe, MatTooltipModule, MatIconModule, RouterLink, MatButtonModule, BrPercentPipe],
   templateUrl: './loan-resume.component.html',
   styleUrl: './loan-resume.component.css'
 })

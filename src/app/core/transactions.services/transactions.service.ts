@@ -108,19 +108,19 @@ export class TransactionsService {
     dialogRef.afterClosed().subscribe((resp: Transaction) => {
       if (resp && resp.id) {
         const {id} = resp;
-        let fnType: Observable<Transaction>;
+        let respAPI: Observable<Transaction>;
         switch (type) {
           case 'edit':
-            fnType = this.apiService.patchTransactionById(id, resp);
+            respAPI = this.apiService.patchTransactionById(id, resp);
             break;
           case 'delete':
-            fnType = this.apiService.deleteTransactionById(id);
+            respAPI = this.apiService.deleteTransactionById(id);
             break;
           default:
-            fnType = this.apiService.patchTransactionById(id, {id: resp.id, pago: true});
+            respAPI = this.apiService.patchTransactionById(id, {id: resp.id, pago: true});
             break;
         }
-        fnType
+        respAPI
           .pipe(first())
           .subscribe((trans) => {
             const dateTrans = {

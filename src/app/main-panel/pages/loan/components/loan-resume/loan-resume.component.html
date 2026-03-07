@@ -67,5 +67,15 @@
   </button>
 }
 @if (userLoans().length) {
-  <app-loan-list/>
+  <button
+    mat-fab
+    extended
+    class="mt-3"
+    class="btn-padrao w-75"
+    type="button"
+    routerLink="contratos"
+  >
+    <mat-icon>article_person</mat-icon>
+    MEUS CONTRATOS
+  </button>
 }

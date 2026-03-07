@@ -3,84 +3,8 @@
 }
 <h2 mat-dialog-title class="text-center">TABELA DE AMORTIZAÇÃO</h2>
 <mat-dialog-content class="d-flex flex-column f">
-  <table class="table table-bordered table-striped">
-    <thead class="sticky-top fixed-head">
-      <tr class="text-center">
-        <th scope="col">Nº</th>
-        <th>Vencimento</th>
-        <th>Prestação</th>
-        <th>Juros</th>
-        <th>Amortização</th>
-        <th>Saldo</th>
-        @if (loan.id) {
-          <th>Ação</th>
-        }
-      </tr>
-    </thead>
-    <tbody class="font-size">
-      @for (parc of loan.parcelas; track $index) {
-        <tr
-          [className]="!parc.pago ? (parc | alertClass : 'table') : ''"
-        >
-          <th class="valor" scope="row">
-            <div>{{parc.item}}</div>
-          </th>
-          <td class="valor">
-            {{parc.vencimento | dateTrans: dateFormats.DOCS_LIST }}
-          </td>
-          <td class="valor">
-            {{parc.parcela | brCurrency}}
-          </td>
-          <td class="valor">
-            {{parc.juros | brCurrency}}
-          </td>
-          <td class="valor">
-            {{parc.amortizacao | brCurrency}}
-          </td>
-          <td class="valor">
-            {{parc.saldo | brCurrency}}
-          </td>
-          @if (loan.id) {
-            <td class="valor">
-              @if(parc.pago) {
-                ✅Pago
-              } @else {
-                <button
-                  mat-icon-button
-                  matTooltip="Pagar"
-                  type="button"
-                  class="text-success pay-btn"
-                  (click)="pagar(loan.id!,parc)"
-                >
-                  <mat-icon class="pay-icon">payments</mat-icon>
-                </button>
-              }
-            </td>
-          }
-        </tr>
-      }
-      <tr class="text-center">
-        <th colspan="2" class="text-end">
-          TOTAL:
-        </th>
-        <th>
-          {{loan.totais.parcela | brCurrency}}
-        </th>
-        <th>
-          {{loan.totais.juros | brCurrency}}
-        </th>
-        <th>
-          {{loan.totais.amortizacao | brCurrency}}
-        </th>
-        <th></th>
-      </tr>
-    </tbody>
-  </table>
+  <app-installments-table/>
 </mat-dialog-content>
 <mat-dialog-actions>
-  @if (loan.id) {
-    <span class="px-3">VALOR ATUAL: {{presentValue$() | brCurrency}}</span>
-    <button mat-button (click)="quitar(loan.id!)">QUITAR CONTRATO</button>
-  }
   <button mat-button (click)="fechar()" cdkFocusInitial>Fechar</button>
 </mat-dialog-actions>

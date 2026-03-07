@@ -11,5 +11,6 @@ export enum DateFormats {
   DOCS_CARD = 'docsCard',
   DOCS_LIST = 'docsList',
   TRANS_LIST = 'transList',
-  HEAD_TRANS_LIST = 'headTransList'
+  HEAD_TRANS_LIST = 'headTransList',
+  LOAN_LIST = 'loanList'
 }
