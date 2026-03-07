@@ -9,10 +9,11 @@ import { LoanService } from '../../services/loan.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-installments-table',
-  imports: [AlertClassPipe,DateTransPipe,BrCurrencyPipe,MatIconModule, MatButtonModule, RouterLink],
+  imports: [AlertClassPipe,DateTransPipe,BrCurrencyPipe,MatIconModule, MatButtonModule, RouterLink, MatTooltipModule],
   templateUrl: './installments-table.component.html',
   styleUrl: './installments-table.component.css'
 })

@@ -21,9 +21,11 @@
       <th>Prestação</th>
       <th>Juros</th>
       <th>Amortização</th>
-      <th>Saldo</th>
+      @if (!loan$()?.id) {
+        <th>Saldo</th>
+      }
       @if (loan$()?.id) {
-        <th>Ação</th>
+        <th>Status</th>
       }
     </tr>
   </thead>
@@ -47,9 +49,11 @@
         <td class="valor">
           {{parc.amortizacao | brCurrency}}
         </td>
-        <td class="valor">
-          {{parc.saldo | brCurrency}}
-        </td>
+        @if(!loan$()?.id) {
+          <td class="valor">
+            {{parc.saldo | brCurrency}}
+          </td>
+        }
         @if (loan$()?.id) {
           <td class="valor">
             @if(parc.pago) {
@@ -82,7 +86,11 @@
       <th>
         {{loan$()?.totais?.amortizacao! | brCurrency}}
       </th>
-      <th colspan="2"></th>
+      @if(loan$()?.id){
+        <th colspan="2"></th>
+      } @else {
+        <th colspan="1"></th>
+      }
     </tr>
   </tbody>
 </table>
