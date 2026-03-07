@@ -5,15 +5,16 @@ import { APIService } from '../../../../core/api.services/api.service';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { first } from 'rxjs';
 import { SisCredito } from '../../../../../server/constants/db.enum';
+import { User } from '../../../../core/models/services.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoanService {
-  private readonly NUM_PARCELAS_MAX = 480;
-  private readonly VR_PARCELA_MIN = 100;
-  private readonly PARCELA_MAX_RENDA = 0.3;
-  private readonly FATOR_MULT_JUROS = 20;
+  private readonly NUM_PARCELAS_MAX = 420;
+  private readonly VR_PARCELA_MIN = 200;
+  private readonly PARCELA_MAX_RENDA = 0.2;
+  private readonly FATOR_MULT_JUROS = 2.6;
   private readonly loginService = inject(LoginService);
   private readonly apiService = inject(APIService);
   private readonly utilService = inject(UtilService);
@@ -21,10 +22,10 @@ export class LoanService {
   readonly userLoans$ = signal<Loan[]>([]);
   readonly tax$ = signal<number>(0);
   readonly loan$ = signal<Loan>({
-    conta: this.loginService.user()!,
+    conta: {conta: '', email: '', nome: ''},
     data: new Date(),
     taxa: 0,
-    totais: {juros: 0, amortizacao: 0, parcela: 0, taxa: 0},
+    totais: {juros: 0, amortizacao: 0, parcela: 0, saldo: 0},
     parcelas: [],
     sistema: SisCredito.PRICE,
     valor: 0,
@@ -68,22 +69,28 @@ export class LoanService {
     return Math.floor(this.limiteDisp/vrParcMin);
   }
 
-  initLoan() {
-    const id = this.loginService.user()?.conta!
-    this.apiService.getLoansByUserId(id)
+  initLoan(user: User | null) {
+    if(!user?.conta) return;
+    this.apiService.getCDI()
       .pipe(first())
-      .subscribe(loans => {
-        this.userLoans$.set(loans);
-        this.apiService.getCDI()
-          .pipe(first())
-          .subscribe(cdi =>{
-            const cdiam = this.utilService.converteTax(
-              cdi.valor/100,
-              this.FATOR_MULT_JUROS
-            );
-            const cdiamround = this.utilService.round(cdiam,4);
-            this.tax$.set(cdiamround);
-          })
-      });
+      .subscribe(cdi =>{
+        const cdiam = this.utilService.converteTax(
+          cdi.valor/100,
+          this.FATOR_MULT_JUROS
+        );
+        const cdiamround = Math.round(cdiam*100000)/100000;
+        this.tax$.set(cdiamround);
+      })
+    // this.apiService.getLoansByUserId(conta)
+    //   .pipe(first())
+    //   .subscribe(loans => {
+    //     this.userLoans$.set(loans);
+    //   });
+  }
+
+  calcularPMT(PV: number, i: number, n: number): number {
+    if(!PV || !i || !n) return 0;
+    const fator = Math.pow(1 + i, n);
+    return PV * (i * fator) / (fator - 1);
   }
 }

@@ -1,3 +1,9 @@
+:host {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .card-resume {
   display: flex;
   gap: 20px;

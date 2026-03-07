@@ -13,6 +13,8 @@ import { authGuard } from './core/guards/auth.guard';
 import { Operation } from '../server/constants/db.enum';
 import { OperationFormComponent } from './main-panel/pages/transfer/components/operation-form/operation-form.component';
 import { operationGuard } from './core/guards/operation.guard';
+import { LoanResumeComponent } from './main-panel/pages/loan/components/loan-resume/loan-resume.component';
+import { LoanFormComponent } from './main-panel/pages/loan/components/loan-form/loan-form.component';
 
 export const routes: Routes = [
   {
@@ -71,6 +73,18 @@ export const routes: Routes = [
       {
         path: Pages.LOAN,
         component: LoanComponent,
+        children: [
+          {
+            path: '',
+            component: LoanResumeComponent,
+            canActivate: []
+          },
+          {
+            path: 'simular',
+            component: LoanFormComponent,
+            canActivate: []
+          }
+        ]
       },
       {
         path: '',

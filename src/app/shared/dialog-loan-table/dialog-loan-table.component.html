@@ -1,22 +1,23 @@
 @if (!loan.id) {
-  <span class="saldo-dev-incial">VALOR RECEBIDO: {{loan.valor | brCurrency}}</span>
+  <span class="saldo-dev-incial">SALDO DEVEDOR INICIAL: {{loan.valor | brCurrency}}</span>
 }
 <h2 mat-dialog-title class="text-center">TABELA DE AMORTIZAÇÃO</h2>
-<mat-dialog-content class="d-flex flex-column">
+<mat-dialog-content class="d-flex flex-column f">
   <table class="table table-bordered table-striped">
-    <thead>
+    <thead class="sticky-top fixed-head">
       <tr class="text-center">
         <th scope="col">Nº</th>
         <th>Vencimento</th>
         <th>Prestação</th>
-        <th>Amortização</th>
         <th>Juros</th>
+        <th>Amortização</th>
+        <th>Saldo</th>
         @if (loan.id) {
           <th>Ação</th>
         }
       </tr>
     </thead>
-    <tbody>
+    <tbody class="font-size">
       @for (parc of loan.parcelas; track $index) {
         <tr
           [className]="!parc.pago ? (parc | alertClass : 'table') : ''"
@@ -31,10 +32,13 @@
             {{parc.parcela | brCurrency}}
           </td>
           <td class="valor">
+            {{parc.juros | brCurrency}}
+          </td>
+          <td class="valor">
             {{parc.amortizacao | brCurrency}}
           </td>
           <td class="valor">
-            {{parc.juros | brCurrency}}
+            {{parc.saldo | brCurrency}}
           </td>
           @if (loan.id) {
             <td class="valor">
@@ -63,11 +67,12 @@
           {{loan.totais.parcela | brCurrency}}
         </th>
         <th>
-          {{loan.totais.amortizacao | brCurrency}}
-        </th>
-        <th>
           {{loan.totais.juros | brCurrency}}
         </th>
+        <th>
+          {{loan.totais.amortizacao | brCurrency}}
+        </th>
+        <th></th>
       </tr>
     </tbody>
   </table>

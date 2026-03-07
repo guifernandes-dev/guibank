@@ -5,7 +5,6 @@
         <mat-card-title class="card-title">NÃO HÁ LIMITE DISPONÍVEL PARA NOVOS EMPRÉSTIMOS</mat-card-title>
       </mat-card-content>
     </mat-card>
-
   }
   <mat-card
     appearance="outlined"
@@ -20,4 +19,18 @@
       {{ valorEmprestimos | brCurrency}}
     </mat-card-content>
   </mat-card>
+  @if (limiteDisp > (vrParcelaMin * (1 + tax()))) {
+    <button
+      mat-fab
+      extended
+      class="mt-3"
+      class="btn-padrao w-75"
+      type="button"
+      routerLink="simular"
+    >
+      <mat-icon>add</mat-icon>
+      SOLICITAR EMPRÉSTIMO
+    </button>
+  }
+  <app-loan-list/>
 </div>

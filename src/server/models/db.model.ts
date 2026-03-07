@@ -25,6 +25,7 @@ export interface Transaction {
 export interface Installment {
   item: number,
   amortizacao: number,
+  saldo: number,
   vencimento: Date,
   pago: boolean,
   juros: number,
@@ -46,7 +47,7 @@ export interface LoanTotal {
   juros: number,
   amortizacao: number,
   parcela: number,
-  taxa: number
+  saldo: number
 }
 
 export interface CDIType {

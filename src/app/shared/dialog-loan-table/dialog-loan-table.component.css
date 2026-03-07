@@ -17,3 +17,16 @@
   height: 20px;
   width: 20px;
 }
+
+.fixed-head {
+  top: -1px;
+  font-size: 13px;
+}
+
+.font-size {
+  font-size: 11px;
+}
+
+th, td {
+  padding: 5px;
+}

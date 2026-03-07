@@ -1,23 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { LoanResumeComponent } from "./components/loan-resume/loan-resume.component";
-import { LoanListComponent } from "./components/loan-list/loan-list.component";
+import { Component, inject } from '@angular/core';
 import { LoanService } from './services/loan.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { LoanFormComponent } from './components/loan-form/loan-form.component';
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: 'app-loan',
-  imports: [LoanResumeComponent, LoanListComponent, LoanFormComponent, MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule, RouterModule],
   templateUrl: './loan.component.html',
   styleUrl: './loan.component.css'
 })
-export class LoanComponent implements OnInit {
+export class LoanComponent {
   private readonly loanService = inject(LoanService);
-
-  ngOnInit(): void {
-    this.loanService.initLoan();
-  }
 
   get limiteDisp() {
     return this.loanService.limiteDisp;

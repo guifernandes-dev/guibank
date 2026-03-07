@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+type RoundType = 'ceil' | 'floor' | 'round'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -62,10 +64,5 @@ export class UtilService {
       valor = value;
     }
     input.setSelectionRange(valor.length,valor.length);
-  }
-
-  round(n: number, digits: number): number {
-    const mult = 1 * 10 ** digits;
-    return Math.round(n*mult)/mult;
   }
 }

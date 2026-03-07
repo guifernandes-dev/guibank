@@ -10,29 +10,33 @@ import { UtilService } from '../../../../../core/util.services/util.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from "@angular/material/icon";
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Installment, Loan } from '../../../../../../server/models/db.model';
+import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db.model';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogLoanTableComponent } from '../../../../../shared/dialog-loan-table/dialog-loan-table.component';
+import { LoginService } from '../../../../../core/login.services/login.service';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-loan-form',
-  imports: [ReactiveFormsModule, MatSliderModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatIconModule, BrCurrencyPipe, BrPercentPipe],
+  imports: [ReactiveFormsModule, MatSliderModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatIconModule, BrCurrencyPipe, BrPercentPipe, MatButtonToggleModule, RouterModule],
   templateUrl: './loan-form.component.html',
   styleUrl: './loan-form.component.css'
 })
 export class LoanFormComponent implements OnInit {
   private readonly loanService = inject(LoanService);
+  private readonly loginService = inject(LoginService);
   private readonly utilService = inject(UtilService);
   private readonly dialog = inject(MatDialog);
   erroValor$ = signal<string>('');
   form = new FormGroup({
-    valor: new FormControl<string>(this.limiteDispString,[this.validatorValor()]),
-    parcelas: new FormControl<number>(Math.floor(this.parcMaxLimite/2),[Validators.required]),
+    valor: new FormControl<string>('0,00',[this.validatorValor()]),
+    parcelas: new FormControl<number>(1,[Validators.required]),
     sistema: new FormControl<SisCredito>(SisCredito.PRICE,[Validators.required]),
   })
-  valor$ = toSignal(this.form.get('valor')!.valueChanges);
+  // valor$ = toSignal(this.form.get('valor')!.valueChanges);
   parcelasMax = signal(1);
 
   get sisCredito() {
@@ -51,100 +55,86 @@ export class LoanFormComponent implements OnInit {
     return this.loanService.loan$;
   }
 
+  get valorEmprestimos() {
+    return this.loanService.valorLoans;
+  }
+
   constructor () {
+    // effect(()=> {
+    //   const valorText = this.valor$() || this.limiteDispString;
+    //   const valor = this.utilService.formataValorNumero(valorText);
+    //   this.setParcelasMax(valor);
+    // });
     effect(()=> {
-      const valorText = this.valor$() || this.limiteDispString;
-      const valor = this.utilService.formataValorNumero(valorText);
-      this.setParcelasMax(valor);
+      this.loanService.tax$();
+      const user = this.loginService.user();
+      if(user?.conta) {
+        this.loanService.initLoan(user);
+        this.form.patchValue({
+          valor: this.utilService.formataValor(this.loanService.limiteDisp),
+          parcelas: this.parcMaxLimite / 2,
+        })
+      };
     });
-    effect(()=> {
-      const tax = this.loanService.tax$();
-      this.calculaParcela(tax);
-    })
   }
 
   ngOnInit(): void {
-    this.setParcelasMax(this.loanService.limiteDisp);
+    this.form.controls['valor'].valueChanges.subscribe(valor => {
+      if(valor) {
+        const valorNum = this.utilService.formataValorNumero(valor);
+        this.setParcelasMax(valorNum);
+      }
+    });
     this.form.valueChanges.subscribe(() => {
       this.calculaParcela();
     });
   }
 
   calculaParcela(i: number = this.loanService.tax$()) {
-    const sistema = this.form.controls['sistema'].value;
-    if (sistema === SisCredito.PRICE) {
-      this.createPriceTable(i);
-    } else {
-      this.createSacTable(i);
-    }
-  }
-
-  createPriceTable(i: number) {
-    const c = this.utilService.formataValorNumero(this.form.controls['valor'].value!);
-    const n = this.form.controls['parcelas'].value!;
-    const parcela = c * i*((1+i)**n)/(((1+i)**n)-1); //
-    if(parcela) {
-      const parcelaRound = this.utilService.round(parcela,2);
-      let parcelas = [];
-      let saldoDev = c;
-      const totais = {juros: 0, amortizacao: 0, parcela: 0, taxa: 0};
-      const hoje = new Date();
-      hoje.setHours(23, 59, 59, 999);
-      for (let index = 1; index <= n; index++) {
-        const juros = this.utilService.round(saldoDev*i,2);
-        const amortizacao = this.utilService.round(parcelaRound-juros,2);
-        const vencimento = new Date(hoje);
-        vencimento.setMonth(hoje.getMonth() + index);
-        const installment: Installment = {
-          item: index,
-          pago: false,
-          juros,
-          amortizacao,
-          parcela: parcelaRound,
-          vencimento,
-        }
-        totais.juros += juros;
-        totais.amortizacao += amortizacao;
-        totais.parcela += parcela;
-        if (index === n) {
-          const taxaTotal = totais.juros / c;
-          const taxaam = this.utilService
-            .converteTax(taxaTotal,1,n,1);
-          totais.taxa = taxaam
-        }
-        saldoDev -= amortizacao
-        parcelas.push(installment);
-      }
+    const form = this.form.value;
+    const valor = this.utilService.formataValorNumero(form.valor!);
+    if(!valor || !form.parcelas) {
       this.loanService.loan$.update(loan => {
-        const loanAjust: Loan = {
+        return {
           ...loan,
-          taxa: i,
-          valor: c,
-          parcelas,
-          totais
-        };
-        console.log(loanAjust);
-        return loanAjust;
+          parcelas: []
+        }
       });
+      return;
     }
+    if(!form.sistema) return;
+    this.createTable(i, valor, form.parcelas, form.sistema);
   }
 
-  createSacTable(i: number) {
-    const c = this.utilService.formataValorNumero(this.form.controls['valor'].value!);
-    const n = this.form.controls['parcelas'].value!;
-    const amortizacao = this.utilService.round(c/n,2);
-    let parcelas = [];
-    let saldoDev = c;
-    const totais = {juros: 0, amortizacao: 0, parcela: 0, taxa: 0};
+  createTable(taxa: number, vp: number, tempo: number, sistema: SisCredito) {
+    let saldo = vp;
+    let parcelas: Installment[] = [];
+    let parcela: number = 0;
+    let amortizacao: number = 0;
+    const totais: LoanTotal = {juros: 0, amortizacao: 0, parcela: 0, saldo: vp};
     const hoje = new Date();
-    for (let index = 1; index <= n; index++) {
-      const juros = this.utilService.round(saldoDev*i,2);
-      const parcela = amortizacao+juros;
+    hoje.setHours(23, 59, 59, 999);
+    const sisIsPrice = sistema === SisCredito.PRICE;
+    if(sisIsPrice) {
+      parcela = this.loanService.calcularPMT(vp,taxa,tempo);
+    } else {
+      amortizacao = vp/tempo;
+    };
+    for (let index = 1; index <= tempo; index++) {
+      const juros = saldo*taxa;
       const vencimento = new Date(hoje);
       vencimento.setMonth(hoje.getMonth() + index);
+      if(sisIsPrice) {
+        parcela = index === tempo ? saldo + juros : parcela;
+        amortizacao = parcela-juros;
+      } else {
+        parcela = amortizacao+juros;
+      }
+      saldo -= amortizacao;
       const installment: Installment = {
         item: index,
         pago: false,
+        saldo,
         juros,
         amortizacao,
         parcela,
@@ -153,24 +143,18 @@ export class LoanFormComponent implements OnInit {
       totais.juros += juros;
       totais.amortizacao += amortizacao;
       totais.parcela += parcela;
-      if (index === n) {
-        const taxaTotal = totais.juros / c;
-        const taxaam = this.utilService
-          .converteTax(taxaTotal,1,n,1);
-        totais.taxa = taxaam
-      }
-      saldoDev -= amortizacao
+      totais.saldo -= amortizacao;
       parcelas.push(installment);
     }
     this.loanService.loan$.update(loan => {
       const loanAjust: Loan = {
         ...loan,
-        taxa: i,
-        valor: c,
+        sistema,
+        taxa: taxa,
+        valor: vp,
         parcelas,
         totais
       };
-      console.log(loanAjust);
       return loanAjust;
     });
   }
