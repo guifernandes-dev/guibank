@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { LoanService } from '../../services/loan.service';
@@ -8,6 +8,7 @@ import { LoanListComponent } from "../loan-list/loan-list.component";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from '@angular/material/button';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
+import { LoginService } from '../../../../../core/login.services/login.service';
 
 @Component({
   selector: 'app-loan-resume',
@@ -17,6 +18,15 @@ import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 })
 export class LoanResumeComponent implements OnInit {
   private readonly loanService = inject(LoanService);
+  private readonly loginService = inject(LoginService);
+
+  constructor() {
+    effect(() => {
+      const user = this.loginService.user();
+      if (!user?.conta) return;
+      this.loanService.getUserLoans(user.conta);
+    });
+  }
 
   ngOnInit(): void {
     this.loanService.initTax();

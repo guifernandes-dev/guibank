@@ -55,6 +55,10 @@ export class APIService {
     return this.http.get<Loan[]>(`${this.baseUrl}/loans`)
   }
 
+  postLoan(body: Loan): Observable<Loan> {
+    return this.http.post<Loan>(`${this.baseUrl}/loans`, body)
+  }
+
   getCDI(): Observable<CDIType> {
     return this.http.get<CDIType>('https://brasilapi.com.br/api/taxas/v1/CDI');
   }

@@ -5,9 +5,9 @@
 >
   <div class="d-flex justify-content-center w-100 gap-2">
     <button
-      mat-icon-button
+      mat-mini-fab
       type="button"
-      class="d-flex justify-content-center align-items-center m-2"
+      class="d-flex justify-content-center align-items-center m-2 btn-padrao"
       routerLink="/loan"
     >
       <mat-icon>chevron_left</mat-icon>
@@ -72,14 +72,14 @@
       <span class="hint">{{this.form.get('parcelas')?.value}} parcelas</span>
     </label>
   </div>
-  @if (loan().taxa) {
-    <div class="d-flex justify-content-center flex-column">
-      <h5 class="text-center">RESULTADO</h5>
+  <div class="d-flex justify-content-center flex-column">
+    <h5 class="text-center">RESULTADO</h5>
+    @if (!disabledBtn()) {
       <span class="text-center simulacao">
-        {{this.form.controls['parcelas'].value}} 
+        {{this.form.get('parcelas')?.value}} 
         x
         {{
-          this.form.controls['sistema'].value === sisCredito.PRICE
+          this.form.get('sistema')?.value === sisCredito.PRICE
             ? (loan().parcelas[0].parcela | brCurrency)
             : `${loan().parcelas[0].parcela | brCurrency} (Inicial) e ${loan().parcelas[loan().parcelas.length-1].parcela | brCurrency} (Final)`
         }}
@@ -95,8 +95,10 @@
         <mat-icon>table</mat-icon>
         VER TABELA DE PARCELAS
       </button>
-    </div>
-  }
+    } @else {
+      <p>Insira um valor e quantidade de parcelas para ver a simulação.</p>
+    }
+  </div>
   <button
     mat-fab
     extended

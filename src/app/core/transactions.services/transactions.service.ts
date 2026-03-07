@@ -120,23 +120,24 @@ export class TransactionsService {
             fnType = this.apiService.patchTransactionById(id, {id: resp.id, pago: true});
             break;
         }
-        fnType.pipe(first())
-        .subscribe((trans) => {
-          const dateTrans = {
-            ...trans,
-            data: new Date(trans.data),
-              vencimento: trans.vencimento ? new Date(trans.vencimento) : null,
-          }
-          cbSubscribe(dateTrans);
-          this.snackBar.open(
-            mensagem,
-            'Ok',
-            {
-              duration: this.utilService.duration,
-              panelClass: 'snackbar-sucess'
+        fnType
+          .pipe(first())
+          .subscribe((trans) => {
+            const dateTrans = {
+              ...trans,
+              data: new Date(trans.data),
+                vencimento: trans.vencimento ? new Date(trans.vencimento) : null,
             }
-          );
-        });
+            cbSubscribe(dateTrans);
+            this.snackBar.open(
+              mensagem,
+              'Ok',
+              {
+                duration: this.utilService.duration,
+                panelClass: 'snackbar-sucess'
+              }
+            );
+          });
       }
     });
   }

@@ -10,6 +10,16 @@
         </td>
         <td>
           <div class="tipo">
+            {{loan.id}}
+          </div>
+        </td>
+        <td>
+          <div class="tipo">
+            {{loan.valor | brCurrency}}
+          </div>
+        </td>
+        <td>
+          <div class="tipo">
             {{loan.data | dateTrans : dateFormats.DOCS_LIST}}
           </div>
         </td>

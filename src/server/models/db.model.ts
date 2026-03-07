@@ -35,7 +35,7 @@ export interface Installment {
 export interface Loan {
   id?: string,
   data: Date,
-  conta: TransAccount,
+  destino: TransAccount,
   valor: number,
   sistema: SisCredito,
   totais: LoanTotal,

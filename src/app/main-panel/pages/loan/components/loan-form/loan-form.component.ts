@@ -62,7 +62,7 @@ export class LoanFormComponent implements OnInit {
       this.loanService.tax$();
       const user = this.loginService.user();
       if(user?.conta) {
-        this.loanService.initTax();
+        this.loanService.initTax(user);
         this.form.patchValue({
           valor: this.utilService.formataValor(this.loanService.limiteDisp),
           parcelas: this.parcMaxLimite / 2,
@@ -115,7 +115,9 @@ export class LoanFormComponent implements OnInit {
     };
     for (let index = 1; index <= tempo; index++) {
       const juros = saldo*taxa;
-      const vencimento = new Date(hoje);
+      const fimDia = new Date(hoje);
+      fimDia.setHours(23,59,59,999);
+      const vencimento = new Date(fimDia);
       vencimento.setMonth(hoje.getMonth() + index);
       if(sisIsPrice) {
         parcela = index === tempo ? saldo + juros : parcela;
@@ -215,13 +217,13 @@ export class LoanFormComponent implements OnInit {
   }
 
   viewTable() {
-    const dialogRef = this.dialog.open(DialogLoanTableComponent, {
+    this.dialog.open(DialogLoanTableComponent, {
       data: this.loan(),
     });
   }
 
   submit() {
-
+    this.loanService.createLoan();
   }
 
   disabledBtn() {
@@ -230,6 +232,9 @@ export class LoanFormComponent implements OnInit {
       disabled = true;
     }
     if (!this.form.get('parcelas')?.value) {
+      disabled = true;
+    }
+    if (!this.loanService.loan$().parcelas.length) {
       disabled = true;
     }
     const errors = this.erroValor$();

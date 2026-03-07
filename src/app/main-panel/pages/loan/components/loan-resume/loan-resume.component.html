@@ -1,6 +1,6 @@
 <div class="d-flex w-100 justify-content-evenly gap-2">
   @if (limiteDisp === 0) {
-    <mat-card appearance="outlined" class="no-limit-container">
+    <mat-card appearance="outlined" class="no-limit-container flex-fill">
       <mat-card-content class="card-resume-no-limit">
         <mat-card-title class="card-title">NÃO HÁ LIMITE DISPONÍVEL PARA NOVOS EMPRÉSTIMOS</mat-card-title>
       </mat-card-content>
@@ -9,38 +9,43 @@
     <mat-card
       appearance="outlined"
       matTooltip="Valores máximos disponíveis para simulação de empréstimo."
-      class="no-limit-container"
+      class="no-limit-container flex-fill"
     >
       <mat-card-header>
-        <mat-card-title-group>
-          <mat-card-title class="card-title">DISPONÍVEL</mat-card-title>
-        </mat-card-title-group>
+          <mat-card-title class="card-title">
+              DISPONÍVEL
+          </mat-card-title>
       </mat-card-header>
       <mat-card-content class="card-resume-limit">
         <div class="container-disp-text">
           <span class="w-100">Valor</span>
-          <span class="w-100">{{ limiteDisp | brCurrency}}</span>
+          <span class="w-100 bold">
+            {{ limiteDisp | brCurrency}}
+          </span>
         </div>
         <div class="container-disp-text">
           <span class="w-100">Parcelas</span>
-          <span class="w-100">{{ parcelasMax }}</span>
+          <span class="w-100 bold">
+            {{ parcelasMax }}
+          </span>
         </div>
         <div class="container-disp-text">
           <span class="w-100">Taxa (a.m)</span>
-          <span class="w-100">{{ taxa() | brPercent }}</span>
+          <span class="w-100 bold">
+            {{ taxa() | brPercent }}
+          </span>
         </div>
       </mat-card-content>
     </mat-card>
   }
-  @if (valorEmprestimos>0) {
+  @if (valorEmprestimos>=0) {
     <mat-card
+      class="flex-fill"
       appearance="outlined"
       matTooltip="Saldo devedor considera o total com juros do contrato."
     >
-      <mat-card-header>
-        <mat-card-title-group>
+      <mat-card-header class="justify-content-center">
           <mat-card-title class="card-title">SALDO DEVEDOR TOTAL</mat-card-title>
-        </mat-card-title-group>
       </mat-card-header>
       <mat-card-content class="card-resume-valor">
         {{ valorEmprestimos | brCurrency}}
