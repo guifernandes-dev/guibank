@@ -6,10 +6,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { LoanListComponent } from "../loan-list/loan-list.component";
 import { RouterLink } from "@angular/router";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-loan-resume',
-  imports: [MatCardModule, BrCurrencyPipe, MatTooltipModule, MatIconModule, LoanListComponent, RouterLink],
+  imports: [MatCardModule, BrCurrencyPipe, MatTooltipModule, MatIconModule, LoanListComponent, RouterLink, MatButtonModule],
   templateUrl: './loan-resume.component.html',
   styleUrl: './loan-resume.component.css'
 })
