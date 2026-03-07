@@ -25,6 +25,7 @@
         <th>Saldo</th>
       }
       @if (loan$()?.id) {
+        <th>Pagamento Hoje</th>
         <th>Status</th>
       }
     </tr>
@@ -34,28 +35,33 @@
       <tr
         [className]="!parc.pago ? (parc | alertClass : 'table') : ''"
       >
-        <th class="valor" scope="row">
+        <th scope="row">
           <div>{{parc.item}}</div>
         </th>
-        <td class="valor">
+        <td>
           {{parc.vencimento | dateTrans: dateFormats.DOCS_LIST }}
         </td>
-        <td class="valor">
+        <td>
           {{parc.parcela | brCurrency}}
         </td>
-        <td class="valor">
+        <td>
           {{parc.juros | brCurrency}}
         </td>
-        <td class="valor">
+        <td>
           {{parc.amortizacao | brCurrency}}
         </td>
         @if(!loan$()?.id) {
-          <td class="valor">
+          <td>
             {{parc.saldo | brCurrency}}
           </td>
         }
         @if (loan$()?.id) {
-          <td class="valor">
+          <td>
+            @if(presentValue$().length) {
+              {{parcelaHoje(parc.item) | brCurrency}}
+            }
+          </td>
+          <td>
             @if(parc.pago) {
               ✅Pago
             } @else {
@@ -96,7 +102,7 @@
 </table>
 @if (loan$()?.id) {
   <div class="d-flex justify-content-center align-items-center">
-    <span class="px-3">VALOR ATUAL: {{presentValue$() | brCurrency}}</span>
+    <span class="px-3">VALOR ATUAL: {{totalHoje() | brCurrency}}</span>
     <button mat-button (click)="quitar(loan$()?.id!)">QUITAR CONTRATO</button>
   </div>
 }
