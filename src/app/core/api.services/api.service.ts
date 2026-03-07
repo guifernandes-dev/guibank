@@ -52,7 +52,7 @@ export class APIService {
   }
 
   getLoansByUserId(id: string): Observable<Loan[]> {
-    return this.http.get<Loan[]>(`${this.baseUrl}/loans`)
+    return this.http.get<Loan[]>(`${this.baseUrl}/loans?destino.conta=${id}`)
   }
 
   postLoan(body: Loan): Observable<Loan> {
