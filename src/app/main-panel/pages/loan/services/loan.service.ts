@@ -8,7 +8,6 @@ import { Operation, SisCredito } from '../../../../../server/constants/db.enum';
 import { User } from '../../../../core/models/services.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogConfirmLoanComponent } from '../../../../shared/dialog-confirm-loan/dialog-confirm-loan.component';
-import { ComponentType } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 
 @Injectable({
