@@ -31,7 +31,7 @@ export class TransactionsListComponent {
     return Operation;
   }
 
-  get transactions() {
+  get transactions2() {
     const mapa = this.loginService.userOp()
       .filter(op => op.pago)
       .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
@@ -50,5 +50,54 @@ export class TransactionsListComponent {
       data: new Date(data),
       dados
     })) as unknown as { data: Date, dados: Transaction[]}[];
+  }
+
+  get transactions() {
+    const operacoes = this.loginService.userOp()
+      .filter(op => op.pago)
+      .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()); // crescente
+
+    // 1. Agrupar por data
+    const mapa = operacoes.reduce((acc, op) => {
+      const data = op.data.toDateString();
+
+      if (!acc[data]) {
+        acc[data] = {
+          data: new Date(data),
+          dados: [],
+          saldoHoje: 0,
+          saldoAcumulado: 0
+        };
+      }
+
+      acc[data].dados.push(op);
+
+      // 2. Somar saldo do dia (entrada positiva, saída negativa)
+      const mult = op.origem?.conta === this.user()?.conta
+        ? -1
+        : 1
+      acc[data].saldoHoje += op.valor * mult;
+
+      return acc;
+    },
+    {} as Record<string, {
+      data: Date;
+      dados: any[];
+      saldoHoje: number;
+      saldoAcumulado: number;
+    }>);
+    
+    // 3. Transformar em array ordenado por data
+    const dias = Object.values(mapa).sort((a, b) => a.data.getTime() - b.data.getTime());
+
+    // 4. Calcular saldo acumulado
+    let saldoAnterior = 0;
+
+    dias.forEach(dia => {
+      dia.saldoAcumulado = saldoAnterior + dia.saldoHoje;
+      saldoAnterior = dia.saldoAcumulado;
+    });
+
+    return dias.sort((a, b) => b.data.getTime() - a.data.getTime());;
   }
 }

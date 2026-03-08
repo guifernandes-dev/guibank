@@ -266,6 +266,21 @@
       "pago": true,
       "tipo": "pagamento",
       "vencimento": "2026-03-08T07:41:17.029Z"
+    },
+    {
+      "id": "f2d5",
+      "origem": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "destino": null,
+      "data": "2026-03-08T18:21:52.929Z",
+      "descricao": "Parcela 1 do Contrato 021e",
+      "valor": 189.24745677427086,
+      "pago": true,
+      "tipo": "pagamento",
+      "vencimento": "2026-03-08T18:21:52.929Z"
     }
   ],
   "loans": [
@@ -280,10 +295,10 @@
       "taxa": 0.03027,
       "pago": false,
       "atuais": {
-        "juros": 0,
-        "amortizacao": 0,
-        "parcela": 0,
-        "saldo": 1092.6146621775438
+        "amortizacao": 188.25293243550868,
+        "juros": 0.9945243387621758,
+        "parcela": 189.24745677427086,
+        "saldo": 903.3672054032729
       },
       "totais": {
         "juros": 92.61466217754368,
@@ -294,11 +309,11 @@
       "parcelas": [
         {
           "item": 1,
-          "pago": false,
+          "pago": true,
           "saldo": 811.7470675644913,
-          "juros": 30.27,
+          "juros": 0.9945243387621758,
           "amortizacao": 188.25293243550868,
-          "parcela": 218.5229324355087,
+          "parcela": 189.24745677427086,
           "vencimento": "2026-04-08T02:59:59.999Z"
         },
         {

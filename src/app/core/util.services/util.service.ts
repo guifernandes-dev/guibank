@@ -129,7 +129,6 @@ export class UtilService {
     const mesAnterior = new Date(anterior.getFullYear(), anterior.getMonth(), anterior.getDate());
     diffMs = hojeData.getTime()- mesAnterior.getTime();
     const periodo = Math.round(diffMs / umDia);
-    console.log(periodo);
     const vf = saldo * Math.pow(1 + taxadia, periodo);
     const j = vf - saldo;
     return amortizacao + j;

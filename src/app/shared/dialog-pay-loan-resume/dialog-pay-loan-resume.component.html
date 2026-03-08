@@ -1,7 +1,8 @@
 <h2 mat-dialog-title>PAGAR</h2>
 <mat-dialog-content>
-  <p>Deseja realmente pagar {{parc.item}} do contrato {{parc.loanId}}?</p>
-  <h4>{{parc.valor | brCurrency}}</h4>
+  <p>Deseja realmente pagar a parcela {{parc.item}} do contrato {{parc.loanId}}?</p>
+  <p>Valor atualizado para pagamento agora:</p>
+  <h4>{{parc.parcela | brCurrency}}</h4>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="pagar()" cdkFocusInitial>PAGAR AGORA</button>

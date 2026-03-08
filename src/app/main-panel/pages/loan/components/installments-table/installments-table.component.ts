@@ -141,8 +141,7 @@ export class InstallmentsTableComponent {
 
   pagar(parcelaChange: Installment, template: TemplateRef<any>) {
     const parcela = this.parcelaHoje(parcelaChange.item);
-    const saldo = this.transService.saldo;
-    if(parcela > saldo) {
+    if(parcela > this.transService.saldo) {
       this.snackBar.open(
         'Saldo inferior ao valor da parcela!',
         'Ok',
@@ -176,11 +175,7 @@ export class InstallmentsTableComponent {
           juros,
           parcela,
         }
-        return {
-          ...loan,
-          atuais,
-          parcelas,
-        }
+        return {...loan,atuais,parcelas}
       }));
       this.presentValue$.update(presValue => {
         return presValue.filter(({item}) => item !== parc.item);

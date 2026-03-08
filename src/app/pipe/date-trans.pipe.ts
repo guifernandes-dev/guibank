@@ -10,9 +10,10 @@ export class DateTransPipe implements PipeTransform {
   transform(value: Date, format: DateFormats): string {
     const dataAtual = new Date();
     let objDate: Intl.DateTimeFormatOptions;
+    let dataOp: string;
     switch (format) {
       case DateFormats.RESUME_TRANS:
-        const dataOp = value.toLocaleDateString();
+        dataOp = value.toLocaleDateString();
         objDate = (dataOp === dataAtual.toLocaleDateString()
           ? { hour: "2-digit", minute: "2-digit" }
           : { day: '2-digit', month: 'long' })
@@ -34,10 +35,13 @@ export class DateTransPipe implements PipeTransform {
           minute: "2-digit"
         });;
       case DateFormats.HEAD_TRANS_LIST:
+        dataOp = value.toLocaleDateString();
         objDate = dataAtual.getFullYear() === value.getFullYear()
           ? {day: "2-digit",month: "long"}
           : {day: "2-digit",month: "long", year: "numeric"}
-        return value.toLocaleDateString(this.LOCALE, objDate);;
+        return dataOp === dataAtual.toLocaleDateString()
+          ? 'Hoje'
+          : value.toLocaleDateString(this.LOCALE, objDate);;
       case DateFormats.LOAN_LIST:
         return value.toLocaleString(this.LOCALE, {
           day: 'numeric',

@@ -4,8 +4,11 @@
     @for (ops of transactions; track $index) {
       <thead>
         <tr>
-          <th colspan="3" class="header-table">
+          <th colspan="2" class="header-table">
             {{ops.data | dateTrans : dateFormats.HEAD_TRANS_LIST}}
+          </th>
+          <th colspan="1" class="header-table saldo">
+            Saldo: {{ops.saldoAcumulado | brCurrency}}
           </th>
         </tr>
       </thead>
