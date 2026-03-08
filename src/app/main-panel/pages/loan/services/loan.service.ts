@@ -1,15 +1,15 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { LoginService } from '../../../../core/login.services/login.service';
-import { Loan } from '../../../../../server/models/db.model';
+import { Installment, Loan, Transaction } from '../../../../../server/models/db.model';
 import { APIService } from '../../../../core/api.services/api.service';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { first } from 'rxjs';
-import { SisCredito } from '../../../../../server/constants/db.enum';
+import { Operation, SisCredito } from '../../../../../server/constants/db.enum';
 import { User } from '../../../../core/models/services.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogConfirmLoanComponent } from '../../../../shared/dialog-confirm-loan/dialog-confirm-loan.component';
-import { Router } from '@angular/router';
 import { ComponentType } from '@angular/cdk/overlay';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +19,10 @@ export class LoanService {
   private readonly VR_PARCELA_MIN = 200;
   private readonly PARCELA_MAX_RENDA = 0.2;
   private readonly FATOR_MULT_JUROS = 2.6;
-  private readonly router = inject(Router);
   private readonly loginService = inject(LoginService);
   private readonly apiService = inject(APIService);
   private readonly utilService = inject(UtilService);
+  private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
   readonly isList$ = signal<boolean>(true);
   readonly userLoans$ = signal<Loan[]>([]);
@@ -38,6 +38,7 @@ export class LoanService {
     sistema: SisCredito.PRICE,
     valor: 0,
   });
+  presentValue$ = signal<{item: number, parcela: number}[]>([]);
 
   get valorLoans() {
     return this.userLoans$()
@@ -78,6 +79,22 @@ export class LoanService {
     return Math.floor(this.limiteDisp/vrParcMin);
   }
 
+  parcelaHoje(item: number): number {
+    const parcHoje = this.presentValue$();
+    const index = parcHoje
+      .findIndex(parc => parc.item === item);
+    if(!parcHoje[index]) return 0;
+    return parcHoje[index].parcela;
+  }
+
+  totalHoje(): number {
+    const presValue = this.presentValue$();
+    if(!presValue.length) return 0;
+    return this.presentValue$().reduce((soma, parcela)=>{
+      return soma+parcela.parcela;
+    },0)
+  }
+
   initTax(user?: User) {
     if(user?.conta){
       const {conta, email, nome} = user;
@@ -99,38 +116,118 @@ export class LoanService {
       })
   }
 
-  openedDialog<T>(
-    fn: ()=> void,
-    dialogClass: ComponentType<T>,
-    data: any
-  ) {
-    const dialogRef = this.dialog.open(dialogClass,{data});
-    dialogRef.afterClosed().subscribe(fn)
+  createTrans(
+    {id, destino, data, valor}: Loan,
+    parc?: Installment,
+    total?: number,
+    type: 'contrato' | 'parcela' | 'quitar' = 'contrato'
+  ): Transaction {
+    const hoje = new Date();
+    switch (type) {
+      case 'contrato':
+        return {
+          origem: null,
+          destino,
+          data,
+          descricao: `Contrato Nº ${id}`,
+          valor: valor * 0.95,
+          tipo: Operation.CREDITO,
+          pago: true,
+          vencimento: null
+        } as Transaction;    
+      case 'parcela':
+        return {
+          origem: destino,
+          destino: null,
+          data: hoje,
+          descricao: `Parcela ${parc?.item} do Contrato ${id}`,
+          valor: parc?.parcela || valor,
+          pago: true,
+          tipo: Operation.PAGAMENTO,
+          vencimento: hoje,
+        } as Transaction;
+      default:
+        return {
+          origem: destino,
+          destino: null,
+          data: hoje,
+          descricao: `Quitação do Contrato ${id}`,
+          valor: total || valor,
+          pago: true,
+          tipo: Operation.PAGAMENTO,
+          vencimento: hoje,
+        } as Transaction;;
+    }
   }
 
   createLoan() {
     const loan = this.loan$();
-    const dialogRef = this.dialog.open(DialogConfirmLoanComponent,{
-      data: loan
-    });
-
+    const dialogRef = this.dialog.open(DialogConfirmLoanComponent,{data: loan});
     dialogRef.afterClosed().subscribe((loan: Loan) => {
-      if(loan) {
-        this.apiService.postLoan(loan)
-          .pipe(first())
-          .subscribe(loan => {
-            const loanDate = {
-              ...loan,
-              data: new Date(loan.data),
-            }
-            this.userLoans$.update(loans => ([
-              ...loans,
-              loanDate
-            ].sort((b,a)=> b.data.getTime()-a.data.getTime())))
-          });
-        this.router.navigate(['/loan']);
-      }  
+      if(!loan) return;
+      this.apiService.postLoan(loan)
+        .pipe(first())
+        .subscribe(loan => {
+          const loanDate = this.ajustLoanDate(loan);
+          this.userLoans$.update(loans => ([
+            ...loans,
+            loanDate
+          ].sort((b,a)=> b.data.getTime()-a.data.getTime())));
+          const trans = this.createTrans(loanDate);
+          this.apiService.postTransaction(trans)
+            .pipe(first())
+            .subscribe(transApi => {
+              const trans = this.ajustTransDate(transApi);
+              this.loginService.userOp().push(trans);
+            });
+            this.router.navigate(['/loan']);
+        });
     });
+  }
+
+  patchLoan(loanParam: Loan, parc?: Installment, total?: number) {
+    if(!loanParam.id) return;
+    this.apiService.patchLoanById(loanParam.id,loanParam)
+      .pipe(first())
+      .subscribe(loanApi => {
+        const loan = this.ajustLoanDate(loanApi);
+        this.userLoans$.update(loans => {
+          const index = loans.findIndex(({id}) => id === loan.id)
+          if(index<0) return loans;
+          const loansCopy = [...loans]
+          loansCopy[index] = loan;
+          return loansCopy;
+        });        
+        const type = parc ? 'parcela' : 'quitar';
+        const trans = this.createTrans(loan, parc, total, type);        
+        this.apiService.postTransaction(trans)
+          .pipe(first())
+          .subscribe(transApi => {
+            const trans = this.ajustTransDate(transApi);
+            this.loginService.userOp().push(trans);
+          });
+      });
+  }
+
+  ajustLoanDate(loan: Loan): Loan {
+    return {
+      ...loan,
+      data: new Date(loan.data),
+      parcelas: loan.parcelas.map(parcela => ({
+        ...parcela,
+        vencimento: new Date(parcela.vencimento)
+      }))
+    }
+  }
+
+  ajustTransDate(trans: Transaction): Transaction {
+    return {
+      ...trans,
+      data: new Date(trans.data),
+      vencimento: trans.vencimento
+        ? new Date(trans.vencimento)
+        : null,
+    }
   }
 
   getUserLoans(conta: string) {
@@ -140,14 +237,7 @@ export class LoanService {
       .pipe(first())
       .subscribe(loans => {
         const loansDate = loans
-          .map(loan => ({
-            ...loan,
-            data: new Date(loan.data),
-            parcelas: loan.parcelas.map(parcela => ({
-              ...parcela,
-              vencimento: new Date(parcela.vencimento)
-            }))
-          }))
+          .map(loan => this.ajustLoanDate(loan))
           .sort((a,b) => b.data.getTime() - a.data.getTime());
         this.userLoans$.set(loansDate);
       });

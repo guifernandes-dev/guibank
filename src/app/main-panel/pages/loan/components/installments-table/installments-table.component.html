@@ -1,3 +1,14 @@
+<ng-template #payParc let-parcela="obj">
+  <p>Deseja realmente pagar parcela Nº {{parcela.item}}?</p>
+  <h4 class="m-0">{{parcela.parcela | brCurrency}}</h4>
+  <span>vencimento: {{parcela.vencimento | dateTrans : dateFormats.DOCS_LIST}}</span>
+</ng-template>
+
+<ng-template #payLoan let-loan="obj">
+  <p>Deseja realmente quitar o contrato Nº {{loan.id}}?</p>
+  <h4 class="m-0">{{loan.valor | brCurrency}}</h4>
+</ng-template>
+
 @if(loan$()?.id) {
   <div class="d-flex justify-content-center w-100 gap-2">
   <button
@@ -9,7 +20,7 @@
     <mat-icon>chevron_left</mat-icon>
   </button>
   <div class="d-flex align-items-center">
-    <h4 class="form-title">PARCELAS</h4>
+    <h4 class="form-title">PARCELAS - Contrato Nº {{loan$()?.id}}</h4>
   </div>
 </div>
 }
@@ -26,7 +37,7 @@
       }
       @if (loan$()?.id) {
         <th>Pagamento Hoje</th>
-        <th>Status</th>
+        <th>Pagar</th>
       }
     </tr>
   </thead>
@@ -57,20 +68,21 @@
         }
         @if (loan$()?.id) {
           <td>
-            @if(presentValue$().length) {
+            @if(parcelaHoje(parc.item)) {
               {{parcelaHoje(parc.item) | brCurrency}}
+            } @else {
+              ✅Pago
             }
           </td>
           <td>
             @if(parc.pago) {
-              ✅Pago
             } @else {
               <button
                 mat-icon-button
                 matTooltip="Pagar"
                 type="button"
                 class="text-success pay-btn"
-                (click)="pagar(loan$()?.id!,parc)"
+                (click)="pagar(parc, payParc)"
               >
                 <mat-icon class="pay-icon">payments</mat-icon>
               </button>
@@ -103,6 +115,8 @@
 @if (loan$()?.id) {
   <div class="d-flex justify-content-center align-items-center">
     <span class="px-3">VALOR ATUAL: {{totalHoje() | brCurrency}}</span>
-    <button mat-button (click)="quitar(loan$()?.id!)">QUITAR CONTRATO</button>
+    @if (!loan$()?.pago) {
+      <button mat-button (click)="quitar(payLoan)">QUITAR CONTRATO</button>
+    }
   </div>
 }

@@ -1,145 +1,293 @@
-[
-  {
-    "id": "b910",
-    "origem": null,
-    "destino": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
+{
+  "transactions": [
+    {
+      "id": "b910",
+      "origem": null,
+      "destino": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "data": "2026-02-27T12:53:15.293Z",
+      "descricao": "Caixa Eletrônico",
+      "valor": 1000,
+      "tipo": "deposito",
+      "pago": true,
+      "vencimento": null
     },
-    "data": "2026-02-27T12:53:15.293Z",
-    "descricao": "Caixa Eletrônico",
-    "valor": 1000,
-    "tipo": "deposito",
-    "pago": true,
-    "vencimento": null
-  },
-  {
-    "id": "782c",
-    "origem": null,
-    "destino": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
+    {
+      "id": "782c",
+      "origem": null,
+      "destino": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "data": "2026-02-27T12:55:27.189Z",
+      "descricao": "Cheque",
+      "valor": 500,
+      "tipo": "deposito",
+      "pago": true,
+      "vencimento": null
     },
-    "data": "2026-02-27T12:55:27.189Z",
-    "descricao": "Cheque",
-    "valor": 500,
-    "tipo": "deposito",
-    "pago": true,
-    "vencimento": null
-  },
-  {
-    "id": "f717",
-    "origem": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
+    {
+      "id": "f717",
+      "origem": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "destino": {
+        "conta": "55f3",
+        "email": "stellasouzamelo@outlook.com",
+        "nome": "Stella Sousa Melo"
+      },
+      "data": "2026-02-27T12:58:39.411Z",
+      "descricao": "Presente",
+      "valor": 200,
+      "tipo": "pix",
+      "pago": true,
+      "vencimento": null
     },
-    "destino": {
-      "conta": "55f3",
-      "email": "stellasouzamelo@outlook.com",
-      "nome": "Stella Sousa Melo"
+    {
+      "id": "f517",
+      "origem": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "destino": null,
+      "data": "2026-02-28T12:59:15.980Z",
+      "descricao": "Lanche",
+      "valor": 50,
+      "tipo": "debito",
+      "pago": true,
+      "vencimento": null
     },
-    "data": "2026-02-27T12:58:39.411Z",
-    "descricao": "Presente",
-    "valor": 200,
-    "tipo": "pix",
-    "pago": true,
-    "vencimento": null
-  },
-  {
-    "id": "f517",
-    "origem": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
+    {
+      "id": "46ee",
+      "origem": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "destino": null,
+      "data": "2026-03-02T03:01:42.045Z",
+      "descricao": "CEMIG",
+      "valor": 100,
+      "tipo": "pagamento",
+      "pago": true,
+      "vencimento": "2026-02-03T03:00:00.000Z"
     },
-    "destino": null,
-    "data": "2026-02-28T12:59:15.980Z",
-    "descricao": "Lanche",
-    "valor": 50,
-    "tipo": "debito",
-    "pago": true,
-    "vencimento": null
-  },
-  {
-    "id": "46ee",
-    "origem": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
+    {
+      "id": "993f",
+      "origem": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "destino": null,
+      "data": "2026-02-27T13:01:13.556Z",
+      "descricao": "CEMIG",
+      "valor": 100,
+      "tipo": "pagamento",
+      "pago": false,
+      "vencimento": "2026-03-03T03:00:00.000Z"
     },
-    "destino": null,
-    "data": "2026-03-02T03:01:42.045Z",
-    "descricao": "CEMIG",
-    "valor": 100,
-    "tipo": "pagamento",
-    "pago": true,
-    "vencimento": "2026-02-03T03:00:00.000Z"
-  },
-  {
-    "id": "993f",
-    "origem": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
+    {
+      "id": "6ecc",
+      "origem": {
+        "conta": "55f3",
+        "email": "stellasouzamelo@outlook.com",
+        "nome": "Stella Sousa Melo"
+      },
+      "destino": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "data": "2026-02-28T15:17:39.745Z",
+      "descricao": "Divida",
+      "valor": 50,
+      "tipo": "pix",
+      "pago": true,
+      "vencimento": null
     },
-    "destino": null,
-    "data": "2026-02-27T13:01:13.556Z",
-    "descricao": "CEMIG",
-    "valor": 100,
-    "tipo": "pagamento",
-    "pago": false,
-    "vencimento": "2026-03-03T03:00:00.000Z"
-  },
-  {
-    "id": "6ecc",
-    "origem": {
-      "conta": "55f3",
-      "email": "stellasouzamelo@outlook.com",
-      "nome": "Stella Sousa Melo"
+    {
+      "id": "da97",
+      "origem": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "destino": null,
+      "data": "2026-02-27T22:37:38.792Z",
+      "descricao": "Teste",
+      "valor": 150,
+      "tipo": "pagamento",
+      "pago": false,
+      "vencimento": "2026-05-14T03:00:00.000Z"
     },
-    "destino": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
+    {
+      "id": "fff6",
+      "origem": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "destino": null,
+      "data": "2026-03-02T21:54:58.208Z",
+      "descricao": "Aluguel",
+      "valor": 2000,
+      "tipo": "pagamento",
+      "pago": false,
+      "vencimento": "2026-03-02T21:54:42.046Z"
+    }
+  ],
+  "loans": [
+    {
+      "id": "021e",
+      "destino": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "data": "2026-03-08T02:41:11.418Z",
+      "taxa": 0.03027,
+      "pago": false,
+      "atuais": {
+        "juros": 0,
+        "amortizacao": 0,
+        "parcela": 0,
+        "saldo": 1092.6146621775438
+      },
+      "totais": {
+        "juros": 92.61466217754368,
+        "amortizacao": 1000,
+        "parcela": 1092.6146621775438,
+        "saldo": 0
+      },
+      "parcelas": [
+        {
+          "item": 1,
+          "pago": false,
+          "saldo": 811.7470675644913,
+          "juros": 30.27,
+          "amortizacao": 188.25293243550868,
+          "parcela": 218.5229324355087,
+          "vencimento": "2026-04-08T02:59:59.999Z"
+        },
+        {
+          "item": 2,
+          "pago": false,
+          "saldo": 617.7957188641598,
+          "juros": 24.57158373517715,
+          "amortizacao": 193.95134870033155,
+          "parcela": 218.5229324355087,
+          "vencimento": "2026-05-08T02:59:59.999Z"
+        },
+        {
+          "item": 3,
+          "pago": false,
+          "saldo": 417.9734628386692,
+          "juros": 18.700676410018115,
+          "amortizacao": 199.8222560254906,
+          "parcela": 218.5229324355087,
+          "vencimento": "2026-06-08T02:59:59.999Z"
+        },
+        {
+          "item": 4,
+          "pago": false,
+          "saldo": 212.10258712328704,
+          "juros": 12.652056720126517,
+          "amortizacao": 205.87087571538217,
+          "parcela": 218.5229324355087,
+          "vencimento": "2026-07-08T02:59:59.999Z"
+        },
+        {
+          "item": 5,
+          "pago": false,
+          "saldo": 0,
+          "juros": 6.420345312221898,
+          "amortizacao": 212.10258712328704,
+          "parcela": 218.52293243550895,
+          "vencimento": "2026-08-08T02:59:59.999Z"
+        }
+      ],
+      "sistema": "price",
+      "valor": 1000
     },
-    "data": "2026-02-28T15:17:39.745Z",
-    "descricao": "Divida",
-    "valor": 50,
-    "tipo": "pix",
-    "pago": true,
-    "vencimento": null
-  },
-  {
-    "id": "da97",
-    "origem": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
-    },
-    "destino": null,
-    "data": "2026-02-27T22:37:38.792Z",
-    "descricao": "Teste",
-    "valor": 150,
-    "tipo": "pagamento",
-    "pago": false,
-    "vencimento": "2026-05-14T03:00:00.000Z"
-  },
-  {
-    "id": "fff6",
-    "origem": {
-      "conta": "6770",
-      "email": "guifjj92@gmail.com",
-      "nome": "Guilherme Fernandes"
-    },
-    "destino": null,
-    "data": "2026-03-02T21:54:58.208Z",
-    "descricao": "Aluguel",
-    "valor": 2000,
-    "tipo": "pagamento",
-    "pago": false,
-    "vencimento": "2026-03-02T21:54:42.046Z"
-  }
-]
+    {
+      "id": "db75",
+      "destino": {
+        "conta": "6770",
+        "email": "guifjj92@gmail.com",
+        "nome": "Guilherme Fernandes"
+      },
+      "data": "2026-01-08T06:13:42.522Z",
+      "taxa": 0.03027,
+      "pago": false,
+      "atuais": {
+        "juros": 0,
+        "amortizacao": 0,
+        "parcela": 0,
+        "saldo": 1092.6146621775438
+      },
+      "totais": {
+        "juros": 92.61466217754368,
+        "amortizacao": 1000,
+        "parcela": 1092.6146621775438,
+        "saldo": 0
+      },
+      "parcelas": [
+        {
+          "item": 1,
+          "pago": false,
+          "saldo": 811.7470675644913,
+          "juros": 30.27,
+          "amortizacao": 188.25293243550868,
+          "parcela": 218.5229324355087,
+          "vencimento": "2026-02-09T02:59:59.999Z"
+        },
+        {
+          "item": 2,
+          "pago": false,
+          "saldo": 617.7957188641598,
+          "juros": 24.57158373517715,
+          "amortizacao": 193.95134870033155,
+          "parcela": 218.5229324355087,
+          "vencimento": "2026-03-09T02:59:59.999Z"
+        },
+        {
+          "item": 3,
+          "pago": false,
+          "saldo": 417.9734628386692,
+          "juros": 18.700676410018115,
+          "amortizacao": 199.8222560254906,
+          "parcela": 218.5229324355087,
+          "vencimento": "2026-04-09T02:59:59.999Z"
+        },
+        {
+          "item": 4,
+          "pago": false,
+          "saldo": 212.10258712328704,
+          "juros": 12.652056720126517,
+          "amortizacao": 205.87087571538217,
+          "parcela": 218.5229324355087,
+          "vencimento": "2026-05-09T02:59:59.999Z"
+        },
+        {
+          "item": 5,
+          "pago": false,
+          "saldo": 0,
+          "juros": 6.420345312221898,
+          "amortizacao": 212.10258712328704,
+          "parcela": 218.52293243550895,
+          "vencimento": "2026-06-09T02:59:59.999Z"
+        }
+      ],
+      "sistema": "price",
+      "valor": 1000
+    }
+  ]
+}

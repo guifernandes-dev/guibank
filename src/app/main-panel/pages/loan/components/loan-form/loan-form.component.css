@@ -46,3 +46,15 @@
   line-height: 1.2;
   padding-right: 56px;
 }
+
+.text-label {
+  font-size: 12px;
+}
+
+.sisAmort-select {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: -5px;
+}

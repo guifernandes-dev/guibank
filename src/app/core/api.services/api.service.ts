@@ -27,7 +27,7 @@ export class APIService {
     return this.http.post<Account>(`${this.baseUrl}/users`,user);
   }
 
-  postTransaction(transaction: Transaction): Observable<Transaction> {
+  postTransaction(transaction: Omit<Transaction,'id'>): Observable<Transaction> {
     return this.http.post<Transaction>(`${this.baseUrl}/transactions`, transaction);
   }
 
@@ -53,6 +53,10 @@ export class APIService {
 
   getLoansByUserId(id: string): Observable<Loan[]> {
     return this.http.get<Loan[]>(`${this.baseUrl}/loans?destino.conta=${id}`)
+  }
+
+  patchLoanById(id: string, body: Loan): Observable<Loan> {
+    return this.http.patch<Loan>(`${this.baseUrl}/loans/${id}`, body)
   }
 
   postLoan(body: Loan): Observable<Loan> {

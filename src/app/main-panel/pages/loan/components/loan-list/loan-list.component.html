@@ -1,3 +1,8 @@
+<ng-template #payLoan let-loan="obj">
+  <p>Deseja realmente quitar o contrato Nº {{loan.id}}?</p>
+  <h4 class="m-0">{{loan.valor | brCurrency}}</h4>
+</ng-template>
+
 <div class="d-flex justify-content-center w-100 gap-2">
   <button
     mat-mini-fab
@@ -44,82 +49,32 @@
                 <td matTooltip="Saldo devedor atual">
                   Saldo: {{loan.atuais.saldo | brCurrency}}
                 </td>
-                <td matTooltip="Próxima parcela a pagar">
-                  Próxima: {{
-                    getProxParc(loan.parcelas).parcela | brCurrency
-                  }} - {{
-                    getProxParc(loan.parcelas).vencimento | dateTrans : dateFormats.DOCS_CARD
-                  }}
-                </td>
+                @if(loan.pago) {
+                  <td>CONTRATO QUITADO</td>
+                } @else {
+                  <td matTooltip="Próxima parcela a pagar">
+                    Próxima: {{
+                      getProxParc(loan.parcelas).parcela | brCurrency
+                    }} - {{
+                      getProxParc(loan.parcelas).vencimento | dateTrans : dateFormats.DOCS_CARD
+                    }}
+                  </td>
+                }
                 <td>
-                  <div class="d-flex justify-content-between">
-                    @if (!loan.pago) {
-                      <button
-                        mat-icon-button
-                        matTooltip="Quitar contrato"
-                        type="button"
-                        class="text-success"
-                        (click)="quitar(loan)"
-                      >
-                        <mat-icon>payments</mat-icon>
-                      </button>
-                      <button
-                        mat-icon-button
-                        matTooltip="Ver Parcelas"
-                        type="button"
-                        [routerLink]="loan.id"
-                      >
-                        <mat-icon>table</mat-icon>
-                      </button>
-                      @if(isNewContract(loan.parcelas)) {
-                        <button
-                          mat-icon-button
-                          matTooltip="Cancelar Contrato"
-                          type="button"
-                          class="text-danger"
-                          (click)="cancelar(loan.id)"
-                        >
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                      }
-                    }
+                  <div class="d-flex justify-content-end">
+                    <button
+                      mat-icon-button
+                      matTooltip="Informações, parcelas e quitação"
+                      type="button"
+                      [routerLink]="loan.id"
+                    >
+                      <mat-icon>info</mat-icon>
+                    </button>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
-          <!-- <div class="tipo">
-            
-          </div>
-          <div class="tipo">
-            
-          </div>
-        </td>
-        <td>
-          <div class="valor">
-            
-          </div>
-        </td>
-        <td>
-          
-        </td> -->
-        <!-- @if(loan.descricao) {
-          <div class="descricao">
-            {{ loan.descricao }}
-          </div>
-        }
-        <div class="recebedor">
-          {{trans | recebedor}}
-        </div>
-        <td style="width: 150px; text-align: end;">
-          <div [class]="`${
-            trans.origem?.conta !== user()?.conta
-              ? 'text-success'
-              : 'text-danger'
-            } valor`">
-            {{trans.valor | brCurrency : trans.origem?.conta === user()?.conta}}
-          </div>
-          <div>{{trans.data | dateTrans : dateFormats.TRANS_LIST}}</div> -->
       </tr>
     }
   </tbody>

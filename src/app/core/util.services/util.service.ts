@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { MenuOperation } from '../../main-panel/pages/transfer/models/operation.models';
+import { Operation } from '../../../server/constants/db.enum';
 
 type RoundType = 'ceil' | 'floor' | 'round'
 
@@ -7,6 +9,40 @@ type RoundType = 'ceil' | 'floor' | 'round'
 })
 export class UtilService {
   readonly duration = 5000;
+
+  transTypes: MenuOperation[] = [
+    {
+      icon: 'send_money',
+      label: 'PIX',
+      operation: Operation.PIX
+    },
+    {
+      icon: 'savings',
+      label: 'DEPÓSITO',
+      operation: Operation.DEPOSITO
+    },
+    {
+      icon: 'payments',
+      label: 'SAQUE',
+      operation: Operation.SAQUE
+    },
+    {
+      icon: 'money',
+      label: 'DÉBITO',
+      operation: Operation.DEBITO
+    },
+    {
+      icon: 'request_quote',
+      label: 'PAGAMENTO',
+      operation: Operation.PAGAMENTO
+    },
+    {
+      icon: 'price_check',
+      label: 'CRÉDITO DE EMPRÉSTIMO',
+      operation: Operation.CREDITO
+    }
+  ]
+
   formataValorInput (event: Event): string {
     const input = event.target as HTMLInputElement;
     const text = input.value;
@@ -53,6 +89,11 @@ export class UtilService {
 
   converteTax(iaa: number, fator: number, nt: number = 12, nq: number = 1): number {
     return (((1+iaa)**(nq/nt))-1)*fator;
+  }
+
+  round(num: number, digits: number) {
+    const mult = Math.pow(10,digits);
+    return Math.round(num * mult)/mult
   }
 
   cursorend(event: Event, value?: string) {

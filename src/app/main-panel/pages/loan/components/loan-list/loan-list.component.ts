@@ -50,7 +50,7 @@ export class LoanListComponent {
     return `${numParcPg}/${parcs.length}`
   }
 
-  getProxParc(parcs: Installment[]): Installment {
+  getProxParc(parcs: Installment[]): Installment {    
     return parcs
       .filter(({pago}) => !pago)
       .sort((a,b) => a.vencimento.getTime() - b.vencimento.getTime())[0]
@@ -58,16 +58,5 @@ export class LoanListComponent {
 
   isNewContract(parcs: Installment[]): boolean {
     return parcs.every(parc => !parc.pago);
-  }
-
-  quitar(loan: Loan) {
-  }
-
-  openTable(id: string | undefined) {
-    
-  }
-
-  cancelar(id: string | undefined) {
-    
   }
 }

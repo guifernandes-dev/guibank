@@ -16,10 +16,9 @@
       <h4 class="form-title">SIMULAÇÃO</h4>
     </div>
   </div>
-  <div>
-    <!-- <h6 class="mb-1">SALDO DEVEDOR TOTAL: {{valorEmprestimos| brCurrency}}</h6> -->
-    <div class="d-flex flex-column align-items-center">
-      <span class="text-center">Sistema de Amortização</span>
+  <div class="d-flex gap-2 justify-content-between">
+    <div class="sisAmort-select">
+      <span class="text-center text-label">Sistema de Amortização</span>
       <div>
         <mat-button-toggle-group
           aria-label="Sistema de Amortização"
@@ -35,30 +34,30 @@
         </mat-button-toggle-group>
       </div>
     </div>
+    <mat-form-field
+      appearance="outline"
+      class="w-50"
+      floatLabel="always"
+    >
+      <mat-label>Valor</mat-label>
+      <input
+        matInput
+        type="text"
+        class="input-valor"
+        step="0.01"
+        formControlName="valor"
+        (input)="formatar($event)"
+        (focus)="formatar($event)"
+        (click)="formatar($event)"
+        (blur)="formatar($event)"
+        required
+      />
+      <span matTextPrefix>R$&nbsp;</span>
+      @if (this.form.get('valor')?.invalid) {
+        <mat-error>{{erroValor$()}}</mat-error>
+      }
+    </mat-form-field>
   </div>
-  <mat-form-field
-    appearance="outline"
-    class="w-50"
-    floatLabel="always"
-  >
-    <mat-label>Valor</mat-label>
-    <input
-      matInput
-      type="text"
-      class="input-valor"
-      step="0.01"
-      formControlName="valor"
-      (input)="formatar($event)"
-      (focus)="formatar($event)"
-      (click)="formatar($event)"
-      (blur)="formatar($event)"
-      required
-    />
-    <span matTextPrefix>R$&nbsp;</span>
-    @if (this.form.get('valor')?.invalid) {
-      <mat-error>{{erroValor$()}}</mat-error>
-    }
-  </mat-form-field>
   <div class="d-flex flex-column w-75">
     <label for="parcelas" class="container-slider">
       <span class="slider-label">Quantidade de Parcelas*</span>
@@ -75,6 +74,12 @@
   <div class="d-flex justify-content-center flex-column">
     <h5 class="text-center">RESULTADO</h5>
     @if (!disabledBtn()) {
+      <span class="text-center">
+        Líquido Creditado: {{(loan().valor * 0.95) | brCurrency}}
+      </span>
+      <span class="text-center taxa" matTooltip="3% IOF + 2% Taxa Administrativa">
+        Valor solicitado desconta taxas de 5%
+      </span>
       <span class="text-center simulacao">
         {{this.form.get('parcelas')?.value}} 
         x

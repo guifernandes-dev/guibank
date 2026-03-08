@@ -17,10 +17,11 @@ import { DialogLoanTableComponent } from '../../../../../shared/dialog-loan-tabl
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { RouterModule } from '@angular/router';
+import { MatTooltip } from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-loan-form',
-  imports: [ReactiveFormsModule, MatSliderModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatIconModule, BrCurrencyPipe, BrPercentPipe, MatButtonToggleModule, RouterModule],
+  imports: [ReactiveFormsModule, MatSliderModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatIconModule, BrCurrencyPipe, BrPercentPipe, MatButtonToggleModule, RouterModule, MatTooltip],
   templateUrl: './loan-form.component.html',
   styleUrl: './loan-form.component.css'
 })
@@ -63,6 +64,7 @@ export class LoanFormComponent implements OnInit {
       const user = this.loginService.user();
       if(user?.conta) {
         this.loanService.initTax(user);
+        
         this.form.patchValue({
           valor: this.utilService.formataValor(this.loanService.limiteDisp),
           parcelas: this.parcMaxLimite / 2,
@@ -79,14 +81,15 @@ export class LoanFormComponent implements OnInit {
       }
     });
     this.form.valueChanges.subscribe(() => {
-      this.calculaParcela();
+      const taxa = this.loanService.tax$()
+      this.calculaParcela(taxa);
     });
   }
 
-  calculaParcela(i: number = this.loanService.tax$()) {
+  calculaParcela(i: number) {
     const form = this.form.value;
     const valor = this.utilService.formataValorNumero(form.valor!);
-    if(!valor || !form.parcelas) {
+    if(!valor || !form.parcelas || !form.sistema) {
       this.loanService.loan$.update(loan => {
         return {
           ...loan,
@@ -95,7 +98,6 @@ export class LoanFormComponent implements OnInit {
       });
       return;
     }
-    if(!form.sistema) return;
     this.createTable(i, valor, form.parcelas, form.sistema);
   }
 
@@ -114,7 +116,7 @@ export class LoanFormComponent implements OnInit {
       amortizacao = vp/tempo;
     };
     for (let index = 1; index <= tempo; index++) {
-      const juros = saldo*taxa;
+      let juros = saldo*taxa;
       const fimDia = new Date(hoje);
       fimDia.setHours(23,59,59,999);
       const vencimento = new Date(fimDia);
@@ -126,6 +128,10 @@ export class LoanFormComponent implements OnInit {
         parcela = amortizacao+juros;
       }
       saldo -= amortizacao;
+      saldo = saldo,2;
+      juros = juros,2;
+      amortizacao = amortizacao,2;
+      parcela = parcela,2;
       const installment: Installment = {
         item: index,
         pago: false,
@@ -151,6 +157,7 @@ export class LoanFormComponent implements OnInit {
         parcelas,
         totais
       };
+
       return loanAjust;
     });
   }

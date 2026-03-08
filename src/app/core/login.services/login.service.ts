@@ -64,8 +64,6 @@ export class LoginService {
   }
 
   setUser = (users: Account[], errorMessage: string = '', route: string ='') => {
-    console.log();
-    
     if (users.length) {
       const {id, nome, renda, email} = users[0];
       const userFind: User = {

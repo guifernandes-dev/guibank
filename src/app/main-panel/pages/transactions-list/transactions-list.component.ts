@@ -6,9 +6,9 @@ import { DateTransPipe } from '../../../pipe/date-trans.pipe';
 import { LoginService } from '../../../core/login.services/login.service';
 import { DateFormats } from '../../../constants/front.enum';
 import { TipoTransPipe } from '../../../pipe/tipo-trans.pipe';
-import { AlertClassPipe } from '../../../pipe/alert-class.pipe';
 import { RecebedorPipe } from '../../../pipe/recebedor.pipe';
 import { Transaction } from '../../../../server/models/db.model';
+import { Operation } from '../../../../server/constants/db.enum';
 
 @Component({
   selector: 'app-transactions-list',
@@ -27,7 +27,11 @@ export class TransactionsListComponent {
     return DateFormats;
   }
 
-  get operations() {
+  get operation() {
+    return Operation;
+  }
+
+  get transactions() {
     const mapa = this.loginService.userOp()
       .filter(op => op.pago)
       .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())

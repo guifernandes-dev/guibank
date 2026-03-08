@@ -22,16 +22,6 @@ export interface Transaction {
   vencimento: Date | null
 }
 
-export interface Installment {
-  item: number,
-  amortizacao: number,
-  saldo: number,
-  vencimento: Date,
-  pago: boolean,
-  juros: number,
-  parcela: number
-}
-
 export interface Loan {
   id?: string,
   data: Date,
@@ -43,6 +33,16 @@ export interface Loan {
   pago: boolean,
   taxa: number,
   parcelas: Installment[]
+}
+
+export interface Installment {
+  item: number,
+  amortizacao: number,
+  saldo: number,
+  vencimento: Date,
+  pago: boolean,
+  juros: number,
+  parcela: number
 }
 
 export interface LoanTotal {

@@ -53,6 +53,7 @@ export class TransactionsService {
   updateUserOp(trans: Transaction) {
     this.loginService.userOp.update(userOps => {
       const opIndex = userOps.findIndex(op => op.id === trans.id);
+      if(opIndex<0) return userOps;
       userOps[opIndex] = trans;
       return userOps;
     });

@@ -10,7 +10,6 @@ import { Transaction } from '../../../../../server/models/db.model';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { Operation } from '../../../../../server/constants/db.enum';
 import { User } from '../../../../core/models/services.model';
-import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -20,35 +19,8 @@ export class OperationService {
   private readonly apiService = inject(APIService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
-  private readonly route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
-  operationMenu: MenuOperation[] = [
-    {
-      icon: 'send_money',
-      label: 'PIX',
-      operation: Operation.PIX
-    },
-    {
-      icon: 'savings',
-      label: 'DEPÓSITO',
-      operation: Operation.DEPOSITO
-    },
-    {
-      icon: 'payments',
-      label: 'SAQUE',
-      operation: Operation.SAQUE
-    },
-    {
-      icon: 'money',
-      label: 'DÉBITO',
-      operation: Operation.DEBITO
-    },
-    {
-      icon: 'request_quote',
-      label: 'PAGAMENTO',
-      operation: Operation.PAGAMENTO
-    }
-  ];
+  operationMenu: MenuOperation[] = this.utilService.transTypes.slice(0,-1);
   currentOp$ = signal<MenuOperation>(this.operationMenu[0]);
   operationForm = new FormGroup({
     origem: new FormGroup({
@@ -201,12 +173,12 @@ export class OperationService {
           );
         } else {
           this.loginService.userOp().push({
-                ...transaction,
-                data: new Date(transaction.data),
-                vencimento: transaction.vencimento
-                  ? new Date(transaction.vencimento)
-                  : null,
-              });
+            ...transaction,
+            data: new Date(transaction.data),
+            vencimento: transaction.vencimento
+              ? new Date(transaction.vencimento)
+              : null,
+          });
           const user = this.loginService.user();
           this.buildForm(user, this.currentOp$().operation !== Operation.PAGAMENTO);
           this.snackBar.open(
