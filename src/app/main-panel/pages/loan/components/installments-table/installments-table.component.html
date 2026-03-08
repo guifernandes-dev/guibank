@@ -41,7 +41,7 @@
       }
     </tr>
   </thead>
-  <tbody [class]="loan$()?.id ? '' : 'font-size '">
+  <tbody [class]="loan$()?.id ? '' : 'font-size'">
     @for (parc of loan$()?.parcelas; track $index) {
       <tr
         [className]="!parc.pago ? (parc | alertClass : 'table') : ''"

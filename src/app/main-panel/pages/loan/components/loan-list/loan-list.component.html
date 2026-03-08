@@ -19,7 +19,7 @@
 <table class="table">
   <tbody>
     @for (loan of loans(); track $index) {
-      <tr>
+      <tr [class]="loan.pago ? 'table-success': ''">
         <td class="icon-td">
           <div class="p-1 container-icon">
             <mat-icon>price_check</mat-icon>
@@ -28,7 +28,7 @@
         <td class="p-0">
           <table class="table table-borderless table-sm m-0">
             <tbody>
-              <tr>
+              <tr [class]="loan.pago ? 'table-success': ''">
                 <td matTooltip="Número do contrato">
                   Nº {{loan.id}}
                 </td>
@@ -42,7 +42,7 @@
                   Taxa: {{loan.taxa | brPercent}} a.m.
                 </td>
               </tr>
-              <tr>
+              <tr [class]="loan.pago ? 'table-success': ''">
                 <td matTooltip="Quantidade de parcelas pagas / Quantidade de parcelas contratadas">
                   Status: {{ statusParcelas(loan.parcelas) }}
                 </td>

@@ -5,22 +5,22 @@ import { Installment, Transaction } from '../../server/models/db.model';
   name: 'alertClass'
 })
 export class AlertClassPipe implements PipeTransform {
-  normalizeData(data: Date): Date {
-    return new Date(data.getFullYear(), data.getMonth(), data.getDay());
-  }
 
   transform(trans: Transaction | Installment, prefix: string = 'alert'): string {
     const hoje = new Date();
-    const data = trans.vencimento;
-    if(!data) {
+    hoje.setHours(23,59,59,999);
+    
+    const venc = trans.vencimento;
+    venc?.setHours(23,59,59,999);
+    
+    if(!venc) {
       return '';
     }
     const {pago} = trans;
-    const hojeTime = this.normalizeData(hoje).getTime();
-    const vencimento = this.normalizeData(data).getTime();
+    
     if(pago) return `${prefix}-secondary`;
-    if(hojeTime > vencimento) return `${prefix}-danger`;
-    if(hojeTime < vencimento) return `${prefix}-light`;
+    if(hoje > venc) return `${prefix}-danger`;
+    if(hoje < venc) return `${prefix}-light`;
     return `${prefix}-warning`;
   }
 
