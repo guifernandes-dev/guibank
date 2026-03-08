@@ -12,15 +12,17 @@ import { DateFormats } from '../../../../../constants/front.enum';
 import { AlertClassPipe } from '../../../../../pipe/alert-class.pipe';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UtilService } from '../../../../../core/util.services/util.service';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-documents-open',
-  imports: [MatIconModule, MatCardModule, MatButtonModule, BrCurrencyPipe, TipoTransPipe, DateTransPipe, AlertClassPipe ],
+  imports: [MatIconModule, MatCardModule, MatButtonModule, BrCurrencyPipe, TipoTransPipe, DateTransPipe, AlertClassPipe],
   templateUrl: './documents-open.component.html',
   styleUrl: './documents-open.component.css'
 })
 export class DocumentsOpenComponent {
   private readonly loginService = inject(LoginService);
+  private readonly dashService = inject(DashboardService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
   private snackBar = inject(MatSnackBar);
@@ -38,14 +40,7 @@ export class DocumentsOpenComponent {
   }
 
   get documents() {
-    const hoje = new Date();
-    const doisMesesDepois = new Date(hoje);
-    doisMesesDepois.setMonth(hoje.getMonth()+2);
-    return this.loginService.userOp()
-      .filter(op => op.vencimento && !op.pago)
-      .filter(op => new Date(op.vencimento!).getTime() <= doisMesesDepois.getTime())
-      .sort((a, b) => new Date(a.vencimento!).getTime() - new Date(b.vencimento!).getTime())
-      .slice(0,3);
+    return this.dashService.getDocuments();
   }
 
   pagar(trans: Transaction): void {

@@ -3,3 +3,14 @@
   display: flex;
   justify-content: center;
 }
+
+.toggle-badge {
+  position: relative;
+  overflow: visible !important;
+}
+
+.btn-ativo {
+  opacity: 1;
+  color: white !important;
+  background-color: var(--dourado-escuro) !important;
+}

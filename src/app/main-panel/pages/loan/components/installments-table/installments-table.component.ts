@@ -63,30 +63,10 @@ export class InstallmentsTableComponent {
   parcelasHoje(loan: Loan) {
     const parcelasHoje = loan.parcelas
       .filter(p=>!p.pago)
-      .map(({parcela, item, amortizacao}) => {
-      const umDia = 1000 * 60 * 60 * 24;
-      const hoje= new Date();
-      const hojeData = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-      const mesAnterior = item === 1 ? loan.data : loan.parcelas[item-2].vencimento;
-      const diffMs = hojeData.getTime() - mesAnterior.getTime();
-      const diasAtraso = Math.round(diffMs / umDia);
-      
-      const taxadia = this.utilService.converteTax(loan.taxa,1,30,1);
-
-      if(diasAtraso>0) {
-        const jurosAoDia = loan.taxa / 30; // mercado usa 30 dias
-        const valorMulta = parcela * 0.02;
-        const valorJuros = parcela * jurosAoDia * (diasAtraso);
-        return {item, parcela: parcela + valorMulta + valorJuros};
-      }
-      if(diasAtraso<-30) {
-        return {item, parcela: amortizacao};
-      }
-      const saldo = item === 1 ? loan.valor : loan.parcelas[item-2].amortizacao;
-      const vf = saldo * Math.pow(1 + taxadia, diasAtraso*-1);
-      const j = vf - saldo;
-      return {item, parcela: amortizacao + j};
-    })
+      .map(parc => ({
+        item: parc.item,
+        parcela: this.utilService.parcelaHoje(parc,loan)
+      }));
     this.presentValue$.set(parcelasHoje);
   }
 

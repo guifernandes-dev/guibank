@@ -1,13 +1,44 @@
-<div class="d-flex flex-column gap-4 max">
+<div class="d-flex flex-column gap-2 max">
+  <h3>Dashboard</h3>
   <section>
-    <h3>Resumo</h3>
+    <h4>Resumo</h4>
     <app-resume class="d-flex w-100 justify-content-center"/>
   </section>
   <section>
-    <app-documents-open/>
+    <h4>Próximas</h4>
+    <div class="d-flex gap-2 mb-2">
+      <button
+        mat-raised-button
+        [matBadge]="parcelas.length"
+        matBadgePosition="after"
+        [matBadgeHidden]="!parcelas.length"
+        (click)="toogleNext(nextCards.PARC)"
+        [class]="nextSelec() === nextCards.PARC ? 'btn-ativo' : ''"
+      >
+        <mat-icon>price_check</mat-icon>
+        Parcelas
+      </button>
+      <button
+        mat-raised-button
+        [matBadge]="parcelas.length"
+        matBadgePosition="after"
+        [matBadgeHidden]="!parcelas.length"
+        (click)="toogleNext(nextCards.PG)"
+        [class]="nextSelec() === nextCards.PG ? 'btn-ativo' : ''"
+      >
+        <mat-icon>request_quote</mat-icon>
+        Pagamentos
+      </button>
+    </div>
+    @if (nextSelec() === nextCards.PARC) {
+      <app-loans-open/>
+    }
+    @if (nextSelec() === nextCards.PG) {
+      <app-documents-open/>
+    }
   </section>
   <section>
-    <h3>Últimas Transações</h3>
+    <h4>Últimas Transações</h4>
     <app-table class="d-flex w-100 justify-content-center"/>
   </section>
 </div>

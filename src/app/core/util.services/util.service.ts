@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MenuOperation } from '../../main-panel/pages/transfer/models/operation.models';
 import { Operation } from '../../../server/constants/db.enum';
-
-type RoundType = 'ceil' | 'floor' | 'round'
-
+import { Installment, Loan } from '../../../server/models/db.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -105,5 +103,35 @@ export class UtilService {
       valor = value;
     }
     input.setSelectionRange(valor.length,valor.length);
+  }
+
+  parcelaHoje({parcela, item, amortizacao, vencimento}: Installment, loan: Loan): number {
+    const umDia = 1000 * 60 * 60 * 24;
+    const hoje= new Date();
+    const hojeData = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    const vencData = new Date(vencimento.getFullYear(), vencimento.getMonth(), vencimento.getDate());
+    let diffMs = hojeData.getTime()- vencData.getTime();
+    const diasAtraso = Math.round(diffMs / umDia);    
+    const taxadia = this.converteTax(loan.taxa,1,30,1);
+
+    if(diasAtraso>0) {
+      const jurosAoDia = loan.taxa / 30; // mercado usa 30 dias
+      const valorMulta = parcela * 0.02;
+      const valorJuros = parcela * jurosAoDia * (diasAtraso);
+      return parcela + valorMulta + valorJuros;
+    }
+    if(diasAtraso<-30) {
+      return amortizacao;
+    }
+    const saldo = item === 1 ? loan.valor : loan.parcelas[item-2].amortizacao;
+    const anterior = item === 1 ? loan.data : loan.parcelas[item-2].vencimento;
+    
+    const mesAnterior = new Date(anterior.getFullYear(), anterior.getMonth(), anterior.getDate());
+    diffMs = hojeData.getTime()- mesAnterior.getTime();
+    const periodo = Math.round(diffMs / umDia);
+    console.log(periodo);
+    const vf = saldo * Math.pow(1 + taxadia, periodo);
+    const j = vf - saldo;
+    return amortizacao + j;
   }
 }

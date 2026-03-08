@@ -14,3 +14,9 @@ export enum DateFormats {
   HEAD_TRANS_LIST = 'headTransList',
   LOAN_LIST = 'loanList'
 }
+
+export enum NextCards {
+  PG = 'Pagamentos',
+  PARC = 'Parcelas',
+  NULL = 'null',
+}

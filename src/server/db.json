@@ -266,21 +266,6 @@
       "pago": true,
       "tipo": "pagamento",
       "vencimento": "2026-03-08T07:41:17.029Z"
-    },
-    {
-      "id": "4693",
-      "origem": {
-        "conta": "6770",
-        "email": "guifjj92@gmail.com",
-        "nome": "Guilherme Fernandes"
-      },
-      "destino": null,
-      "data": "2026-03-08T07:53:02.255Z",
-      "descricao": "Quitação do Contrato 021e",
-      "valor": 1000,
-      "pago": true,
-      "tipo": "pagamento",
-      "vencimento": "2026-03-08T07:53:02.255Z"
     }
   ],
   "loans": [
