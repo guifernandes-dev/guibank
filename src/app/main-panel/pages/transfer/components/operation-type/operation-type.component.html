@@ -1,15 +1,17 @@
-<nav class="d-flex justify-content-between gap-2">
-  @for (item of operationItems; track $index) {
-    <button
-      type="button"
-      class="btn flex-fill"
-      [routerLink]="item.operation"
-      routerLinkActive="active"
-      #rla="routerLinkActive"
-      [disabled]="rla.isActive"
-    >
-      <mat-icon>{{item.icon}}</mat-icon>
-      {{item.label}}
-    </button>
-  }
+<nav class="container">
+  <div class="row">
+    @for (item of operationItems; track $index) {
+      <button
+        type="button"
+        class="btn col mx-1"
+        [routerLink]="item.operation"
+        routerLinkActive="active"
+        #rla="routerLinkActive"
+        [disabled]="rla.isActive"
+      >
+        <mat-icon>{{item.icon}}</mat-icon>
+        {{item.label}}
+      </button>
+    }
+  </div>
 </nav>

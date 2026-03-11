@@ -1,7 +1,18 @@
 <div class="d-flex flex-column gap-2 max">
   <h3>Dashboard</h3>
   <section>
-    <h4>Resumo</h4>
+    <div class="d-flex gap-3 align-items-center title mb-2">
+      <h4 class="text">Resumo</h4>
+      <button
+        mat-icon-button
+        [matTooltip]="hidden() ? 'Esconder valores' : 'Ver valores'"
+        type="button"
+        (click)="changeHidden()"
+        class="d-flex justify-content-center align-items-center"
+      >
+        <mat-icon>{{hidden() ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </div>
     <app-resume class="d-flex w-100 justify-content-center"/>
   </section>
   <section>
@@ -39,6 +50,23 @@
   </section>
   <section>
     <h4>Últimas Transações</h4>
-    <app-table class="d-flex w-100 justify-content-center"/>
+    @defer (on interaction(btnViewLastTrans); when userOp()) {
+      <app-table class="d-flex w-100 justify-content-center"/>
+    } @placeholder {
+      <!-- Pode ser um botão ou algo que vai startar o defer -->
+       <!-- Nesse exemplo não vai ser usado -->
+        <!-- Só é usado quando o @defer só tem o on interaction -->
+      <button
+        mat-raised-button
+        #btnViewLastTrans
+      >
+        <mat-icon>visibility</mat-icon>
+        Ver Últimas Transações
+      </button>
+    } @loading (minimum 3s) {
+      <div class="d-flex w-100 justify-content-center align-items-center box-height">
+        <mat-spinner/>
+      </div>
+    } @error {}
   </section>
 </div>

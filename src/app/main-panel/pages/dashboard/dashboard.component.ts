@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { TableComponent } from './components/table/table.component';
 import { ResumeComponent } from './components/resume/resume.component';
 import { DocumentsOpenComponent } from './components/documents-open/documents-open.component';
@@ -10,11 +10,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { DashboardService } from './services/dashboard.service';
 import { LoginService } from '../../../core/login.services/login.service';
 import { LoanService } from '../loan/services/loan.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [TableComponent, ResumeComponent, DocumentsOpenComponent, LoansOpenComponent, MatButtonModule, MatBadgeModule, MatIconModule],
+  imports: [TableComponent, ResumeComponent, DocumentsOpenComponent, LoansOpenComponent, MatButtonModule, MatBadgeModule, MatIconModule, MatProgressSpinnerModule, MatTooltipModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -27,8 +29,18 @@ export class DashboardComponent {
     effect(() => {
       const user = this.loginService.user();
       if (!user?.conta) return;
+      const hidden = JSON.parse(localStorage.getItem('hidden') || '{}')[user.conta];      
+      this.dashService.hidden.set(!!hidden);
       this.loanService.getUserLoans(user.conta);
     });
+  }
+
+  get hidden() {
+    return this.dashService.hidden;
+  }
+
+  get userOp() {
+    return this.loginService.userOp;
   }
 
   get nextCards() {
@@ -54,5 +66,17 @@ export class DashboardComponent {
 
   get parcelas() {
     return this.dashService.getParcelas()
+  }
+
+  changeHidden() {
+    const conta = this.loginService.user()?.conta;
+    if(!conta) return;
+    const userHidden = JSON.parse(localStorage.getItem('hidden') || '{}');
+    this.dashService.hidden.update(hidden => {
+      const newHidden = !hidden
+      userHidden[conta] = newHidden;
+      localStorage.setItem('hidden',JSON.stringify(userHidden))
+      return newHidden;
+    });
   }
 }

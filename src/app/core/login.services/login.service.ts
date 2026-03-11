@@ -6,7 +6,7 @@ import { User } from '../models/services.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Account, Transaction } from '../../../server/models/db.model';
 import { UtilService } from '../util.services/util.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Pages } from '../../constants/front.enum';
 
 @Injectable({

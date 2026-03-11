@@ -12,6 +12,7 @@ export class DashboardService {
   private readonly loginService = inject(LoginService);
   private readonly loanService = inject(LoanService);
   nextSelec$ = signal(NextCards.NULL);
+  readonly hidden = signal(true);
   notificacoes$ = signal({
     parc: 0,
     doc: 0,

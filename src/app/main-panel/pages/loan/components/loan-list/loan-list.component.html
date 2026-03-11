@@ -3,7 +3,7 @@
   <h4 class="m-0">{{loan.valor | brCurrency}}</h4>
 </ng-template>
 
-<div class="d-flex justify-content-center w-100 gap-2">
+<div class="d-flex justify-content-center gap-2">
   <button
     mat-mini-fab
     type="button"
@@ -47,7 +47,7 @@
                   Status: {{ statusParcelas(loan.parcelas) }}
                 </td>
                 <td matTooltip="Saldo devedor atual">
-                  Saldo: {{loan.atuais.saldo | brCurrency}}
+                  Saldo: {{getBalancoAtual(loan).saldo | brCurrency}}
                 </td>
                 @if(loan.pago) {
                   <td>CONTRATO QUITADO</td>

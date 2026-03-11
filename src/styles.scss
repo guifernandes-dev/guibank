@@ -51,7 +51,7 @@ body {
 
 .max {
   max-width: 650px;
-  width: 80%;
+  width: 95%;
 }
 
 .max-form {
@@ -79,4 +79,10 @@ input.input-valor::-webkit-inner-spin-button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 767px) {
+  h3 {
+    margin-left: 50px;
+  }
 }

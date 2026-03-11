@@ -9,7 +9,7 @@ import { LoginService } from '../../../../../core/login.services/login.service';
 import { RouterLink, RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
-import { Installment, Loan } from '../../../../../../server/models/db.model';
+import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db.model';
 
 @Component({
   selector: 'app-loan-list',
@@ -58,5 +58,18 @@ export class LoanListComponent {
 
   isNewContract(parcs: Installment[]): boolean {
     return parcs.every(parc => !parc.pago);
+  }
+
+  getBalancoAtual(loan: Loan): LoanTotal {
+    const totais: LoanTotal = {amortizacao: 0, juros: 0, parcela: 0, saldo: loan.valor};
+    return loan.parcelas
+      .filter(({pago}) => pago)
+      .reduce((acc, parc) => {
+        const amortizacao = acc.amortizacao + parc.amortizacao;
+        const juros = acc.juros + parc.juros;
+        const parcela = acc.parcela + parc.parcela;
+        const saldo = acc.saldo - parc.amortizacao;
+        return {amortizacao, juros, parcela, saldo};
+      }, totais)
   }
 }

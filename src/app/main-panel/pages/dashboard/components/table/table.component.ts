@@ -7,6 +7,7 @@ import { RecebedorPipe } from '../../../../../pipe/recebedor.pipe';
 import { DateTransPipe } from '../../../../../pipe/date-trans.pipe';
 import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';
 import { Operation } from '../../../../../../server/constants/db.enum';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-table',
@@ -16,7 +17,12 @@ import { Operation } from '../../../../../../server/constants/db.enum';
 })
 export class TableComponent {
   private readonly loginService = inject(LoginService);
+  private readonly dashService = inject(DashboardService);
   dateFormats = DateFormats;
+
+  get hidden() {
+    return this.dashService.hidden;
+  }
 
   get operation() {
     return Operation;
@@ -30,7 +36,7 @@ export class TableComponent {
     const ops = this.loginService.userOp()
       .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
       .filter(op => op.pago)
-      .slice(0,3)
+      .slice(0,4)
     return ops;
   }
 }

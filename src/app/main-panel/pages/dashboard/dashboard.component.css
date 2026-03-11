@@ -14,3 +14,15 @@
   color: white !important;
   background-color: var(--dourado-escuro) !important;
 }
+
+.box-height {
+  height: 196px;
+}
+
+.text {
+  margin-bottom: 0;
+}
+
+.title {
+  height: 48px;
+}
