@@ -60,16 +60,9 @@ export class LoanListComponent {
     return parcs.every(parc => !parc.pago);
   }
 
-  getBalancoAtual(loan: Loan): LoanTotal {
-    const totais: LoanTotal = {amortizacao: 0, juros: 0, parcela: 0, saldo: loan.valor};
-    return loan.parcelas
-      .filter(({pago}) => pago)
-      .reduce((acc, parc) => {
-        const amortizacao = acc.amortizacao + parc.amortizacao;
-        const juros = acc.juros + parc.juros;
-        const parcela = acc.parcela + parc.parcela;
-        const saldo = acc.saldo - parc.amortizacao;
-        return {amortizacao, juros, parcela, saldo};
-      }, totais)
+  getBalanco(loan: Loan): number {
+    const balancoAtual = this.loanService.getBalanco(loan);
+    const balancoTotal = this.loanService.getBalanco(loan,'total');
+    return balancoTotal.parcela-balancoAtual.parcela;
   }
 }

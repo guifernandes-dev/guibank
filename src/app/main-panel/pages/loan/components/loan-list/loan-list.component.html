@@ -46,8 +46,8 @@
                 <td matTooltip="Quantidade de parcelas pagas / Quantidade de parcelas contratadas">
                   Status: {{ statusParcelas(loan.parcelas) }}
                 </td>
-                <td matTooltip="Saldo devedor atual">
-                  Saldo: {{getBalancoAtual(loan).saldo | brCurrency}}
+                <td matTooltip="Saldo devedor total">
+                  Saldo: {{getBalanco(loan) | brCurrency}}
                 </td>
                 @if(loan.pago) {
                   <td>CONTRATO QUITADO</td>

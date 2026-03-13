@@ -183,4 +183,10 @@ export class InstallmentsTableComponent {
       this.loanService.patchLoan(this.loan$()!, parc);
     });
   }
+
+  getBalanco(): LoanTotal {
+    const loan = this.loan$();
+    if(!loan) return {amortizacao: 0, juros: 0, parcela: 0, saldo: 0}
+    return this.loanService.getBalanco(loan, 'total');
+  }
 }

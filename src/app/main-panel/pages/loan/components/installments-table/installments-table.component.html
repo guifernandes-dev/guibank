@@ -96,13 +96,13 @@
         TOTAL:
       </th>
       <th>
-        {{loan$()?.totais?.parcela! | brCurrency}}
+        {{getBalanco().parcela | brCurrency}}
       </th>
       <th>
-        {{loan$()?.totais?.juros! | brCurrency}}
+        {{getBalanco().juros | brCurrency}}
       </th>
       <th>
-        {{loan$()?.totais?.amortizacao! | brCurrency}}
+        {{getBalanco().amortizacao | brCurrency}}
       </th>
       @if(loan$()?.id){
         <th colspan="2"></th>

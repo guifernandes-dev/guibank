@@ -6,3 +6,13 @@
 .card-title {
   font-weight: 500;
 }
+
+@media screen and (max-width: 767px) {
+  .card-resume {
+    font-size: 18px;
+  }
+
+  .card-title {
+    font-size: 18px;
+  }
+}

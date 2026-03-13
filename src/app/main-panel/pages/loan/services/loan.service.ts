@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { LoginService } from '../../../../core/login.services/login.service';
-import { Installment, Loan, Transaction } from '../../../../../server/models/db.model';
+import { Installment, Loan, LoanTotal, Transaction } from '../../../../../server/models/db.model';
 import { APIService } from '../../../../core/api.services/api.service';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { first } from 'rxjs';
@@ -246,5 +246,18 @@ export class LoanService {
     if(!PV || !i || !n) return 0;
     const fator = Math.pow(1 + i, n);
     return PV * (i * fator) / (fator - 1);
+  }
+
+  getBalanco(loan: Loan, tipo: 'total' | 'atual' = 'atual'): LoanTotal {
+    const totais: LoanTotal = {amortizacao: 0, juros: 0, parcela: 0, saldo: loan.valor};
+    return loan.parcelas
+      .filter(({pago}) => tipo === 'total' || pago)
+      .reduce((acc, parc) => {
+        const amortizacao = acc.amortizacao + parc.amortizacao;
+        const juros = acc.juros + parc.juros;
+        const parcela = acc.parcela + parc.parcela;
+        const saldo = acc.saldo - parc.amortizacao;
+        return {amortizacao, juros, parcela, saldo};
+      }, totais)
   }
 }
