@@ -4,7 +4,6 @@ import { APIService } from '../api.services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPayComponent } from '../../shared/dialog-pay-document/dialog-pay-document.component';
 import { first, Observable } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Transaction } from '../../../server/models/db.model';
 import { DialogDeleteComponent } from '../../shared/dialog-delete/dialog-delete.component';
 import { UtilService } from '../util.services/util.service';
@@ -20,7 +19,6 @@ export class TransactionsService {
   private readonly apiService = inject(APIService);
   private readonly utilService = inject(UtilService);
   private readonly dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
   private readonly OPTIONS_CHANGE_DOCS: Record<KeyType, OptionChangeDocs> = {
     pay: {type: 'pay', mensagem: 'Documento pago com sucesso!'},
     edit: {type: 'edit', mensagem: 'Documento alterado com sucesso!'},
@@ -130,14 +128,7 @@ export class TransactionsService {
                 vencimento: trans.vencimento ? new Date(trans.vencimento) : null,
             }
             cbSubscribe(dateTrans);
-            this.snackBar.open(
-              mensagem,
-              'Ok',
-              {
-                duration: this.utilService.duration,
-                panelClass: 'snackbar-sucess'
-              }
-            );
+            this.utilService.openSnackBar(mensagem,'Ok','snackbar-sucess');
           });
       }
     });

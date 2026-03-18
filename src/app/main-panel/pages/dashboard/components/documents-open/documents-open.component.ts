@@ -10,7 +10,6 @@ import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';
 import { DateTransPipe } from '../../../../../pipe/date-trans.pipe';
 import { DateFormats } from '../../../../../constants/front.enum';
 import { AlertClassPipe } from '../../../../../pipe/alert-class.pipe';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UtilService } from '../../../../../core/util.services/util.service';
 import { DashboardService } from '../../services/dashboard.service';
 
@@ -25,7 +24,6 @@ export class DocumentsOpenComponent {
   private readonly dashService = inject(DashboardService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
-  private snackBar = inject(MatSnackBar);
   
   get dateFormats() {
     return DateFormats;
@@ -45,14 +43,7 @@ export class DocumentsOpenComponent {
 
   pagar(trans: Transaction): void {
     if(trans.valor > this.saldo) {
-      this.snackBar.open(
-        'Saldo inferior ao valor do documento!',
-        'Ok',
-        {
-          duration: this.utilService.duration,
-          panelClass: 'snackbar-erro'
-        }
-      );
+      this.utilService.openSnackBar('Saldo inferior ao valor do documento!');
       return;
     }
     this.transService.payTrans(trans);

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { forkJoin, map, Observable } from 'rxjs';
 import { User } from '../models/services.model';
@@ -12,15 +12,19 @@ export class APIService {
   private baseUrl = 'http://localhost:3000';
 
   getUserByAccount(conta: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/users?id=${conta}`)
+    return this.http.get<Account[]>(`${this.baseUrl}/users?id=${conta}`);
   }
 
   getUserByEmail(email: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/users?email=${email}`)
+    const params = new HttpParams().set('email', email);
+    return this.http.get<Account[]>(`${this.baseUrl}/users`, {params})
   }
 
   getUserByEmailESenha(email: string, senha: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/users?email=${email}&senha=${senha}`)
+    const params = new HttpParams()
+      .set('email', email)
+      .set('senha', senha);
+    return this.http.get<Account[]>(`${this.baseUrl}/users`, {params})
   }
 
   postUser(user: Omit<User,'conta'>): Observable<Account> {
@@ -32,15 +36,18 @@ export class APIService {
   }
 
   getTransactionsByUser(conta: string): Observable<Transaction[]> {
+    const paramsOrigem = new HttpParams().set('origem.conta', conta);
+    const paramsDestino = new HttpParams().set('destino.conta', conta);
     return forkJoin([
-      this.http.get<Transaction[]>(`${this.baseUrl}/transactions?origem.conta=${conta}`),
-      this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino.conta=${conta}`)
+      this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params: paramsOrigem}),
+      this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params: paramsDestino})
     ]).pipe(
       map(([destino, origem]) => [...destino, ...origem])
     );
   }
   getTransactionsByUserDestination(conta: string): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino.conta=${conta}`);
+    const params = new HttpParams().set('destino.conta', conta);
+    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params});
   }
 
   patchTransactionById(id: string, transaction: Partial<Transaction>): Observable<Transaction> {
@@ -52,7 +59,8 @@ export class APIService {
   }
 
   getLoansByUserId(id: string): Observable<Loan[]> {
-    return this.http.get<Loan[]>(`${this.baseUrl}/loans?destino.conta=${id}`)
+    const params = new HttpParams().set('destino.conta', id);
+    return this.http.get<Loan[]>(`${this.baseUrl}/loans`, {params})
   }
 
   patchLoanById(id: string, body: Loan): Observable<Loan> {

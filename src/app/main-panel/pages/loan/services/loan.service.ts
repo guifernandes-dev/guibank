@@ -31,8 +31,6 @@ export class LoanService {
     data: new Date(),
     taxa: 0,
     pago: false,
-    atuais: {juros: 0, amortizacao: 0, parcela: 0, saldo: 0},
-    totais: {juros: 0, amortizacao: 0, parcela: 0, saldo: 0},
     parcelas: [],
     sistema: SisCredito.PRICE,
     valor: 0,

@@ -106,7 +106,6 @@ export class LoanFormComponent implements OnInit {
     let parcelas: Installment[] = [];
     let parcela: number = 0;
     let amortizacao: number = 0;
-    const totais: LoanTotal = {juros: 0, amortizacao: 0, parcela: 0, saldo: vp};
     const hoje = new Date();
     hoje.setHours(23, 59, 59, 999);
     const sisIsPrice = sistema === SisCredito.PRICE;
@@ -141,10 +140,6 @@ export class LoanFormComponent implements OnInit {
         parcela,
         vencimento,
       };
-      totais.juros += juros;
-      totais.amortizacao += amortizacao;
-      totais.parcela += parcela;
-      totais.saldo -= amortizacao;
       parcelas.push(installment);
     }
     this.loanService.loan$.update(loan => {
@@ -152,10 +147,8 @@ export class LoanFormComponent implements OnInit {
         ...loan,
         sistema,
         taxa: taxa,
-        atuais: {...loan.atuais, saldo: totais.amortizacao + totais.juros},
         valor: vp,
         parcelas,
-        totais
       };
 
       return loanAjust;

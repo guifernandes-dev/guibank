@@ -28,8 +28,6 @@ export interface Loan {
   destino: TransAccount,
   valor: number,
   sistema: SisCredito,
-  atuais: LoanTotal,
-  totais: LoanTotal,
   pago: boolean,
   taxa: number,
   parcelas: Installment[]

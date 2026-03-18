@@ -49,14 +49,7 @@ export class DocumentListComponent {
 
   pagar(trans: Transaction) {
     if(trans.valor > this.saldo) {
-      this.snackBar.open(
-        'Saldo inferior ao valor do documento!',
-        'Ok',
-        {
-          duration: this.utilService.duration,
-          panelClass: 'snackbar-erro'
-        }
-      );
+      this.utilService.openSnackBar('Saldo inferior ao valor do documento!');
       return;
     }
     this.transService.payTrans(trans);

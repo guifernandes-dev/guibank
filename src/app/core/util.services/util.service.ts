@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MenuOperation } from '../../main-panel/pages/transfer/models/operation.models';
 import { Operation } from '../../../server/constants/db.enum';
 import { Installment, Loan } from '../../../server/models/db.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
+  private readonly snackBar = inject(MatSnackBar);
   readonly duration = 5000;
 
   transTypes: MenuOperation[] = [
@@ -67,6 +69,21 @@ export class UtilService {
 
     // 6. Formata no padrão brasileiro: #.###,##
     return this.formataValor(numero);
+  }
+
+  openSnackBar(
+    mensagem: string,
+    textBtn: string = 'Fechar',
+    panelClass: string = 'snackbar-erro'
+  ) {
+    this.snackBar.open(
+      mensagem,
+      textBtn,
+      {
+        duration: this.duration,
+        panelClass
+      }
+    );
   }
 
   formataValorNumero(valor: string): number {

@@ -6,7 +6,7 @@
 
 <ng-template #payLoan let-loan="obj">
   <p>Deseja realmente quitar o contrato Nº {{loan.id}}?</p>
-  <h4 class="m-0">{{loan.valor | brCurrency}}</h4>
+  <h4 class="m-0">{{totalHoje() | brCurrency}}</h4>
 </ng-template>
 
 @if(loan$()?.id) {

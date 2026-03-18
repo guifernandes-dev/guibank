@@ -4,7 +4,6 @@ import { first, map, Observable, of } from 'rxjs';
 import { LoginService } from '../../../../core/login.services/login.service';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { APIService } from '../../../../core/api.services/api.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionsService } from '../../../../core/transactions.services/transactions.service';
 import { Transaction } from '../../../../../server/models/db.model';
 import { UtilService } from '../../../../core/util.services/util.service';
@@ -19,7 +18,6 @@ export class OperationService {
   private readonly apiService = inject(APIService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
-  private snackBar = inject(MatSnackBar);
   operationMenu: MenuOperation[] = this.utilService.transTypes.slice(0,-1);
   currentOp$ = signal<MenuOperation>(this.operationMenu[0]);
   operationForm = new FormGroup({
@@ -161,17 +159,8 @@ export class OperationService {
   createTransaction(transaction: Transaction) {
     this.apiService.postTransaction(transaction)
       .pipe(first())
-      .subscribe(transaction => {
-        if(!transaction) {
-          this.snackBar.open(
-            'Erro ao salvar operação',
-            'Ok',
-            {
-              duration: this.utilService.duration,
-              panelClass: 'snackbar-erro'
-            }
-          );
-        } else {
+      .subscribe({
+        next: transaction => {
           this.loginService.userOp().push({
             ...transaction,
             data: new Date(transaction.data),
@@ -181,14 +170,10 @@ export class OperationService {
           });
           const user = this.loginService.user();
           this.buildForm(user, this.currentOp$().operation !== Operation.PAGAMENTO);
-          this.snackBar.open(
-            'Transação salva com sucesso!',
-            'Ok',
-            {
-              duration: this.utilService.duration,
-              panelClass: 'snackbar-sucess'
-            }
-          );
+          this.utilService.openSnackBar('Transação salva com sucesso!','Ok','snackbar-sucess');
+        },
+        error: () => {
+          this.utilService.openSnackBar('Erro ao salvar operação','Ok');
         }
       });
   }

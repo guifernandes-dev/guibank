@@ -1,18 +1,31 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { LoginService } from '../login.services/login.service';
-import { CookieService } from 'ngx-cookie-service';
+import { first, map } from 'rxjs';
+import { Pages } from '../../constants/front.enum';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = (_, state) => {
   const loginService = inject(LoginService);
-  const cookieService = inject(CookieService);
   const router = inject(Router);
-  const accountCookie = cookieService.get('accountLogged');
 
-  if(accountCookie) {
-    loginService.searchUserLogged(accountCookie);
-    return true;
+  if(state.url === '/login') {
+    return loginService.guardLoggedUser()
+      .pipe(
+        first(),
+        map(isLogged => {
+          if(isLogged) return router.createUrlTree([`/${Pages.DASHBOARD}`]);
+          return true;
+        })
+      );
+  } else {
+    return loginService.guardLoggedUser()
+      .pipe(
+        first(),
+        map(isLogged => {
+          if(!isLogged) return router.createUrlTree(['/login']);
+          loginService.findUserOp();
+          return true;
+        })
+      );
   }
-  router.navigate(['/login']);
-  return false;
 };

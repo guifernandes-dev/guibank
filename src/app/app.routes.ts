@@ -8,7 +8,6 @@ import { LoanComponent } from './main-panel/pages/loan/loan.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { MainPanelComponent } from './main-panel/main-panel.component';
 import { LoginComponent } from './login/login.component';
-import { loginGuard } from './core/guards/login.guard';
 import { authGuard } from './core/guards/auth.guard';
 import { Operation } from '../server/constants/db.enum';
 import { OperationFormComponent } from './main-panel/pages/transfer/components/operation-form/operation-form.component';
@@ -104,7 +103,7 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [loginGuard]
+    canActivate: [authGuard]
   },
   {
     path: '**',
