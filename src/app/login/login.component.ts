@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
 import { LoginService } from '../core/login.services/login.service';
 import { UtilService } from '../core/util.services/util.service';
+import { Login } from '../../server/models/db.model';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +24,11 @@ export class LoginComponent {
   private _loginForm = signal(true);
   readonly nome = new FormControl('', [Validators.required, Validators.minLength(3)]);
   readonly email = new FormControl('', [Validators.required, Validators.email]);
-  readonly senha = new FormControl('', [Validators.required, this.passwordStrengthValidator()]);
+  readonly password = new FormControl('', [Validators.required, this.passwordStrengthValidator()]);
   readonly renda = new FormControl('0,00');
   emailError = signal('');
   nomeError = signal('');
-  senhaChecks = signal({
+  passwordChecks = signal({
     hasMinLength: false,
     hasLetter: false,
     hasNumber: false,
@@ -39,9 +40,9 @@ export class LoginComponent {
     merge(this.email.statusChanges, this.email.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateEmailError());
-    merge(this.senha.statusChanges, this.senha.valueChanges)
+    merge(this.password.statusChanges, this.password.valueChanges)
       .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateSenhaChecks());
+      .subscribe(() => this.updatePasswordChecks());
   }
 
   get loginForm() {
@@ -103,11 +104,11 @@ export class LoginComponent {
     }
   }
 
-  updateSenhaChecks() {
-    const errors = this.senha.errors?.['passwordStrength'];
+  updatePasswordChecks() {
+    const errors = this.password.errors?.['passwordStrength'];
 
     if (!errors) {
-      this.senhaChecks.set({
+      this.passwordChecks.set({
         hasMinLength: true,
         hasLetter: true,
         hasNumber: true,
@@ -116,7 +117,7 @@ export class LoginComponent {
       return;
     }
     
-    this.senhaChecks.set({
+    this.passwordChecks.set({
       hasMinLength: errors.hasMinLength,
       hasLetter: errors.hasLetter,
       hasNumber: errors.hasNumber,
@@ -135,24 +136,28 @@ export class LoginComponent {
   }
 
   formValido(): boolean {
-    const senhas = this.senhaChecks();
-    const senhaValida = senhas.hasMinLength && senhas.hasLetter && senhas.hasNumber && senhas.hasSpecial;
+    const passwords = this.passwordChecks();
+    const passwordValida = passwords.hasMinLength && passwords.hasLetter && passwords.hasNumber && passwords.hasSpecial;
     const nomeValido = this.loginForm || this.nome.valid;
-    return !(senhaValida && nomeValido && this.email.valid);    
+    return !(passwordValida && nomeValido && this.email.valid);    
   }
 
   submit() {
     const email = this.email.value;
-    const senha = this.senha.value;
+    const password = this.password.value;
     if (this.loginForm) {
-      if ( email && senha) {
-        this.loginService.logar(email,senha);
+      if ( email && password) {
+        const user: Login = {
+          email,
+          password: password
+        }
+        this.loginService.logar(user);
       }
     } else {
       const nome = this.nome.value;
       const renda = this.utilService.formataValorNumero(this.renda.value!);
-      if (nome && email && senha) {
-        this.loginService.criarConta({nome,email,senha,renda});
+      if (nome && email && password) {
+        this.loginService.criarConta({nome,email,password,renda});
       }
     }
   }

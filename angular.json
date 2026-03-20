@@ -16,6 +16,10 @@
             "outputPath": "dist/taskflow",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "define": {
+              "API_BASE_URL": "\"http://localhost:3000\"",
+              "SECRET_JWT": "\"guibankprivate\""
+            },
             "polyfills": [
               "zone.js"
             ],

@@ -81,6 +81,11 @@ input.input-valor::-webkit-inner-spin-button {
   align-items: center;
 }
 
+.blur {
+  filter: blur(5px);
+  transition: filter 0.3s ease-in-out;
+}
+
 @media screen and (max-width: 767px) {
   h3 {
     margin-left: 50px;

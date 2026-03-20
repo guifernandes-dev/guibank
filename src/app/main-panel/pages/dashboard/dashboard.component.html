@@ -50,23 +50,12 @@
   </section>
   <section>
     <h4>Últimas Transações</h4>
-    @defer (on interaction(btnViewLastTrans); when userOp()) {
+    @defer (when !isLoading()) {
       <app-table class="d-flex w-100 justify-content-center"/>
-    } @placeholder {
-      <!-- Pode ser um botão ou algo que vai startar o defer -->
-       <!-- Nesse exemplo não vai ser usado -->
-        <!-- Só é usado quando o @defer só tem o on interaction -->
-      <button
-        mat-raised-button
-        #btnViewLastTrans
-      >
-        <mat-icon>visibility</mat-icon>
-        Ver Últimas Transações
-      </button>
-    } @loading (minimum 3s) {
+    } @placeholder () {
       <div class="d-flex w-100 justify-content-center align-items-center box-height">
         <mat-spinner/>
       </div>
-    } @error {}
+    }
   </section>
 </div>

@@ -1,32 +1,11 @@
 {
   "users": [
     {
-      "id": "6770",
-      "nome": "Guilherme Fernandes",
       "email": "guifjj92@gmail.com",
-      "senha": "gui!27",
-      "renda": 10000
-    },
-    {
-      "id": "2ef1",
-      "nome": "Cristina Dehon",
-      "email": "crisdehon67@gmail.com",
-      "senha": "va!1012",
-      "renda": 25000
-    },
-    {
-      "id": "55f3",
-      "nome": "Stella Sousa Melo",
-      "email": "stellasouzamelo@outlook.com",
-      "senha": "Stela@26",
-      "renda": 2000
-    },
-    {
-      "id": "a4da",
-      "nome": "User Teste",
-      "email": "teste@email.com",
-      "senha": "teste!1",
-      "renda": 500
+      "password": "$2a$10$iRSl9l9kctUmU2G2NIMXmOFBgQeaGY6olVGUKTLeGtNc1mfOiHIaa",
+      "nome": "Guilherme Fernandes",
+      "renda": 10000,
+      "id": "C536"
     }
   ],
   "transactions": [

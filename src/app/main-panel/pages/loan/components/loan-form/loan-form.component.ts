@@ -62,7 +62,7 @@ export class LoanFormComponent implements OnInit {
     effect(()=> {
       this.loanService.tax$();
       const user = this.loginService.user();
-      if(user?.conta) {
+      if(user?.id) {
         this.loanService.initTax(user);
         
         this.form.patchValue({

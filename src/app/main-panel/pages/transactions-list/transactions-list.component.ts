@@ -73,7 +73,7 @@ export class TransactionsListComponent {
       acc[data].dados.push(op);
 
       // 2. Somar saldo do dia (entrada positiva, saída negativa)
-      const mult = op.origem?.conta === this.user()?.conta
+      const mult = op.origem?.id === this.user()?.id
         ? -1
         : 1
       acc[data].saldoHoje += op.valor * mult;

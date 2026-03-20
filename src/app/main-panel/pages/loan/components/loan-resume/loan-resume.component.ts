@@ -22,8 +22,8 @@ export class LoanResumeComponent implements OnInit {
   constructor() {
     effect(() => {
       const user = this.loginService.user();
-      if (!user?.conta) return;
-      this.loanService.getUserLoans(user.conta);
+      if (!user?.id) return;
+      this.loanService.getUserLoans(user.id);
     });
   }
 

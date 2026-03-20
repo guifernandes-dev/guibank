@@ -28,10 +28,10 @@ export class DashboardComponent {
   constructor() {
     effect(() => {
       const user = this.loginService.user();
-      if (!user?.conta) return;
-      const hidden = JSON.parse(localStorage.getItem('hidden') || '{}')[user.conta];      
+      if (!user?.id) return;
+      const hidden = JSON.parse(localStorage.getItem('hidden') || '{}')[user.id];      
       this.dashService.hidden.set(!!hidden);
-      this.loanService.getUserLoans(user.conta);
+      this.loanService.getUserLoans(user.id);
     });
   }
 
@@ -41,6 +41,10 @@ export class DashboardComponent {
 
   get userOp() {
     return this.loginService.userOp;
+  }
+
+  get isLoading() {
+    return this.loginService.isLoading;
   }
 
   get nextCards() {
@@ -69,7 +73,7 @@ export class DashboardComponent {
   }
 
   changeHidden() {
-    const conta = this.loginService.user()?.conta;
+    const conta = this.loginService.user()?.id;
     if(!conta) return;
     const userHidden = JSON.parse(localStorage.getItem('hidden') || '{}');
     this.dashService.hidden.update(hidden => {

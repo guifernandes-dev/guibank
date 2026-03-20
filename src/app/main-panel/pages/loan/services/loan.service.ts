@@ -27,7 +27,7 @@ export class LoanService {
   readonly userLoans$ = signal<Loan[]>([]);
   readonly tax$ = signal<number>(0);
   readonly loan$ = signal<Loan>({
-    destino: {conta: '', email: '', nome: ''},
+    destino: {id: '', email: '', nome: ''},
     data: new Date(),
     taxa: 0,
     pago: false,
@@ -93,11 +93,11 @@ export class LoanService {
   }
 
   initTax(user?: User) {
-    if(user?.conta){
-      const {conta, email, nome} = user;
+    if(user?.id){
+      const {id, email, nome} = user;
       this.loan$.update(loan => ({
         ...loan,
-        destino: {conta,email,nome}
+        destino: {id,email,nome}
       }))
     }
     if(this.tax$()) return;

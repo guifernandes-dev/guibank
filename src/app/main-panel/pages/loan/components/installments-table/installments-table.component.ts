@@ -35,8 +35,8 @@ export class InstallmentsTableComponent {
     effect(() => {
       const id = this.route.snapshot.paramMap.get('id');
       const user = this.loginService.user();
-      if (!user?.conta || !id) return;
-      this.loanService.getUserLoans(user.conta);
+      if (!user?.id || !id) return;
+      this.loanService.getUserLoans(user.id);
     });
     effect(() => {
       const id = this.route.snapshot.paramMap.get('id');

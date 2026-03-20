@@ -1,4 +1,4 @@
-import { Installment } from "../../../server/models/db.model";
+import { Account, Installment } from "../../../server/models/db.model";
 import { Pages } from "../../constants/front.enum";
 
 export interface MenuItem {
@@ -7,12 +7,8 @@ export interface MenuItem {
   page: Pages
 }
 
-export interface User {
-  conta: string,
-  nome: string,
-  email: string,
-  renda: number,
-  senha?: string
+export interface User extends Account {
+  password?: string
 }
 
 export type KeyType = 'pay' | 'edit' | 'delete';

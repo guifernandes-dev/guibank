@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ErrorsForm, MenuOperation } from '../models/operation.models';
-import { first, map, Observable, of } from 'rxjs';
+import { catchError, first, map, Observable, of } from 'rxjs';
 import { LoginService } from '../../../../core/login.services/login.service';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { APIService } from '../../../../core/api.services/api.service';
@@ -49,11 +49,11 @@ export class OperationService {
 
   buildForm(userLogged: User | null, reset: boolean = false): void {
     if(!userLogged) return;
-    const {nome, conta, email} = userLogged;
+    const {nome, id, email} = userLogged;
     const operation = this.currentOp$().operation
     const data = new Date();
     const isExpense = operation !== Operation.DEPOSITO;
-    const user = {conta, email, nome};
+    const user = {id, email, nome};
     const INITIAL_FORM = {
       origem: isExpense ? user : {conta: '', email: '', nome: ''},
       destino: !isExpense ? user : {conta: '', email: '', nome: ''},
@@ -71,8 +71,9 @@ export class OperationService {
     return (control: AbstractControl<string>): Observable<ValidationErrors | null> => {
       const value = control.value;
       const user = this.loginService.user();
+      const cbUserNotFound = ()=> of({ userNotExist: 'Usuário não encontrado'});
 
-      if(user?.conta === value || user?.email === value) {
+      if(user?.id === value || user?.email === value) {
         return of({ accountLogged: 'Não pode ser o próprio usuário'})
       }
       if (!value) {
@@ -81,17 +82,15 @@ export class OperationService {
       if (this.tipoConta?.value === 'num') {
         if (value.length !== 4) return of({minlength: 'Número de Conta deve ter 4 dígitos'})
         return this.apiService
-          .getUserByAccount(value)
+          .getUserById(value)
           .pipe(
             first(),
-            map(contas => {
-              if(contas.length) {
-                const {nome, id, email} = contas[0];
+            map(conta => {
+                const {nome, id, email} = conta;
                 this.operationForm.patchValue({destino: {nome, conta: id, email}});
                 return null;
-              }
-              return { userNotExist: 'Usuário não encontrado'}
-            })
+            }),
+            catchError(cbUserNotFound)
           )
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -100,14 +99,12 @@ export class OperationService {
         .getUserByEmail(value)
         .pipe(
           first(),
-          map(contas => {        
-            if(contas.length) {
-              const {nome, id, email} = contas[0];
+          map(conta => {        
+              const {nome, id, email} = conta;
               this.operationForm.patchValue({destino: {nome, conta: id, email}});
               return null;
-            }
-            return { userNotExist: 'Usuário não encontrado'}
-          })
+          }),
+          catchError(cbUserNotFound)
         )
     }
   }

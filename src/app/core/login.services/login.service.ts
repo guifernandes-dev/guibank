@@ -3,8 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { APIService } from '../api.services/api.service';
 import { catchError, first, map, Observable, of } from 'rxjs';
 import { User } from '../models/services.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Account, Transaction } from '../../../server/models/db.model';
+import { Login, AccountResp, Transaction, Account } from '../../../server/models/db.model';
 import { UtilService } from '../util.services/util.service';
 import { Router } from '@angular/router';
 import { Pages } from '../../constants/front.enum';
@@ -19,6 +18,7 @@ export class LoginService {
   private readonly router = inject(Router);
   private user$ = signal<User | null>(null);
   private userOperations$ = signal<Transaction[]>([]);
+  readonly isLoading = signal(false);
 
   get user() {
     return this.user$;
@@ -32,7 +32,7 @@ export class LoginService {
     if(this.userOp.length) return;
     console.log(this.user());
     this.api
-      .getTransactionsByUser(this.user()?.conta!)
+      .getTransactionsByUser(this.user()?.id!)
       .pipe(first())
       .subscribe({
         next: operations => {
@@ -44,25 +44,25 @@ export class LoginService {
         },
         error: () => {
           this.utils.openSnackBar('Erro ao buscar as operações!')
+        },
+        complete: () => {
+          this.isLoading.set(false);
         }
       });
   }
 
   guardLoggedUser(): Observable<boolean> {
     if(this.user()) return of(true);
-    const accountCookie: string | null = JSON.parse(
+    const accessToken: string | null = JSON.parse(
       this.cookies.get('accountLogged') || 'null'
     );
-    if(!accountCookie) return of(false);
-    return this.api.getUserByAccount(accountCookie)
+    if(!accessToken) return of(false);
+    return this.api.getValidUser()
       .pipe(
         first(),
-        map(users => {
-          if(!users.length) {
-            this.utils.openSnackBar('Usuário não encotrado');
-            return false;
-          };
-          this.registrarUser(users);
+        map((user) => {
+          this.isLoading.set(true);
+          this.registrarUser({accessToken,user});
           return true;
         }),
         catchError(()=> {
@@ -72,18 +72,18 @@ export class LoginService {
       )
   }
 
-  logar(email: string, senha: string) {
-    this.api
-      .getUserByEmailESenha(email,senha)
+  logar(login: Login) {
+    this.api.postLogin(login)
       .pipe(first())
-      .subscribe(users => {
-        if(!users.length) {
+      .subscribe({
+        next: resp => {
+          this.registrarUser(resp);
+          this.router.navigate([`/${Pages.DASHBOARD}`])
+        },
+        error: () => {
           this.utils.openSnackBar('Usuário ou E-mail incorreto.');
-          return;
         }
-        this.registrarUser(users);
-        this.router.navigate([`/${Pages.DASHBOARD}`])
-      })
+    });
   }
 
   logout() {
@@ -93,35 +93,25 @@ export class LoginService {
     this.router.navigate(['/login'])
   }
 
-  criarConta(newWuser: Omit<User,'conta'>) {
-    this.api
-      .getUserByEmail(newWuser.email)
+  criarConta(newWuser: Omit<User,'id'>) {
+    this.api.postRegister(newWuser)
       .pipe(first())
-      .subscribe(user => {
-        if(user.length) {
-          this.utils.openSnackBar('E-mail já cadastrado','Ok');
-        } else {
-          this.api.postUser(newWuser)
-            .pipe(first())
-            .subscribe((account) => {
-              this.registrarUser([account]);
-              this.router.navigate([`/${Pages.DASHBOARD}`])
-            });
+      .subscribe({
+        next: resp => {
+          this.registrarUser(resp);
+          this.router.navigate([`/${Pages.DASHBOARD}`])
+        },
+        error: () => {
+          this.utils.openSnackBar('E-mail já cadastrado!', 'Ok')
         }
       });
   }
 
-  registrarUser(users: Account[]) {
-    const {id, nome, renda, email} = users[0];
-      const user: User = {
-        conta: id,
-        nome,
-        renda,
-        email
-      }
+  registrarUser(account: AccountResp) {
+    const {user, accessToken} = account;
     this.cookies.set(
       'accountLogged',
-      JSON.stringify(user.conta),
+      JSON.stringify(accessToken),
       { expires: 2 }
     );
     this.user$.set(user);

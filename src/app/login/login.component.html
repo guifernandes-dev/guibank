@@ -61,9 +61,9 @@
         <input
           matInput
           [type]="hide() ? 'password' : 'text'"
-          [formControl]="senha"
-          (input)="updateSenhaChecks()"
-          (blur)="updateSenhaChecks()"
+          [formControl]="password"
+          (input)="updatePasswordChecks()"
+          (blur)="updatePasswordChecks()"
           maxlength="8"
           required
         />
@@ -79,20 +79,20 @@
         </button>
       </mat-form-field>
       <div class="w-100">
-        <div class="req" [class.ok]="senhaChecks().hasMinLength">
-          <mat-icon>{{ senhaChecks().hasMinLength ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+        <div class="req" [class.ok]="passwordChecks().hasMinLength">
+          <mat-icon>{{ passwordChecks().hasMinLength ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
           senha entre 4 e 8 dígitos
         </div>
-        <div class="req" [class.ok]="senhaChecks().hasLetter">
-          <mat-icon>{{ senhaChecks().hasLetter ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+        <div class="req" [class.ok]="passwordChecks().hasLetter">
+          <mat-icon>{{ passwordChecks().hasLetter ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
           senha com letra
         </div>
-        <div class="req" [class.ok]="senhaChecks().hasNumber">
-          <mat-icon>{{ senhaChecks().hasNumber ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+        <div class="req" [class.ok]="passwordChecks().hasNumber">
+          <mat-icon>{{ passwordChecks().hasNumber ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
           senha com número
         </div>
-        <div class="req" [class.ok]="senhaChecks().hasSpecial">
-          <mat-icon>{{ senhaChecks().hasSpecial ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+        <div class="req" [class.ok]="passwordChecks().hasSpecial">
+          <mat-icon>{{ passwordChecks().hasSpecial ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
           senha com caractere especial
         </div>
       </div>

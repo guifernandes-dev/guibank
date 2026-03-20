@@ -18,7 +18,7 @@ export interface ErrorsForm extends ErrorsDialog {
 }
 
 export interface TransAccount {
-  conta: string,
+  id: string,
   email: string,
   nome: string,
 }

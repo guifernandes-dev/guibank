@@ -4,10 +4,12 @@
       <tr>
         <td style="width: 60px;">
           <div class="p-1 container-icon">
-            <mat-icon>{{(trans | tipoTrans).icon}}</mat-icon>
+            <mat-icon [class]="hidden() ? '' : 'blur'">
+              {{(trans | tipoTrans).icon}}
+            </mat-icon>
           </div>
         </td>
-        <td>
+        <td [class]="hidden() ? '' : 'blur'">
           <div class="tipo">
             {{(trans | tipoTrans).label}}
           </div>
@@ -20,13 +22,15 @@
             {{trans | recebedor}}
           </div>
         </td>
-        <td style="width: 150px; text-align: end;">
-          <div [class]="`${
-            trans.origem?.conta !== user()?.conta
-              ? 'text-success'
-              : 'text-danger'
-            } valor`">
-            {{trans.valor | brCurrency : trans.origem?.conta === user()?.conta}}
+        <td style="width: 150px; text-align: end;" [class]="hidden() ? '' : 'blur'">
+          <div
+            [class]="`${
+              trans.origem?.id !== user()?.id
+                ? 'text-success'
+                : 'text-danger'
+            } valor`"
+          >
+            {{trans.valor | brCurrency : trans.origem?.id === user()?.id}}
           </div>
           <div>{{trans.data | dateTrans : dateFormats.RESUME_TRANS}}</div>
         </td>
