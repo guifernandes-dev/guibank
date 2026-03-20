@@ -32,11 +32,11 @@ export class OperationTypeComponent {
 
   changeOperation(operation: MenuOperation) {
     this.operationService.currentOp$.set(operation);
-    this.operationService.operationForm.get('destino')?.get('conta')?.reset('');
+    this.operationService.operationForm.get('destino')?.get('id')?.reset('');
     this.operationService.operationForm.get('destino')?.get('email')?.reset('');
     this.operationService.operationForm.get('destino')?.get('nome')?.reset('');
     this.operationService.buildForm(this.loginService.user());
-    this.operationService.updateErros(this.destinoNumero ? 'conta' : 'email');
+    this.operationService.updateErros(this.destinoNumero ? 'id' : 'email');
     this.operationService.updateErros('valor');
     this.operationService.updateErros('vencimento');
   }

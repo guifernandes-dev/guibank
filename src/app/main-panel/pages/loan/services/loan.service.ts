@@ -227,10 +227,10 @@ export class LoanService {
     }
   }
 
-  getUserLoans(conta: string) {
+  getUserLoans(id: string) {
     const loans = this.userLoans$();
     if(loans.length) return;
-    this.apiService.getLoansByUserId(conta)
+    this.apiService.getLoansByUserId(id)
       .pipe(first())
       .subscribe(loans => {
         const loansDate = loans

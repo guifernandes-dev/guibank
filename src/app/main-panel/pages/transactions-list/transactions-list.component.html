@@ -34,11 +34,11 @@
             </div>
             <td style="width: 150px; text-align: end;">
               <div [class]="`${
-                trans.origem?.conta !== user()?.id
+                trans.origem?.id !== user()?.id
                   ? 'text-success'
                   : 'text-danger'
                 } valor`">
-                {{trans.valor | brCurrency : trans.origem?.conta === user()?.id}}
+                {{trans.valor | brCurrency : trans.origem?.id === user()?.id}}
               </div>
               <div>{{trans.data | dateTrans : dateFormats.TRANS_LIST}}</div>
             </td>

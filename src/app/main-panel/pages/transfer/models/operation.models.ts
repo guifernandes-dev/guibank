@@ -13,7 +13,7 @@ export interface ErrorsDialog {
 }
 
 export interface ErrorsForm extends ErrorsDialog {
-  conta: string,
+  id: string,
   email: string
 }
 

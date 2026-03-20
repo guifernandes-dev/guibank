@@ -36,9 +36,9 @@ export class APIService {
     return this.http.post<Transaction>(`${this.baseUrl}/transactions`, transaction);
   }
 
-  getTransactionsByUser(conta: string): Observable<Transaction[]> {
-    const paramsOrigem = new HttpParams().set('origem.conta', conta);
-    const paramsDestino = new HttpParams().set('destino.conta', conta);
+  getTransactionsByUser(id: string): Observable<Transaction[]> {
+    const paramsOrigem = new HttpParams().set('origem.id', id);
+    const paramsDestino = new HttpParams().set('destino.id', id);
     return forkJoin([
       this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params: paramsOrigem}),
       this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params: paramsDestino})
@@ -46,8 +46,8 @@ export class APIService {
       map(([destino, origem]) => [...destino, ...origem])
     );
   }
-  getTransactionsByUserDestination(conta: string): Observable<Transaction[]> {
-    const params = new HttpParams().set('destino.conta', conta);
+  getTransactionsByUserDestination(id: string): Observable<Transaction[]> {
+    const params = new HttpParams().set('destino.id', id);
     return this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params});
   }
 
@@ -60,7 +60,7 @@ export class APIService {
   }
 
   getLoansByUserId(id: string): Observable<Loan[]> {
-    const params = new HttpParams().set('destino.conta', id);
+    const params = new HttpParams().set('destino.id', id);
     return this.http.get<Loan[]>(`${this.baseUrl}/loans`, {params})
   }
 

@@ -5,7 +5,7 @@ import { LoginService } from '../../../../core/login.services/login.service';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { APIService } from '../../../../core/api.services/api.service';
 import { TransactionsService } from '../../../../core/transactions.services/transactions.service';
-import { Transaction } from '../../../../../server/models/db.model';
+import { Account, Transaction } from '../../../../../server/models/db.model';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { Operation } from '../../../../../server/constants/db.enum';
 import { User } from '../../../../core/models/services.model';
@@ -22,12 +22,12 @@ export class OperationService {
   currentOp$ = signal<MenuOperation>(this.operationMenu[0]);
   operationForm = new FormGroup({
     origem: new FormGroup({
-      conta: new FormControl<string>(''),
+      id: new FormControl<string>(''),
       email: new FormControl<string>(''),
       nome: new FormControl<string>('')
     }),
     destino: new FormGroup({
-      conta: new FormControl<string>('', {asyncValidators: this.validatorDestino()}),
+      id: new FormControl<string>('', {asyncValidators: this.validatorDestino()}),
       email: new FormControl<string>('', {asyncValidators: this.validatorDestino()}),
       nome: new FormControl<string>('')
     }),
@@ -39,7 +39,7 @@ export class OperationService {
     vencimento: new FormControl<Date | null>(null)
   });
   errorsForm$ = signal<ErrorsForm>({
-    conta: '',
+    id: '',
     email: '',
     descricao: '',
     vencimento: '',
@@ -55,8 +55,8 @@ export class OperationService {
     const isExpense = operation !== Operation.DEPOSITO;
     const user = {id, email, nome};
     const INITIAL_FORM = {
-      origem: isExpense ? user : {conta: '', email: '', nome: ''},
-      destino: !isExpense ? user : {conta: '', email: '', nome: ''},
+      origem: isExpense ? user : {id: '', email: '', nome: ''},
+      destino: !isExpense ? user : {id: '', email: '', nome: ''},
       data,
       descricao: reset ? '' : this.operationForm.get('descricao')?.value,
       valor: reset ? '0,00': this.operationForm.get('valor')?.value,
@@ -72,6 +72,11 @@ export class OperationService {
       const value = control.value;
       const user = this.loginService.user();
       const cbUserNotFound = ()=> of({ userNotExist: 'Usuário não encontrado'});
+      const cbFound = (conta: Account) => {
+          const {nome, id, email} = conta;
+          this.operationForm.patchValue({destino: {nome, id, email}});
+          return null;
+      };
 
       if(user?.id === value || user?.email === value) {
         return of({ accountLogged: 'Não pode ser o próprio usuário'})
@@ -85,11 +90,7 @@ export class OperationService {
           .getUserById(value)
           .pipe(
             first(),
-            map(conta => {
-                const {nome, id, email} = conta;
-                this.operationForm.patchValue({destino: {nome, conta: id, email}});
-                return null;
-            }),
+            map(cbFound),
             catchError(cbUserNotFound)
           )
       }
@@ -99,11 +100,7 @@ export class OperationService {
         .getUserByEmail(value)
         .pipe(
           first(),
-          map(conta => {        
-              const {nome, id, email} = conta;
-              this.operationForm.patchValue({destino: {nome, conta: id, email}});
-              return null;
-          }),
+          map(cbFound),
           catchError(cbUserNotFound)
         )
     }
@@ -142,7 +139,7 @@ export class OperationService {
         mensagem = ''
         break;
       default:
-        mensagem = key === 'conta' || key === 'email'
+        mensagem = key === 'id' || key === 'email'
           ? this.operationForm.get('destino')?.get(key)?.getError(code)
           : this.operationForm.get(key)?.getError(code);
         break;

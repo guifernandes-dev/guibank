@@ -73,12 +73,12 @@ export class DashboardComponent {
   }
 
   changeHidden() {
-    const conta = this.loginService.user()?.id;
-    if(!conta) return;
+    const id = this.loginService.user()?.id;
+    if(!id) return;
     const userHidden = JSON.parse(localStorage.getItem('hidden') || '{}');
     this.dashService.hidden.update(hidden => {
       const newHidden = !hidden
-      userHidden[conta] = newHidden;
+      userHidden[id] = newHidden;
       localStorage.setItem('hidden',JSON.stringify(userHidden))
       return newHidden;
     });
