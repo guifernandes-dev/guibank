@@ -53,9 +53,7 @@ export class LoginService {
 
   guardLoggedUser(): Observable<boolean> {
     if(this.user()) return of(true);
-    const accessToken: string | null = JSON.parse(
-      this.cookies.get('accountLogged') || 'null'
-    );
+    const accessToken: string | null = this.cookies.get('accountLogged') || 'null';
     if(!accessToken) return of(false);
     return this.api.getValidUser()
       .pipe(
@@ -111,7 +109,7 @@ export class LoginService {
     const {user, accessToken} = account;
     this.cookies.set(
       'accountLogged',
-      JSON.stringify(accessToken),
+      accessToken,
       { expires: 2 }
     );
     this.user$.set(user);
