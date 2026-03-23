@@ -107,6 +107,7 @@ export class TransactionsService {
     dialogRef.afterClosed().subscribe((resp: Transaction) => {
       if (resp && resp.id) {
         const {id} = resp;
+        resp.data = new Date();
         let respAPI: Observable<Transaction>;
         switch (type) {
           case 'edit':
@@ -124,8 +125,7 @@ export class TransactionsService {
           .subscribe((trans) => {
             const dateTrans = {
               ...trans,
-              data: new Date(trans.data),
-                vencimento: trans.vencimento ? new Date(trans.vencimento) : null,
+              vencimento: trans.vencimento ? new Date(trans.vencimento) : null,
             }
             cbSubscribe(dateTrans);
             this.utilService.openSnackBar(mensagem,'Ok','snackbar-sucess');

@@ -149,7 +149,7 @@
       "descricao": "Aluguel",
       "valor": 2000,
       "tipo": "pagamento",
-      "pago": false,
+      "pago": true,
       "vencimento": "2026-03-02T21:54:42.046Z"
     },
     {

@@ -30,7 +30,6 @@ export class LoginService {
 
   findUserOp(): void {
     if(this.userOp.length) return;
-    console.log(this.user());
     this.api
       .getTransactionsByUser(this.user()?.id!)
       .pipe(first())
@@ -51,9 +50,14 @@ export class LoginService {
       });
   }
 
+  getToken(): string {
+    return this.cookies.get('accountLogged');
+  }
+
   guardLoggedUser(): Observable<boolean> {
     if(this.user()) return of(true);
-    const accessToken: string | null = this.cookies.get('accountLogged') || 'null';
+    const accessToken = this.getToken();
+    
     if(!accessToken) return of(false);
     return this.api.getValidUser()
       .pipe(

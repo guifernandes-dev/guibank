@@ -29,7 +29,7 @@ export class DashboardComponent {
     effect(() => {
       const user = this.loginService.user();
       if (!user?.id) return;
-      const hidden = JSON.parse(localStorage.getItem('hidden') || '{}')[user.id];      
+      const hidden = JSON.parse(sessionStorage.getItem('hidden') || '{}')[user.id];      
       this.dashService.hidden.set(!!hidden);
       this.loanService.getUserLoans(user.id);
     });
@@ -65,21 +65,21 @@ export class DashboardComponent {
   }
 
   get documents() {
-    return this.dashService.getDocuments()
+    return this.dashService.getDocuments
   }
 
   get parcelas() {
-    return this.dashService.getParcelas()
+    return this.dashService.getParcelas
   }
 
   changeHidden() {
     const id = this.loginService.user()?.id;
     if(!id) return;
-    const userHidden = JSON.parse(localStorage.getItem('hidden') || '{}');
+    const userHidden = JSON.parse(sessionStorage.getItem('hidden') || '{}');
     this.dashService.hidden.update(hidden => {
       const newHidden = !hidden
       userHidden[id] = newHidden;
-      localStorage.setItem('hidden',JSON.stringify(userHidden))
+      sessionStorage.setItem('hidden',JSON.stringify(userHidden))
       return newHidden;
     });
   }

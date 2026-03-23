@@ -20,9 +20,9 @@
     <div class="d-flex gap-2 mb-2">
       <button
         mat-raised-button
-        [matBadge]="parcelas.length"
+        [matBadge]="parcelas().length"
         matBadgePosition="after"
-        [matBadgeHidden]="!parcelas.length"
+        [matBadgeHidden]="!parcelas().length"
         (click)="toogleNext(nextCards.PARC)"
         [class]="nextSelec() === nextCards.PARC ? 'btn-ativo' : ''"
       >
@@ -31,9 +31,9 @@
       </button>
       <button
         mat-raised-button
-        [matBadge]="parcelas.length"
+        [matBadge]="documents().length"
         matBadgePosition="after"
-        [matBadgeHidden]="!parcelas.length"
+        [matBadgeHidden]="!documents().length"
         (click)="toogleNext(nextCards.PG)"
         [class]="nextSelec() === nextCards.PG ? 'btn-ativo' : ''"
       >

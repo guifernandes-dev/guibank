@@ -11,7 +11,7 @@
           ${saldo > 0 ? 'text-success' : 'text-danger'} 
           ${hidden() ? '' : 'blur'}
         `">
-          {{ saldo | brCurrency}}
+          {{ hidden() ? (saldo | brCurrency) : 'R$9.999,99'}}
         </mat-card-content>
       } @placeholder() {
         <mat-card-content>
@@ -27,7 +27,7 @@
       </mat-card-header>
       @defer (when !isLoading()) {
         <mat-card-content [class]="`card-resume text-success ${hidden() ? '' : 'blur'}`">
-          {{ receitas | brCurrency }}
+          {{ hidden() ? (receitas | brCurrency) : 'R$9.999,99' }}
         </mat-card-content>
       } @placeholder() {
         <mat-card-content>
@@ -43,7 +43,7 @@
       </mat-card-header>
       @defer (when !isLoading()) {
         <mat-card-content [class]="`card-resume text-danger ${hidden() ? '' : 'blur'}`">
-          {{ despesas | brCurrency }}
+          {{ hidden() ? (despesas | brCurrency) : 'R$9.999,99' }}
         </mat-card-content>
       } @placeholder() {
         <mat-card-content>
