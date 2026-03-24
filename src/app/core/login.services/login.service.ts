@@ -114,7 +114,7 @@ export class LoginService {
     this.cookies.set(
       'accountLogged',
       accessToken,
-      { expires: 2 }
+      { expires: 2/24 }
     );
     this.user$.set(user);
   }

@@ -2,7 +2,6 @@
   "users": [
     {
       "email": "guifjj92@gmail.com",
-      "password": "$2a$10$iRSl9l9kctUmU2G2NIMXmOFBgQeaGY6olVGUKTLeGtNc1mfOiHIaa",
       "nome": "Guilherme Fernandes",
       "renda": 10000,
       "id": "C536"
@@ -145,7 +144,7 @@
         "nome": "Guilherme Fernandes"
       },
       "destino": null,
-      "data": "2026-03-02T21:54:58.208Z",
+      "data": "2026-03-24T03:10:55.226Z",
       "descricao": "Aluguel",
       "valor": 2000,
       "tipo": "pagamento",
@@ -229,7 +228,7 @@
       "valor": 235.90227977503713,
       "pago": true,
       "tipo": "pagamento",
-      "vencimento": "2026-03-08T07:36:40.624Z"
+      "vencimento": "2026-03-09T07:36:40.624Z"
     },
     {
       "id": "8eb1",

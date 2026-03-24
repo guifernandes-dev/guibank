@@ -69,8 +69,7 @@ server.get('/users/me', (req, res) => {
   try {
     // Valida usando a sua SECRET personalizada    
     const user = router.db.get('users').find({ email: payload.email }).value();
-    console.log(user);
-    
+    delete user.password;
     if (user) {
       // Retorna 204 para o Guard do Angular e injeta o payload no header se quiser
       return res.status(200).json(user);

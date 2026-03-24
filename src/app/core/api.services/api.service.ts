@@ -51,7 +51,7 @@ export class APIService {
     return this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params});
   }
 
-  patchTransactionById(id: string, transaction: Partial<Transaction>): Observable<Transaction> {
+  patchTransactionById(id: string, transaction: Partial<Transaction>): Observable<Transaction> {    
     return this.http.patch<Transaction>(`${this.baseUrl}/transactions/${id}`, transaction);
   }
 

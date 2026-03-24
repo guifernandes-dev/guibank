@@ -13,7 +13,7 @@ export class DateTransPipe implements PipeTransform {
     let dataOp: string;
     switch (format) {
       case DateFormats.RESUME_TRANS:
-        dataOp = value.toLocaleDateString();
+        dataOp = value.toLocaleDateString();        
         objDate = (dataOp === dataAtual.toLocaleDateString()
           ? { hour: "2-digit", minute: "2-digit" }
           : { day: '2-digit', month: 'long' })
