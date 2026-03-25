@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { APIService } from '../api.services/api.service';
 import { catchError, first, map, Observable, of } from 'rxjs';
 import { User } from '../models/services.model';
-import { Login, AccountResp, Transaction, Account } from '../../../server/models/db.model';
+import { Login, AccountResp, Transaction } from '../../../server/models/db.model';
 import { UtilService } from '../util.services/util.service';
 import { Router } from '@angular/router';
 import { Pages } from '../../constants/front.enum';

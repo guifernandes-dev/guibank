@@ -3,10 +3,10 @@
   <div class="d-flex justify-content-center align-items-center gap-2">
     <div class="d-flex flex-column">
       <span>
-        Olá, {{ user()?.nome!.split(' ')[0] }}.
+        {{'HEADER.HELLO' | translate}}, {{ user()?.nome!.split(' ')[0] }}.
       </span>
       <span class="text-right conta">
-        Conta: {{ user()?.id }}
+        {{'HEADER.ACCOUNT' | translate}}: {{ user()?.id }}
       </span>
     </div>
     <button

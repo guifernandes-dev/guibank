@@ -16,7 +16,6 @@ const generateAlphanumericId = () => {
 };
 
 server.db = router.db;
-server.db._sm = process.env.JWT_SECRET;
 
 server.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -69,10 +68,11 @@ server.get('/users/me', (req, res) => {
   try {
     // Valida usando a sua SECRET personalizada    
     const user = router.db.get('users').find({ email: payload.email }).value();
-    delete user.password;
     if (user) {
+      const userCopy = {...user};
+      delete userCopy.password;
       // Retorna 204 para o Guard do Angular e injeta o payload no header se quiser
-      return res.status(200).json(user);
+      return res.status(200).json(userCopy);
     } else {
       return res.status(401).json({ error: "Token inválido ou expirado" });
     }
@@ -98,9 +98,10 @@ server.get('/users/:id?', (req, res, next) => {
   }
 
   if (user) {
+    const userCopy = {...user};
     // Encontrou: 204 No Content
-    delete user.password;
-    return res.status(200).json(user);
+    delete userCopy.password;
+    return res.status(200).json(userCopy);
   } else {
     // Não encontrou: 404 Not Found
     return res.status(404).jsonp({ error: "Usuário não encontrado" });

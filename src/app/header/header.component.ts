@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { LoginService } from '../core/login.services/login.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
-  imports: [MatButtonModule,MatIconModule],
+  imports: [MatButtonModule, MatIconModule, TranslatePipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })

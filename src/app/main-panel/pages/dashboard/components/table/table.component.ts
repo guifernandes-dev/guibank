@@ -85,7 +85,7 @@ export class TableComponent {
       pago: true,
       vencimento: null
     }
-  ].slice(0,this.loginService.userOp().length);
+  ].slice(0,this.loginService.userOp().length ? this.loginService.userOp().length : 4);
 
   get hidden() {
     return this.dashService.hidden;

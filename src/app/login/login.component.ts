@@ -10,10 +10,11 @@ import { MatIcon } from "@angular/material/icon";
 import { LoginService } from '../core/login.services/login.service';
 import { UtilService } from '../core/util.services/util.service';
 import { Login } from '../../server/models/db.model';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
-  imports: [MatButtonModule, MatInputModule, MatIcon, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatSnackBarModule],
+  imports: [MatButtonModule, MatInputModule, MatIcon, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatSnackBarModule, TranslatePipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +22,7 @@ import { Login } from '../../server/models/db.model';
 export class LoginComponent {
   private readonly loginService = inject(LoginService);
   private readonly utilService = inject(UtilService);
+  private readonly translate = inject(TranslateService);
   private _loginForm = signal(true);
   readonly nome = new FormControl('', [Validators.required, Validators.minLength(3)]);
   readonly email = new FormControl('', [Validators.required, Validators.email]);
@@ -28,6 +30,7 @@ export class LoginComponent {
   readonly renda = new FormControl('0,00');
   emailError = signal('');
   nomeError = signal('');
+  rendaError = signal('');
   passwordChecks = signal({
     hasMinLength: false,
     hasLetter: false,
@@ -84,21 +87,23 @@ export class LoginComponent {
 
   updateEmailError() {
     if (this.email.hasError('required')) {
-      this.emailError.set('insira um e-mail');
+      this.emailError.set('LOGIN.EMAIL.ERROR.REQUIRED');
     } else if (this.email.hasError('email')) {
-      this.emailError.set('e-mail inválido');
+      this.emailError.set('LOGIN.EMAIL.ERROR.INVALID');
     } else {
       this.emailError.set('');
     }
   }
 
   updateNomeError() {
+    console.log(this.nome.errors);
+    
     if(this.loginForm) {
       this.nomeError.set('');
     } else if(this.nome.hasError('required')) {
-      this.nomeError.set('insira um nome');
-    } else if (this.nome.hasError('minlenght')) {
-      this.nomeError.set('o nome precisa de pelo menos 3 caracteres');
+      this.nomeError.set('LOGIN.NAME.ERROR.REQUIRED');
+    } else if (this.nome.hasError('minlength')) {
+      this.nomeError.set('LOGIN.NAME.ERROR.MINLENGTH');
     } else {
       this.nomeError.set('');
     }
@@ -127,7 +132,12 @@ export class LoginComponent {
 
   formatar(event: Event) {
     const formatado = this.utilService.formataValorInput(event);
+    const value = this.utilService.formataValorNumero(formatado);
     this.renda.setValue(formatado);
+    if(value < 40000) {
+      this.renda.setErrors({ minlength: true });
+      this.rendaError.set('LOGIN.INCOME.ERROR');
+    }
     this.cursorend(event,formatado)
   }
 
@@ -139,7 +149,8 @@ export class LoginComponent {
     const passwords = this.passwordChecks();
     const passwordValida = passwords.hasMinLength && passwords.hasLetter && passwords.hasNumber && passwords.hasSpecial;
     const nomeValido = this.loginForm || this.nome.valid;
-    return !(passwordValida && nomeValido && this.email.valid);    
+    const rendaValida = this.loginForm || this.renda.valid;
+    return !(passwordValida && nomeValido && this.email.valid && rendaValida);    
   }
 
   submit() {
@@ -160,5 +171,13 @@ export class LoginComponent {
         this.loginService.criarConta({nome,email,password,renda});
       }
     }
+  }
+
+  setPt() {
+    this.translate.use('pt-br');
+  }
+
+  setUs() {
+    this.translate.use('en-us');
   }
 }

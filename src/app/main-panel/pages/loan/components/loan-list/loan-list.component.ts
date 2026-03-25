@@ -19,21 +19,6 @@ import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db
 })
 export class LoanListComponent {
   private readonly loanService = inject(LoanService);
-  private readonly loginService = inject(LoginService);
-    
-
-  constructor() {
-    effect(() => {
-      const user = this.loginService.user();
-      if (!user?.id) return;
-      this.loanService.getUserLoans(user.id);
-    });
-  }
-
-  ngOnInit(): void {
-    this.loanService.initTax();
-  }
-
 
   get dateFormats() {
     return DateFormats;

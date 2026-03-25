@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { LoanService } from '../../services/loan.service';
@@ -15,21 +15,9 @@ import { LoginService } from '../../../../../core/login.services/login.service';
   templateUrl: './loan-resume.component.html',
   styleUrl: './loan-resume.component.css'
 })
-export class LoanResumeComponent implements OnInit {
+export class LoanResumeComponent {
   private readonly loanService = inject(LoanService);
   private readonly loginService = inject(LoginService);
-
-  constructor() {
-    effect(() => {
-      const user = this.loginService.user();
-      if (!user?.id) return;
-      this.loanService.getUserLoans(user.id);
-    });
-  }
-
-  ngOnInit(): void {
-    this.loanService.initTax();
-  }
 
   get taxa() {
     return this.loanService.tax$;

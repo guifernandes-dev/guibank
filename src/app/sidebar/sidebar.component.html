@@ -12,9 +12,30 @@
           <mat-icon>
             {{item.icon}}
           </mat-icon>
-          {{item.label}}
+          {{item.label | translate}}
         </button>
       }
     </div>
   </nav>
+  <div class="w-100 text-center my-2">
+    {{ 'SIDEBAR.TITLE_LANG' | translate}}
+    <div class="d-flex justify-content-evenly">
+      <button
+        type="button"
+        mat-icon-button
+        (click)="setPt()"
+        class="d-flex justify-content-center align-items-center"
+      >
+        <img src="https://flagsapi.com/BR/flat/24.png" [alt]="'SIDEBAR.FLAG_ALT_BR' | translate">
+      </button>
+      <button
+        type="button"
+        mat-icon-button
+        (click)="setUs()"
+        class="d-flex justify-content-center align-items-center"
+      >
+        <img src="https://flagsapi.com/US/flat/24.png" [alt]="'SIDEBAR.FLAG_ALT_US' | translate">
+      </button>
+    </div>
+  </div>
 </aside>

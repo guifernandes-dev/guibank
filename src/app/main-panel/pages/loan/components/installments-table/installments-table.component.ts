@@ -22,8 +22,7 @@ import { TransactionsService } from '../../../../../core/transactions.services/t
   styleUrl: './installments-table.component.css'
 })
 export class InstallmentsTableComponent {
-  private loanService = inject(LoanService);
-  private readonly loginService = inject(LoginService);
+  private readonly loanService = inject(LoanService);
   private readonly utilService = inject(UtilService);
   private readonly transService = inject(TransactionsService);
   private readonly dialog = inject(MatDialog);
@@ -32,12 +31,6 @@ export class InstallmentsTableComponent {
   presentValue$ = signal<{item: number, parcela: number}[]>([]);
 
   constructor() {
-    effect(() => {
-      const id = this.route.snapshot.paramMap.get('id');
-      const user = this.loginService.user();
-      if (!user?.id || !id) return;
-      this.loanService.getUserLoans(user.id);
-    });
     effect(() => {
       const id = this.route.snapshot.paramMap.get('id');
       let loan: Loan | undefined;

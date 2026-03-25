@@ -31,7 +31,6 @@ export class DashboardComponent {
       if (!user?.id) return;
       const hidden = JSON.parse(sessionStorage.getItem('hidden') || '{}')[user.id];      
       this.dashService.hidden.set(!!hidden);
-      this.loanService.getUserLoans(user.id);
     });
   }
 
