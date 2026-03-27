@@ -10,10 +10,11 @@ import { RecebedorPipe } from '../../../pipe/recebedor.pipe';
 import { Transaction } from '../../../../server/models/db.model';
 import { Operation } from '../../../../server/constants/db.enum';
 import { UtilService } from '../../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-transactions-list',
-  imports: [MatIconModule, MatButtonModule, BrCurrencyPipe, DateTransPipe, TipoTransPipe, RecebedorPipe],
+  imports: [MatIconModule, MatButtonModule, BrCurrencyPipe, DateTransPipe, TipoTransPipe, RecebedorPipe, TranslatePipe],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transactions-list.component.css'
 })

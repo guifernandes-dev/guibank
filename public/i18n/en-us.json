@@ -77,5 +77,19 @@
       "DUE_DATE": "Due Date",
       "PAY": "Pay"
     }
+  },
+  "MENU_OP": {
+    "LABELS": {
+      "TRANSFER": "TRANSFER",
+      "DEPOSIT": "DEPOSIT",
+      "WITHDRAWAL": "WITHDRAWAL",
+      "DEBIT": "DEBIT",
+      "PAYMENT": "PAYMENT",
+      "LOAN_CREDIT": "LOAN CREDIT"
+    },
+    "TYPE_TRANS": {
+      "PAYMENT": "PAYMENT BY TRANSFER",
+      "CREDIT": "CREDIT BY TRANSFER"
+    }
   }
 }

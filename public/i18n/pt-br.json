@@ -77,5 +77,19 @@
       "DUE_DATE": "Vencimento",
       "PAY": "Pagar"
     }
+  },
+  "MENU_OP": {
+    "LABELS": {
+      "TRANSFER": "PIX",
+      "DEPOSIT": "DEPÓSITO",
+      "WITHDRAWAL": "SAQUE",
+      "DEBIT": "DÉBITO",
+      "PAYMENT": "PAGAMENTO",
+      "LOAN_CREDIT": "CRÉDITO DE EMPRÉSTIMO"
+    },
+    "TYPE_TRANS": {
+      "PAYMENT": "PAGAMENTO POR PIX",
+      "CREDIT": "RECEBIMENTO POR PIX"
+    }
   }
 }

@@ -1,7 +1,7 @@
 <ng-template #payParc let-parcela="obj">
   <p>Deseja realmente pagar parcela Nº {{parcela.item}}?</p>
   <h4 class="m-0">{{parcela.parcela | brCurrency : lang}}</h4>
-  <span>vencimento: {{parcela.vencimento | dateTrans : dateFormats.DOCS_LIST}}</span>
+  <span>vencimento: {{parcela.vencimento | dateTrans : lang : dateFormats.DOCS_LIST}}</span>
 </ng-template>
 
 <ng-template #payLoan let-loan="obj">
@@ -50,7 +50,7 @@
           <div>{{parc.item}}</div>
         </th>
         <td>
-          {{parc.vencimento | dateTrans: dateFormats.DOCS_LIST }}
+          {{parc.vencimento | dateTrans : lang: dateFormats.DOCS_LIST }}
         </td>
         <td>
           {{parc.parcela | brCurrency : lang}}

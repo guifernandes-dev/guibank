@@ -12,7 +12,7 @@
           <td>
             <div>{{trans.descricao}}</div>
             <div>
-              Vencimento: {{trans.vencimento! | dateTrans : dateFormats.DOCS_LIST }}
+              Vencimento: {{trans.vencimento! | dateTrans : lang : dateFormats.DOCS_LIST }}
             </div>
           </td>
           <td class="valor">

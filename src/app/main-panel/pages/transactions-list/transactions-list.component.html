@@ -5,7 +5,7 @@
       <thead>
         <tr>
           <th colspan="2" class="header-table">
-            {{ops.data | dateTrans : dateFormats.HEAD_TRANS_LIST}}
+            {{ops.data | dateTrans : lang : dateFormats.HEAD_TRANS_LIST}}
           </th>
           <th colspan="1" class="header-table saldo">
             Saldo: {{ops.saldoAcumulado | brCurrency : lang}}
@@ -22,7 +22,7 @@
             </td>
             <td>
             <div class="tipo">
-              {{(trans | tipoTrans).label}}
+              {{(trans | tipoTrans).label | translate}}
             </div>
             @if(trans.descricao) {
               <div class="descricao">
@@ -40,7 +40,7 @@
                 } valor`">
                 {{trans.valor | brCurrency : lang : trans.origem?.id === user()?.id}}
               </div>
-              <div>{{trans.data | dateTrans : dateFormats.TRANS_LIST}}</div>
+              <div>{{trans.data | dateTrans : lang : dateFormats.TRANS_LIST}}</div>
             </td>
           </tr>
         }

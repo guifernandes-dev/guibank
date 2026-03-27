@@ -20,32 +20,32 @@ export class UtilService {
   transTypes: MenuOperation[] = [
     {
       icon: 'send_money',
-      label: 'PIX',
+      label: 'MENU_OP.LABELS.TRANSFER',
       operation: Operation.PIX
     },
     {
       icon: 'savings',
-      label: 'DEPÓSITO',
+      label: 'MENU_OP.LABELS.DEPOSIT',
       operation: Operation.DEPOSITO
     },
     {
       icon: 'payments',
-      label: 'SAQUE',
+      label: 'MENU_OP.LABELS.WITHDRAWAL',
       operation: Operation.SAQUE
     },
     {
       icon: 'money',
-      label: 'DÉBITO',
+      label: 'MENU_OP.LABELS.DEBIT',
       operation: Operation.DEBITO
     },
     {
       icon: 'request_quote',
-      label: 'PAGAMENTO',
+      label: 'MENU_OP.LABELS.PAYMENT',
       operation: Operation.PAGAMENTO
     },
     {
       icon: 'price_check',
-      label: 'CRÉDITO DE EMPRÉSTIMO',
+      label: 'MENU_OP.LABELS.LOAN_CREDIT',
       operation: Operation.CREDITO
     }
   ]

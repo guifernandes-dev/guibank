@@ -16,8 +16,12 @@ export class TipoTransPipe implements PipeTransform {
     const item = this.utilService.transTypes.find(item => trans.tipo === item.operation)!;
     const accountLogged = this.loginService.user()?.id;
     if(trans.tipo === Operation.PIX) {
-      if(trans.destino?.id === accountLogged) return {...item, label: `RECEBIMENTO POR ${item.label}`};
-      return {...item, label: `PAGAMENTO POR ${item.label}`};
+      return {
+        ...item,
+        label: `MENU_OP.TYPE_TRANS.${trans.destino?.id === accountLogged
+          ? 'CREDIT'
+          : 'PAYMENT'}`
+      };
     };
     return item;
   }

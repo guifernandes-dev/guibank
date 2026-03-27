@@ -2,7 +2,7 @@
 <mat-dialog-content class="d-flex flex-column">
   <span>Deseja realmente deletar o documento {{trans.descricao}}?</span>
   <span>No valor de {{trans.valor | brCurrency : lang}} e vencimento em {{
-    (trans.vencimento || trans.data) | dateTrans : dateFormats.DOCS_CARD
+    (trans.vencimento || trans.data) | dateTrans : lang : dateFormats.DOCS_CARD
   }}.</span>
 </mat-dialog-content>
 <mat-dialog-actions>
