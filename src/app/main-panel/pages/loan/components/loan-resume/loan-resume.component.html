@@ -20,7 +20,7 @@
         <div class="container-disp-text">
           <span class="w-100">Valor</span>
           <span class="w-100 bold">
-            {{ limiteDisp | brCurrency}}
+            {{ limiteDisp | brCurrency : lang}}
           </span>
         </div>
         <div class="container-disp-text">
@@ -48,7 +48,7 @@
           <mat-card-title class="card-title">SALDO DEVEDOR TOTAL</mat-card-title>
       </mat-card-header>
       <mat-card-content class="card-resume-valor">
-        {{ valorEmprestimos | brCurrency}}
+        {{ valorEmprestimos | brCurrency : lang}}
       </mat-card-content>
     </mat-card>
   }

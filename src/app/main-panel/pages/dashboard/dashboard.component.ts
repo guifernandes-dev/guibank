@@ -9,29 +9,27 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DashboardService } from './services/dashboard.service';
 import { LoginService } from '../../../core/login.services/login.service';
-import { LoanService } from '../loan/services/loan.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [TableComponent, ResumeComponent, DocumentsOpenComponent, LoansOpenComponent, MatButtonModule, MatBadgeModule, MatIconModule, MatProgressSpinnerModule, MatTooltipModule],
+  imports: [TableComponent, ResumeComponent, DocumentsOpenComponent, LoansOpenComponent, MatButtonModule, MatBadgeModule, MatIconModule, MatProgressSpinnerModule, MatTooltipModule, TranslatePipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
   private readonly dashService = inject(DashboardService);
   private readonly loginService = inject(LoginService);
-  private readonly loanService = inject(LoanService);
   
   constructor() {
     effect(() => {
       const user = this.loginService.user();
-      if (!user?.conta) return;
-      const hidden = JSON.parse(localStorage.getItem('hidden') || '{}')[user.conta];      
+      if (!user?.id) return;
+      const hidden = JSON.parse(sessionStorage.getItem('hidden') || '{}')[user.id];      
       this.dashService.hidden.set(!!hidden);
-      this.loanService.getUserLoans(user.conta);
     });
   }
 
@@ -41,6 +39,10 @@ export class DashboardComponent {
 
   get userOp() {
     return this.loginService.userOp;
+  }
+
+  get isLoading() {
+    return this.loginService.isLoading;
   }
 
   get nextCards() {
@@ -69,13 +71,13 @@ export class DashboardComponent {
   }
 
   changeHidden() {
-    const conta = this.loginService.user()?.conta;
-    if(!conta) return;
-    const userHidden = JSON.parse(localStorage.getItem('hidden') || '{}');
+    const id = this.loginService.user()?.id;
+    if(!id) return;
+    const userHidden = JSON.parse(sessionStorage.getItem('hidden') || '{}');
     this.dashService.hidden.update(hidden => {
       const newHidden = !hidden
-      userHidden[conta] = newHidden;
-      localStorage.setItem('hidden',JSON.stringify(userHidden))
+      userHidden[id] = newHidden;
+      sessionStorage.setItem('hidden',JSON.stringify(userHidden))
       return newHidden;
     });
   }

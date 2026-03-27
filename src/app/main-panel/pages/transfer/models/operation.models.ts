@@ -13,12 +13,12 @@ export interface ErrorsDialog {
 }
 
 export interface ErrorsForm extends ErrorsDialog {
-  conta: string,
+  id: string,
   email: string
 }
 
 export interface TransAccount {
-  conta: string,
+  id: string,
   email: string,
   nome: string,
 }

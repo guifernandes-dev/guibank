@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { LoanService } from './services/loan.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from "@angular/router";
+import { LoginService } from '../../../core/login.services/login.service';
 
 @Component({
   selector: 'app-loan',
@@ -10,8 +11,21 @@ import { RouterModule } from "@angular/router";
   templateUrl: './loan.component.html',
   styleUrl: './loan.component.css'
 })
-export class LoanComponent {
+export class LoanComponent implements OnInit {
   private readonly loanService = inject(LoanService);
+  private readonly loginService = inject(LoginService);
+
+  constructor() {
+    effect(() => {
+      const user = this.loginService.user();
+      if (!user?.id) return;
+      this.loanService.getUserLoans(user.id);
+    });
+  }
+
+  ngOnInit(): void {
+    this.loanService.initTax();
+  }
 
   get limiteDisp() {
     return this.loanService.limiteDisp;

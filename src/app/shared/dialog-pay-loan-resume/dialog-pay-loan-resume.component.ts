@@ -24,12 +24,15 @@ import { UtilService } from '../../core/util.services/util.service';
   styleUrl: './dialog-pay-loan-resume.component.css'
 })
 export class DialogPayLoanResumeComponent {
-
+  private readonly utilService = inject(UtilService);
   readonly dialogRef = inject(MatDialogRef<DialogPayLoanResumeComponent>);
   parc = inject(MAT_DIALOG_DATA);
 
+  get lang() {
+    return this.utilService.langAtual;
+  }
 
-   pagar() {
+  pagar() {
     this.dialogRef.close(this.parc);
   }
 

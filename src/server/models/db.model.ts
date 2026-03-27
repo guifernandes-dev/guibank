@@ -1,13 +1,21 @@
 import { TransAccount } from "../../app/main-panel/pages/transfer/models/operation.models"
 import { Operation, SisCredito } from "../constants/db.enum"
 
+export interface AccountResp {
+  accessToken: string,
+  user: Account
+}
+
 export interface Account {
   id: string,
   nome: string,
   email: string,
   renda: number,
-  senha: string,
-  limit: number,
+}
+
+export interface Login {
+  email: string,
+  password: string,
 }
 
 export interface Transaction {
@@ -28,8 +36,6 @@ export interface Loan {
   destino: TransAccount,
   valor: number,
   sistema: SisCredito,
-  atuais: LoanTotal,
-  totais: LoanTotal,
   pago: boolean,
   taxa: number,
   parcelas: Installment[]

@@ -35,6 +35,7 @@
 .sidebar {
   height: calc(100vh - 64px - 72.8px);
   display: flex;
-  justify-content: end;
+  align-items: end;
+  flex-direction: column;
   background-color: var(--menu-background);
 }

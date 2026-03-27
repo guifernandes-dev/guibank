@@ -1,13 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { MenuOperation } from '../../main-panel/pages/transfer/models/operation.models';
 import { Operation } from '../../../server/constants/db.enum';
 import { Installment, Loan } from '../../../server/models/db.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
+import { Language } from '../models/services.model';
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
+  readonly langs: Language[] = [
+    {culture: 'en-US', currency: 'USD'},
+    {culture: 'pt-BR', currency: 'BRL'},
+  ];
+  readonly langAtual = signal<Language>(this.langs[0]);
   readonly duration = 5000;
-
   transTypes: MenuOperation[] = [
     {
       icon: 'send_money',
@@ -41,6 +50,26 @@ export class UtilService {
     }
   ]
 
+  get languages() {
+    return this.langs.map(lang => lang.culture);
+  }
+
+  setLangAtual(newLang?: string) {
+    let browserLang: string | undefined;
+    if(newLang) {
+      browserLang=newLang;
+    } else {      
+      browserLang = this.translate
+        .getBrowserCultureLang()
+    }
+    const lang = this.langs.find(({culture})=>culture===browserLang);
+    if (lang?.culture) {
+      this.langAtual.set(lang);
+    } else {
+      return this.langAtual.set(this.langs[0]);
+    }
+  }
+
   formataValorInput (event: Event): string {
     const input = event.target as HTMLInputElement;
     const text = input.value;
@@ -67,6 +96,21 @@ export class UtilService {
 
     // 6. Formata no padrão brasileiro: #.###,##
     return this.formataValor(numero);
+  }
+
+  openSnackBar(
+    mensagem: string,
+    textBtn: string = 'Fechar',
+    panelClass: string = 'snackbar-erro'
+  ) {
+    this.snackBar.open(
+      mensagem,
+      textBtn,
+      {
+        duration: this.duration,
+        panelClass
+      }
+    );
   }
 
   formataValorNumero(valor: string): number {

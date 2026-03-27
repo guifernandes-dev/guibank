@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { LoginService } from '../../../../core/login.services/login.service';
-import { Installment, Loan, Transaction } from '../../../../../server/models/db.model';
+import { Installment, Loan, LoanTotal, Transaction } from '../../../../../server/models/db.model';
 import { APIService } from '../../../../core/api.services/api.service';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { first } from 'rxjs';
@@ -27,12 +27,10 @@ export class LoanService {
   readonly userLoans$ = signal<Loan[]>([]);
   readonly tax$ = signal<number>(0);
   readonly loan$ = signal<Loan>({
-    destino: {conta: '', email: '', nome: ''},
+    destino: {id: '', email: '', nome: ''},
     data: new Date(),
     taxa: 0,
     pago: false,
-    atuais: {juros: 0, amortizacao: 0, parcela: 0, saldo: 0},
-    totais: {juros: 0, amortizacao: 0, parcela: 0, saldo: 0},
     parcelas: [],
     sistema: SisCredito.PRICE,
     valor: 0,
@@ -95,11 +93,11 @@ export class LoanService {
   }
 
   initTax(user?: User) {
-    if(user?.conta){
-      const {conta, email, nome} = user;
+    if(user?.id){
+      const {id, email, nome} = user;
       this.loan$.update(loan => ({
         ...loan,
-        destino: {conta,email,nome}
+        destino: {id,email,nome}
       }))
     }
     if(this.tax$()) return;
@@ -229,10 +227,10 @@ export class LoanService {
     }
   }
 
-  getUserLoans(conta: string) {
+  getUserLoans(id: string) {
     const loans = this.userLoans$();
     if(loans.length) return;
-    this.apiService.getLoansByUserId(conta)
+    this.apiService.getLoansByUserId(id)
       .pipe(first())
       .subscribe(loans => {
         const loansDate = loans
@@ -246,5 +244,18 @@ export class LoanService {
     if(!PV || !i || !n) return 0;
     const fator = Math.pow(1 + i, n);
     return PV * (i * fator) / (fator - 1);
+  }
+
+  getBalanco(loan: Loan, tipo: 'total' | 'atual' = 'atual'): LoanTotal {
+    const totais: LoanTotal = {amortizacao: 0, juros: 0, parcela: 0, saldo: loan.valor};
+    return loan.parcelas
+      .filter(({pago}) => tipo === 'total' || pago)
+      .reduce((acc, parc) => {
+        const amortizacao = acc.amortizacao + parc.amortizacao;
+        const juros = acc.juros + parc.juros;
+        const parcela = acc.parcela + parc.parcela;
+        const saldo = acc.saldo - parc.amortizacao;
+        return {amortizacao, juros, parcela, saldo};
+      }, totais)
   }
 }

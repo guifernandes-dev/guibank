@@ -14,7 +14,6 @@ import { UtilService } from '../../../../../core/util.services/util.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPayLoanComponent } from '../../../../../shared/dialog-pay-loan/dialog-pay-loan.component';
 import { TransactionsService } from '../../../../../core/transactions.services/transactions.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-installments-table',
@@ -23,23 +22,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './installments-table.component.css'
 })
 export class InstallmentsTableComponent {
-  private loanService = inject(LoanService);
-  private readonly loginService = inject(LoginService);
+  private readonly loanService = inject(LoanService);
   private readonly utilService = inject(UtilService);
   private readonly transService = inject(TransactionsService);
   private readonly dialog = inject(MatDialog);
   private route = inject(ActivatedRoute);
-  private snackBar = inject(MatSnackBar);
   readonly loan$ = signal<Loan | null>(null)
   presentValue$ = signal<{item: number, parcela: number}[]>([]);
 
   constructor() {
-    effect(() => {
-      const id = this.route.snapshot.paramMap.get('id');
-      const user = this.loginService.user();
-      if (!user?.conta || !id) return;
-      this.loanService.getUserLoans(user.conta);
-    });
     effect(() => {
       const id = this.route.snapshot.paramMap.get('id');
       let loan: Loan | undefined;
@@ -58,6 +49,10 @@ export class InstallmentsTableComponent {
 
   get dateFormats() {
     return DateFormats;
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   parcelasHoje(loan: Loan) {
@@ -87,69 +82,50 @@ export class InstallmentsTableComponent {
   }
 
   quitar(template: TemplateRef<any>) {
-    const total = this.totalHoje();
-    const saldo = this.transService.saldo;
-    if(total > saldo) {
-      this.snackBar.open(
-        'Saldo inferior ao valor de quitação do contrato!',
-        'Ok',
-        {
-          duration: this.utilService.duration,
-          panelClass: 'snackbar-erro'
-        }
-      );
+    let saldo = this.totalHoje();
+    const saldoUser = this.transService.saldo;
+    if(saldo > saldoUser) {
+      this.utilService.openSnackBar('Saldo inferior ao valor de quitação do contrato!','Ok')
       return;
     }
     const loan = this.loan$();
-    const totais = { juros: 0, amortizacao: 0, parcela: 0, saldo: total};    
-    const parcelas = loan?.parcelas.map(parc => {
-      if(parc.pago) {
-        totais.juros += parc.juros;
-        totais.amortizacao += parc.amortizacao;
-        totais.parcela += parc.parcela;
-        return parc
-      };
-      const parcHoje = this.parcelaHoje(parc.item);    
-      const newParc = {
-        ...parc,
-        pago: true,
-        saldo: totais.saldo - parcHoje,
-        juros: parcHoje - parc.amortizacao,
-        parcela: parcHoje,
-      }
-      totais.juros += newParc.juros;
-      totais.amortizacao += newParc.amortizacao;
-      totais.parcela += newParc.parcela;
-      totais.saldo -= newParc.amortizacao;
-      return newParc;
-    })
-    const newLoan = {
-      ...this.loan$(),
-      pago: true,
-      atuais: totais,
-      totais: totais,
-      parcelas,
+    if(!loan) {
+      this.utilService.openSnackBar('Empréstimo não encontrado!')
+      return;
     };
-    const dialogRef = this.dialog.open(DialogPayLoanComponent,{data: { obj: newLoan, template}});
+    const dialogRef = this.dialog.open(DialogPayLoanComponent,{data: { obj: loan, template}});
     dialogRef.afterClosed().subscribe((loan: Loan) => {
       if(!loan) return;
-      this.loan$.set(loan);
+      const parcelas = loan.parcelas.map(parc => {
+        if(parc.pago) {
+          return parc
+        };
+        const parcHoje = this.parcelaHoje(parc.item);    
+        const newParc = {
+          ...parc,
+          pago: true,
+          saldo: saldo - parcHoje,
+          juros: parcHoje - parc.amortizacao,
+          parcela: parcHoje,
+        }
+        saldo -= newParc.amortizacao;
+        return newParc;
+      });
+      const newLoan: Loan = {
+        ...loan,
+        pago: true,
+        parcelas,
+      };
+      this.loan$.set(newLoan);
       this.presentValue$.set([])
-      this.loanService.patchLoan(loan,undefined,total);
+      this.loanService.patchLoan(newLoan,undefined,saldo);
     });
   }
 
   pagar(parcelaChange: Installment, template: TemplateRef<any>) {
     const parcela = this.parcelaHoje(parcelaChange.item);
     if(parcela > this.transService.saldo) {
-      this.snackBar.open(
-        'Saldo inferior ao valor da parcela!',
-        'Ok',
-        {
-          duration: this.utilService.duration,
-          panelClass: 'snackbar-erro'
-        }
-      );
+      this.utilService.openSnackBar('Saldo inferior ao valor da parcela!','Ok');
       return;
     }
     const dialogRef = this.dialog.open(DialogPayLoanComponent,{
@@ -162,12 +138,6 @@ export class InstallmentsTableComponent {
         const {amortizacao} = loan.parcelas[parc.item-1];
         const parcelas = [...loan.parcelas];
         const juros = parcela-amortizacao;
-        const atuais: LoanTotal = {
-          amortizacao: loan.atuais.amortizacao + amortizacao,
-          juros: loan.atuais.juros + juros,
-          parcela: loan.atuais.parcela + parcela,
-          saldo: loan.atuais.saldo - parcela,
-        }
         const index = loan.parcelas.findIndex(parc => parc.item === parc.item);
         parcelas[index] = {
           ...loan.parcelas[index],
@@ -175,12 +145,18 @@ export class InstallmentsTableComponent {
           juros,
           parcela,
         }
-        return {...loan,atuais,parcelas}
+        return {...loan,parcelas}
       }));
       this.presentValue$.update(presValue => {
         return presValue.filter(({item}) => item !== parc.item);
       });
       this.loanService.patchLoan(this.loan$()!, parc);
     });
+  }
+
+  getBalanco(): LoanTotal {
+    const loan = this.loan$();
+    if(!loan) return {amortizacao: 0, juros: 0, parcela: 0, saldo: 0}
+    return this.loanService.getBalanco(loan, 'total');
   }
 }

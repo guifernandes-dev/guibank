@@ -4,7 +4,6 @@ import { APIService } from '../api.services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPayComponent } from '../../shared/dialog-pay-document/dialog-pay-document.component';
 import { first, Observable } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Transaction } from '../../../server/models/db.model';
 import { DialogDeleteComponent } from '../../shared/dialog-delete/dialog-delete.component';
 import { UtilService } from '../util.services/util.service';
@@ -20,7 +19,6 @@ export class TransactionsService {
   private readonly apiService = inject(APIService);
   private readonly utilService = inject(UtilService);
   private readonly dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
   private readonly OPTIONS_CHANGE_DOCS: Record<KeyType, OptionChangeDocs> = {
     pay: {type: 'pay', mensagem: 'Documento pago com sucesso!'},
     edit: {type: 'edit', mensagem: 'Documento alterado com sucesso!'},
@@ -29,9 +27,9 @@ export class TransactionsService {
 
   get saldos(): {rec: number, desp: number} {
     return this.loginService.userOp().reduce((saldo,trans)=>{
-      if (trans.destino?.conta === this.loginService.user()?.conta && trans.pago) {
+      if (trans.destino?.id === this.loginService.user()?.id && trans.pago) {
         return {...saldo, rec: saldo.rec+trans.valor }
-      } else if (trans.origem?.conta === this.loginService.user()?.conta && trans.pago) {
+      } else if (trans.origem?.id === this.loginService.user()?.id && trans.pago) {
         return {...saldo, desp: saldo.desp+trans.valor }
       }
       return saldo
@@ -52,17 +50,23 @@ export class TransactionsService {
 
   updateUserOp(trans: Transaction) {
     this.loginService.userOp.update(userOps => {
-      const opIndex = userOps.findIndex(op => op.id === trans.id);
+      const ops = [...userOps];
+      const opIndex = ops.findIndex(op => op.id === trans.id);
+      
       if(opIndex<0) return userOps;
-      userOps[opIndex] = trans;
-      return userOps;
+      ops[opIndex] = trans;
+      return ops;
     });
   }
 
   payTrans(trans: Transaction) {
+    const payTrans: Transaction = {
+      ...trans,
+      data: new Date()
+    };
     const cbSubscribe = (trans: Transaction) => this.updateUserOp(trans);
     this.changeTrans(
-      trans,
+      payTrans,
       DialogPayComponent,
       cbSubscribe,
       this.OPTIONS_CHANGE_DOCS.pay,
@@ -82,9 +86,10 @@ export class TransactionsService {
   deleteTrans(trans: Transaction) {
     const cbSubscribe = (trans: Transaction) => {
       this.loginService.userOp.update(userOps => {
-        const opIndex = userOps.findIndex(op => op.id === trans.id);
-        delete userOps[opIndex];
-        return userOps;
+        const ops = [...userOps];
+        const opIndex = ops.findIndex(op => op.id === trans.id);
+        delete ops[opIndex];
+        return ops;
       });
     }
     this.changeTrans(
@@ -108,7 +113,7 @@ export class TransactionsService {
 
     dialogRef.afterClosed().subscribe((resp: Transaction) => {
       if (resp && resp.id) {
-        const {id} = resp;
+        const {id, data} = resp;
         let respAPI: Observable<Transaction>;
         switch (type) {
           case 'edit':
@@ -118,26 +123,19 @@ export class TransactionsService {
             respAPI = this.apiService.deleteTransactionById(id);
             break;
           default:
-            respAPI = this.apiService.patchTransactionById(id, {id: resp.id, pago: true});
+            respAPI = this.apiService.patchTransactionById(id, {pago: true, data});
             break;
         }
         respAPI
           .pipe(first())
-          .subscribe((trans) => {
+          .subscribe((trans) => {            
             const dateTrans = {
               ...trans,
               data: new Date(trans.data),
-                vencimento: trans.vencimento ? new Date(trans.vencimento) : null,
+              vencimento: trans.vencimento ? new Date(trans.vencimento) : null,
             }
             cbSubscribe(dateTrans);
-            this.snackBar.open(
-              mensagem,
-              'Ok',
-              {
-                duration: this.utilService.duration,
-                panelClass: 'snackbar-sucess'
-              }
-            );
+            this.utilService.openSnackBar(mensagem,'Ok','snackbar-sucess');
           });
       }
     });

@@ -53,8 +53,8 @@ export class OperationFormComponent {
   }
 
   ngOnInit(): void {
-    this.checkError(this.destinoNumero ? 'conta' : 'email');
-    this.checkError(this.destinoNumero ? 'conta' : 'email');
+    this.checkError(this.destinoNumero ? 'id' : 'email');
+    this.checkError(this.destinoNumero ? 'id' : 'email');
     this.checkError('vencimento');
   }
 
@@ -98,13 +98,17 @@ export class OperationFormComponent {
     return this.operationForm.get('origem')
   }
 
+  get lang() {
+    return this.utilService.langAtual;
+  }
+
   resetDestino() {
     this.destino?.get('nome')?.reset('');
     this.destino?.get('email')?.reset('');
-    this.destino?.get('conta')?.reset('');
-    this.errorsForm.update( erros => ({
+    this.destino?.get('id')?.reset('');
+    this.errorsForm.update( (erros): ErrorsForm => ({
       ...erros,
-      conta: '',
+      id: '',
       email: '',
     }))
   }
@@ -143,7 +147,7 @@ export class OperationFormComponent {
     const curOp = this.currentOp().operation;
     switch (curOp) {
       case Operation.PIX:
-        disabled = !this.destino?.get('conta')?.value?.length;
+        disabled = !this.destino?.get('id')?.value?.length;
         break;
       case Operation.PAGAMENTO:
         disabled = !this.operationForm.get('vencimento')?.value;

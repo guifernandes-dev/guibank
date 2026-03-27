@@ -9,10 +9,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
 import { LoginService } from '../core/login.services/login.service';
 import { UtilService } from '../core/util.services/util.service';
+import { Login } from '../../server/models/db.model';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { LoadingComponent } from "../shared/loading/loading.component";
 
 @Component({
   selector: 'app-login',
-  imports: [MatButtonModule, MatInputModule, MatIcon, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatSnackBarModule],
+  imports: [MatButtonModule, MatInputModule, MatIcon, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatSnackBarModule, TranslatePipe, LoadingComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,14 +23,16 @@ import { UtilService } from '../core/util.services/util.service';
 export class LoginComponent {
   private readonly loginService = inject(LoginService);
   private readonly utilService = inject(UtilService);
+  private readonly translate = inject(TranslateService);
   private _loginForm = signal(true);
   readonly nome = new FormControl('', [Validators.required, Validators.minLength(3)]);
   readonly email = new FormControl('', [Validators.required, Validators.email]);
-  readonly senha = new FormControl('', [Validators.required, this.passwordStrengthValidator()]);
+  readonly password = new FormControl('', [Validators.required, this.passwordStrengthValidator()]);
   readonly renda = new FormControl('0,00');
   emailError = signal('');
   nomeError = signal('');
-  senhaChecks = signal({
+  rendaError = signal('');
+  passwordChecks = signal({
     hasMinLength: false,
     hasLetter: false,
     hasNumber: false,
@@ -39,13 +44,17 @@ export class LoginComponent {
     merge(this.email.statusChanges, this.email.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateEmailError());
-    merge(this.senha.statusChanges, this.senha.valueChanges)
+    merge(this.password.statusChanges, this.password.valueChanges)
       .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateSenhaChecks());
+      .subscribe(() => this.updatePasswordChecks());
   }
 
   get loginForm() {
     return this._loginForm()
+  }
+
+  get isLoading() {
+    return this.loginService.isLoading;
   }
 
   toogleLoginForm(): void {
@@ -83,31 +92,33 @@ export class LoginComponent {
 
   updateEmailError() {
     if (this.email.hasError('required')) {
-      this.emailError.set('insira um e-mail');
+      this.emailError.set('LOGIN.EMAIL.ERROR.REQUIRED');
     } else if (this.email.hasError('email')) {
-      this.emailError.set('e-mail inválido');
+      this.emailError.set('LOGIN.EMAIL.ERROR.INVALID');
     } else {
       this.emailError.set('');
     }
   }
 
   updateNomeError() {
+    console.log(this.nome.errors);
+    
     if(this.loginForm) {
       this.nomeError.set('');
     } else if(this.nome.hasError('required')) {
-      this.nomeError.set('insira um nome');
-    } else if (this.nome.hasError('minlenght')) {
-      this.nomeError.set('o nome precisa de pelo menos 3 caracteres');
+      this.nomeError.set('LOGIN.NAME.ERROR.REQUIRED');
+    } else if (this.nome.hasError('minlength')) {
+      this.nomeError.set('LOGIN.NAME.ERROR.MINLENGTH');
     } else {
       this.nomeError.set('');
     }
   }
 
-  updateSenhaChecks() {
-    const errors = this.senha.errors?.['passwordStrength'];
+  updatePasswordChecks() {
+    const errors = this.password.errors?.['passwordStrength'];
 
     if (!errors) {
-      this.senhaChecks.set({
+      this.passwordChecks.set({
         hasMinLength: true,
         hasLetter: true,
         hasNumber: true,
@@ -116,7 +127,7 @@ export class LoginComponent {
       return;
     }
     
-    this.senhaChecks.set({
+    this.passwordChecks.set({
       hasMinLength: errors.hasMinLength,
       hasLetter: errors.hasLetter,
       hasNumber: errors.hasNumber,
@@ -126,7 +137,12 @@ export class LoginComponent {
 
   formatar(event: Event) {
     const formatado = this.utilService.formataValorInput(event);
+    const value = this.utilService.formataValorNumero(formatado);
     this.renda.setValue(formatado);
+    if(value < 40000) {
+      this.renda.setErrors({ minlength: true });
+      this.rendaError.set('LOGIN.INCOME.ERROR');
+    }
     this.cursorend(event,formatado)
   }
 
@@ -135,25 +151,38 @@ export class LoginComponent {
   }
 
   formValido(): boolean {
-    const senhas = this.senhaChecks();
-    const senhaValida = senhas.hasMinLength && senhas.hasLetter && senhas.hasNumber && senhas.hasSpecial;
+    const passwords = this.passwordChecks();
+    const passwordValida = passwords.hasMinLength && passwords.hasLetter && passwords.hasNumber && passwords.hasSpecial;
     const nomeValido = this.loginForm || this.nome.valid;
-    return !(senhaValida && nomeValido && this.email.valid);    
+    const rendaValida = this.loginForm || this.renda.valid;
+    return !(passwordValida && nomeValido && this.email.valid && rendaValida);    
   }
 
   submit() {
     const email = this.email.value;
-    const senha = this.senha.value;
+    const password = this.password.value;
     if (this.loginForm) {
-      if ( email && senha) {
-        this.loginService.logar(email,senha);
+      if ( email && password) {
+        const user: Login = {
+          email,
+          password: password
+        }
+        this.loginService.logar(user);
       }
     } else {
       const nome = this.nome.value;
       const renda = this.utilService.formataValorNumero(this.renda.value!);
-      if (nome && email && senha) {
-        this.loginService.criarConta({nome,email,senha,renda});
+      if (nome && email && password) {
+        this.loginService.criarConta({nome,email,password,renda});
       }
     }
+  }
+
+  setPt() {
+    this.translate.use('pt-br');
+  }
+
+  setUs() {
+    this.translate.use('en-us');
   }
 }

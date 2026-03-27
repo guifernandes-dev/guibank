@@ -1,12 +1,12 @@
 <ng-template #payParc let-parcela="obj">
   <p>Deseja realmente pagar parcela Nº {{parcela.item}}?</p>
-  <h4 class="m-0">{{parcela.parcela | brCurrency}}</h4>
+  <h4 class="m-0">{{parcela.parcela | brCurrency : lang}}</h4>
   <span>vencimento: {{parcela.vencimento | dateTrans : dateFormats.DOCS_LIST}}</span>
 </ng-template>
 
 <ng-template #payLoan let-loan="obj">
   <p>Deseja realmente quitar o contrato Nº {{loan.id}}?</p>
-  <h4 class="m-0">{{loan.valor | brCurrency}}</h4>
+  <h4 class="m-0">{{totalHoje() | brCurrency : lang}}</h4>
 </ng-template>
 
 @if(loan$()?.id) {
@@ -53,23 +53,23 @@
           {{parc.vencimento | dateTrans: dateFormats.DOCS_LIST }}
         </td>
         <td>
-          {{parc.parcela | brCurrency}}
+          {{parc.parcela | brCurrency : lang}}
         </td>
         <td>
-          {{parc.juros | brCurrency}}
+          {{parc.juros | brCurrency : lang}}
         </td>
         <td>
-          {{parc.amortizacao | brCurrency}}
+          {{parc.amortizacao | brCurrency : lang}}
         </td>
         @if(!loan$()?.id) {
           <td>
-            {{parc.saldo | brCurrency}}
+            {{parc.saldo | brCurrency : lang}}
           </td>
         }
         @if (loan$()?.id) {
           <td>
             @if(parcelaHoje(parc.item)) {
-              {{parcelaHoje(parc.item) | brCurrency}}
+              {{parcelaHoje(parc.item) | brCurrency : lang}}
             } @else {
               ✅Pago
             }
@@ -96,13 +96,13 @@
         TOTAL:
       </th>
       <th>
-        {{loan$()?.totais?.parcela! | brCurrency}}
+        {{getBalanco().parcela | brCurrency : lang}}
       </th>
       <th>
-        {{loan$()?.totais?.juros! | brCurrency}}
+        {{getBalanco().juros | brCurrency : lang}}
       </th>
       <th>
-        {{loan$()?.totais?.amortizacao! | brCurrency}}
+        {{getBalanco().amortizacao | brCurrency : lang}}
       </th>
       @if(loan$()?.id){
         <th colspan="2"></th>
@@ -114,7 +114,7 @@
 </table>
 @if (loan$()?.id) {
   <div class="d-flex justify-content-center align-items-center">
-    <span class="px-3">VALOR ATUAL: {{totalHoje() | brCurrency}}</span>
+    <span class="px-3">VALOR ATUAL: {{totalHoje() | brCurrency : lang}}</span>
     @if (!loan$()?.pago) {
       <button mat-button (click)="quitar(payLoan)">QUITAR CONTRATO</button>
     }

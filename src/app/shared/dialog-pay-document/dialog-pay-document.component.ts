@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogModule, M
 import { BrCurrencyPipe } from '../../pipe/br-currency.pipe';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { Transaction } from '../../../server/models/db.model';
+import { UtilService } from '../../core/util.services/util.service';
 
 @Component({
   selector: 'app-dialog-overview',
@@ -23,7 +24,12 @@ import { Transaction } from '../../../server/models/db.model';
 })
 export class DialogPayComponent {
   readonly dialogRef = inject(MatDialogRef<DialogPayComponent>);
-  trans = inject<Transaction>(MAT_DIALOG_DATA);
+  private readonly utilService = inject(UtilService);
+  trans = inject<Transaction>(MAT_DIALOG_DATA);  
+
+  get lang() {
+    return this.utilService.langAtual;
+  }
 
   pagar() {
     this.dialogRef.close({id: this.trans.id, data: new Date()});

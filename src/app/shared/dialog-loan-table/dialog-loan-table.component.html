@@ -1,4 +1,4 @@
-<span class="saldo-dev-incial">SALDO DEVEDOR INICIAL: {{loan.valor | brCurrency}}</span>
+<span class="saldo-dev-incial">SALDO DEVEDOR INICIAL: {{loan.valor | brCurrency : lang}}</span>
 <h2 mat-dialog-title class="text-center">TABELA DE AMORTIZAÇÃO</h2>
 <mat-dialog-content class="d-flex flex-column f">
   <app-installments-table/>

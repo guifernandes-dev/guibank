@@ -1,11 +1,11 @@
 <h2 mat-dialog-title>CONTRATAR</h2>
 <mat-dialog-content class="d-flex flex-column">
-  <span>Deseja realmente contratar um empréstimo de {{loan.valor | brCurrency}}?</span>
+  <span>Deseja realmente contratar um empréstimo de {{loan.valor | brCurrency : lang}}?</span>
   <span>
     Com pagamento em {{loan.parcelas.length}} parcelas de {{
       loan.sistema === sisCredito.PRICE
-        ? (loan.parcelas[0].parcela | brCurrency)
-        : `${loan.parcelas[0].parcela | brCurrency} (Inicial) e ${loan.parcelas[loan.parcelas.length-1].parcela | brCurrency} (Final)`
+        ? (loan.parcelas[0].parcela | brCurrency : lang)
+        : `${loan.parcelas[0].parcela | brCurrency : lang} (Inicial) e ${loan.parcelas[loan.parcelas.length-1].parcela | brCurrency : lang} (Final)`
     }}
   </span>
 </mat-dialog-content>

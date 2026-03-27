@@ -8,6 +8,8 @@ import { DateTransPipe } from '../../../../../pipe/date-trans.pipe';
 import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';
 import { Operation } from '../../../../../../server/constants/db.enum';
 import { DashboardService } from '../../services/dashboard.service';
+import { Transaction } from '../../../../../../server/models/db.model';
+import { UtilService } from '../../../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-table',
@@ -18,7 +20,74 @@ import { DashboardService } from '../../services/dashboard.service';
 export class TableComponent {
   private readonly loginService = inject(LoginService);
   private readonly dashService = inject(DashboardService);
+  private readonly utilService = inject(UtilService);
   dateFormats = DateFormats;
+  private readonly BLUR_TRANS: Transaction[] = [
+    {
+      id: "b910",
+      origem: null,
+      destino: {
+        id: '0',
+        email: 'xablau@email.com',
+        nome: 'Xablau da Silva'
+      },
+      data: new Date("2026-02-27T12:53:15.293Z"),
+      descricao: "Caixa Eletrônico",
+      valor: 1000,
+      tipo: Operation.DEPOSITO,
+      pago: true,
+      vencimento: null
+    },
+    {
+      id: "782c",
+      origem: null,
+      destino: {
+        id: this.loginService.user()?.id || '0',
+        email: this.loginService.user()?.email || 'xablau@email.com',
+        nome: this.loginService.user()?.nome || 'Xablau da Silva'
+      },
+      data: new Date("2026-02-27T12:55:27.189Z"),
+      descricao: "Cheque",
+      valor: 500,
+      tipo: Operation.DEPOSITO,
+      pago: true,
+      vencimento: null
+    },
+    {
+      id: "f717",
+      origem: {
+        id: this.loginService.user()?.id || '0',
+        email: this.loginService.user()?.email || 'xablau@email.com',
+        nome: this.loginService.user()?.nome || 'Xablau da Silva'
+      },
+      destino: {
+        id: "0000",
+        email: "xablau@email.com",
+        nome: "Xablauzin Teste"
+      },
+      data: new Date("2026-02-27T12:58:39.411Z"),
+      descricao: "Presente",
+      valor: 200,
+      tipo: Operation.PIX,
+      pago: true,
+      vencimento: null
+    },
+    {
+      id: "f517",
+      origem: {
+        id: this.loginService.user()?.id || '0',
+        email: this.loginService.user()?.email || 'xablau@email.com',
+        nome: this.loginService.user()?.nome || 'Xablau da Silva'
+      },
+      destino: null,
+      data: new Date("2026-02-28T12:59:15.980Z"),
+      descricao: "Lanche",
+      valor: 50,
+      tipo: Operation.DEBITO,
+      pago: true,
+      vencimento: null
+    }
+  ].slice(0,this.loginService.userOp().length ? this.loginService.userOp().length : 4);
 
   get hidden() {
     return this.dashService.hidden;
@@ -32,11 +101,22 @@ export class TableComponent {
     return this.loginService.user
   }
 
+  get lang() {
+    return this.utilService.langAtual;
+  }
+
   get data() {
-    const ops = this.loginService.userOp()
+    if(!this.hidden()) return this.BLUR_TRANS;
+    return this.loginService.userOp()
       .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
       .filter(op => op.pago)
+      .map(trans =>{
+        if(this.hidden()) return trans;
+        return {
+          ...trans,
+          tipo: Operation.PIX
+        }
+      })
       .slice(0,4)
-    return ops;
   }
 }

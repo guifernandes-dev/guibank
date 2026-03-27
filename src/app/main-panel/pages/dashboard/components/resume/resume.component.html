@@ -3,35 +3,59 @@
     <mat-card appearance="outlined" class="col mx-2">
       <mat-card-header>
         <mat-card-title-group>
-          <mat-card-title class="card-title">SALDO</mat-card-title>
+          <mat-card-title class="card-title">
+            {{'DASH.RESUME.BALANCE'|translate}}
+          </mat-card-title>
         </mat-card-title-group>
       </mat-card-header>
-      <mat-card-content [class]="`card-resume 
-        ${saldo > 0 ? 'text-success' : 'text-danger'} 
-        ${hidden() ? '' : 'blur'}
-      `">
-        {{ hidden() ? (saldo | brCurrency) : 'R$ *****'}}
-      </mat-card-content>
+      @defer (when !isLoading()) {
+        <mat-card-content [class]="`card-resume 
+          ${saldo > 0 ? 'text-success' : 'text-danger'} 
+          ${hidden() ? '' : 'blur'}
+        `">
+          {{ hidden() ? (saldo | brCurrency : lang) : 'R$9.999,99'}}
+        </mat-card-content>
+      } @placeholder() {
+        <mat-card-content>
+          <mat-spinner diameter="30"/>
+        </mat-card-content>
+      }
     </mat-card>
     <mat-card appearance="outlined" class="col mx-2">
       <mat-card-header>
         <mat-card-title-group>
-          <mat-card-title class="card-title">ENTRADAS</mat-card-title>
+          <mat-card-title class="card-title">
+            {{'DASH.RESUME.DEPOSITS'|translate}}
+          </mat-card-title>
         </mat-card-title-group>
       </mat-card-header>
-      <mat-card-content [class]="`card-resume text-success ${hidden() ? '' : 'blur'}`">
-        {{ hidden() ? (receitas | brCurrency) : 'R$ *****'}}
-      </mat-card-content>
+      @defer (when !isLoading()) {
+        <mat-card-content [class]="`card-resume text-success ${hidden() ? '' : 'blur'}`">
+          {{ hidden() ? (receitas | brCurrency : lang) : 'R$9.999,99' }}
+        </mat-card-content>
+      } @placeholder() {
+        <mat-card-content>
+          <mat-spinner diameter="30"/>
+        </mat-card-content>
+      }
     </mat-card>
     <mat-card appearance="outlined" class="col mx-2">
       <mat-card-header>
         <mat-card-title-group>
-          <mat-card-title class="card-title">SAÍDAS</mat-card-title>
+          <mat-card-title class="card-title">
+            {{'DASH.RESUME.WITHDRAWALS'|translate}}
+          </mat-card-title>
         </mat-card-title-group>
       </mat-card-header>
-      <mat-card-content [class]="`card-resume text-danger ${hidden() ? '' : 'blur'}`">
-        {{ hidden() ? (despesas | brCurrency) : 'R$ *****'}}
-      </mat-card-content>
+      @defer (when !isLoading()) {
+        <mat-card-content [class]="`card-resume text-danger ${hidden() ? '' : 'blur'}`">
+          {{ hidden() ? (despesas | brCurrency : lang) : 'R$9.999,99' }}
+        </mat-card-content>
+      } @placeholder() {
+        <mat-card-content>
+          <mat-spinner diameter="30"/>
+        </mat-card-content>
+      }
     </mat-card>
 
   </div>

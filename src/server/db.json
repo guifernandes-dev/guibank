@@ -1,32 +1,11 @@
 {
   "users": [
     {
-      "id": "6770",
-      "nome": "Guilherme Fernandes",
       "email": "guifjj92@gmail.com",
-      "senha": "gui!27",
-      "renda": 10000
-    },
-    {
-      "id": "2ef1",
-      "nome": "Cristina Dehon",
-      "email": "crisdehon67@gmail.com",
-      "senha": "va!1012",
-      "renda": 25000
-    },
-    {
-      "id": "55f3",
-      "nome": "Stella Sousa Melo",
-      "email": "stellasouzamelo@outlook.com",
-      "senha": "Stela@26",
-      "renda": 2000
-    },
-    {
-      "id": "a4da",
-      "nome": "User Teste",
-      "email": "teste@email.com",
-      "senha": "teste!1",
-      "renda": 500
+      "password": "$2a$10$nHOdLN86vp0eowvBFik8BuvCztol9hiRYwhV/07nYfkGY88qgJOWC",
+      "nome": "Guilherme Fernandes",
+      "renda": 10000,
+      "id": "52ME"
     }
   ],
   "transactions": [
@@ -34,7 +13,7 @@
       "id": "b910",
       "origem": null,
       "destino": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -49,7 +28,7 @@
       "id": "782c",
       "origem": null,
       "destino": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -63,12 +42,12 @@
     {
       "id": "f717",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
       "destino": {
-        "conta": "55f3",
+        "id": "55f3",
         "email": "stellasouzamelo@outlook.com",
         "nome": "Stella Sousa Melo"
       },
@@ -82,7 +61,7 @@
     {
       "id": "f517",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -97,7 +76,7 @@
     {
       "id": "46ee",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -112,7 +91,7 @@
     {
       "id": "993f",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -127,12 +106,12 @@
     {
       "id": "6ecc",
       "origem": {
-        "conta": "55f3",
+        "id": "55f3",
         "email": "stellasouzamelo@outlook.com",
         "nome": "Stella Sousa Melo"
       },
       "destino": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -146,7 +125,7 @@
     {
       "id": "da97",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -161,27 +140,27 @@
     {
       "id": "fff6",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
       "destino": null,
-      "data": "2026-03-02T21:54:58.208Z",
+      "data": "2026-03-24T03:10:55.226Z",
       "descricao": "Aluguel",
       "valor": 2000,
       "tipo": "pagamento",
-      "pago": false,
+      "pago": true,
       "vencimento": "2026-03-02T21:54:42.046Z"
     },
     {
       "id": "60bb",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
       "destino": {
-        "conta": "55f3",
+        "id": "55f3",
         "email": "stellasouzamelo@outlook.com",
         "nome": "Stella Sousa Melo"
       },
@@ -196,7 +175,7 @@
       "id": "a0db",
       "origem": null,
       "destino": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -211,7 +190,7 @@
       "id": "26d0",
       "origem": null,
       "destino": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -226,7 +205,7 @@
       "id": "e743",
       "origem": null,
       "destino": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -240,7 +219,7 @@
     {
       "id": "0096",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -250,12 +229,12 @@
       "valor": 235.90227977503713,
       "pago": true,
       "tipo": "pagamento",
-      "vencimento": "2026-03-08T07:36:40.624Z"
+      "vencimento": "2026-03-09T07:36:40.624Z"
     },
     {
       "id": "8eb1",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -270,7 +249,7 @@
     {
       "id": "f2d5",
       "origem": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
@@ -287,25 +266,13 @@
     {
       "id": "021e",
       "destino": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
       "data": "2026-03-08T02:41:11.418Z",
       "taxa": 0.03027,
       "pago": false,
-      "atuais": {
-        "amortizacao": 188.25293243550868,
-        "juros": 0.9945243387621758,
-        "parcela": 189.24745677427086,
-        "saldo": 903.3672054032729
-      },
-      "totais": {
-        "juros": 92.61466217754368,
-        "amortizacao": 1000,
-        "parcela": 1092.6146621775438,
-        "saldo": 0
-      },
       "parcelas": [
         {
           "item": 1,
@@ -359,25 +326,13 @@
     {
       "id": "db75",
       "destino": {
-        "conta": "6770",
+        "id": "52ME",
         "email": "guifjj92@gmail.com",
         "nome": "Guilherme Fernandes"
       },
       "data": "2026-01-08T06:13:42.522Z",
       "taxa": 0.03027,
       "pago": true,
-      "atuais": {
-        "juros": 82.73749930857454,
-        "amortizacao": 1000,
-        "parcela": 1082.7374993085746,
-        "saldo": 35.088151969046066
-      },
-      "totais": {
-        "juros": 82.73749930857454,
-        "amortizacao": 1000,
-        "parcela": 1082.7374993085746,
-        "saldo": 35.088151969046066
-      },
       "parcelas": [
         {
           "item": 1,

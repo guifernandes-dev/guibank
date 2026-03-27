@@ -9,7 +9,6 @@ import { TipoTransPipe } from '../../../pipe/tipo-trans.pipe';
 import { DateTransPipe } from '../../../pipe/date-trans.pipe';
 import { DateFormats } from '../../../constants/front.enum';
 import { AlertClassPipe } from '../../../pipe/alert-class.pipe';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UtilService } from '../../../core/util.services/util.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -23,7 +22,6 @@ export class DocumentListComponent {
   private readonly utilService = inject(UtilService);
   private readonly loginService = inject(LoginService);
   private readonly transService = inject(TransactionsService);
-  private snackBar = inject(MatSnackBar);
 
   get user() {
     return this.loginService.user;
@@ -47,16 +45,13 @@ export class DocumentListComponent {
       .sort((a, b) => new Date(a.vencimento!).getTime() - new Date(b.vencimento!).getTime());
   }
 
+  get lang() {
+    return this.utilService.langAtual;
+  }
+
   pagar(trans: Transaction) {
     if(trans.valor > this.saldo) {
-      this.snackBar.open(
-        'Saldo inferior ao valor do documento!',
-        'Ok',
-        {
-          duration: this.utilService.duration,
-          panelClass: 'snackbar-erro'
-        }
-      );
+      this.utilService.openSnackBar('Saldo inferior ao valor do documento!');
       return;
     }
     this.transService.payTrans(trans);

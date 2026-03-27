@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>DELETAR</h2>
 <mat-dialog-content class="d-flex flex-column">
   <span>Deseja realmente deletar o documento {{trans.descricao}}?</span>
-  <span>No valor de {{trans.valor | brCurrency}} e vencimento em {{
+  <span>No valor de {{trans.valor | brCurrency : lang}} e vencimento em {{
     (trans.vencimento || trans.data) | dateTrans : dateFormats.DOCS_CARD
   }}.</span>
 </mat-dialog-content>

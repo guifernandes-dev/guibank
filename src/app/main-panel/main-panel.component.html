@@ -1,28 +1,32 @@
-<div class="menu">
-  <app-header/>
-</div>
-<mat-sidenav-container class="content" [hasBackdrop]="true">
-  <mat-sidenav
-    #sidenav
-    mode="over"
-    [(opened)]="opened"
-    style="max-width: 250px;"
-  >
-    <div class="sidebar">
-      <div class="p-3">
+@if (!isLoading()) {
+  <div class="menu">
+    <app-header/>
+  </div>
+  <mat-sidenav-container class="content" [hasBackdrop]="true">
+    <mat-sidenav
+      #sidenav
+      mode="over"
+      [(opened)]="opened"
+      style="max-width: 250px;"
+    >
+      <div class="sidebar">
+        <div class="p-3">
+          <button mat-icon-button (click)="sidenav.toggle()" class="btn-menu">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <app-sidebar class="w-100"/>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content class="main">
+      <div class="menu-btn-container">
         <button mat-icon-button (click)="sidenav.toggle()" class="btn-menu">
-          <mat-icon>close</mat-icon>
+          <mat-icon>menu</mat-icon>
         </button>
       </div>
-      <app-sidebar class="w-100"/>
-    </div>
-  </mat-sidenav>
-  <mat-sidenav-content class="main">
-    <div class="menu-btn-container">
-      <button mat-icon-button (click)="sidenav.toggle()" class="btn-menu">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </div>
-    <router-outlet/>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+      <router-outlet/>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+} @else {
+  <app-loading/>
+}

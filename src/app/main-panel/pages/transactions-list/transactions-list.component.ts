@@ -9,6 +9,7 @@ import { TipoTransPipe } from '../../../pipe/tipo-trans.pipe';
 import { RecebedorPipe } from '../../../pipe/recebedor.pipe';
 import { Transaction } from '../../../../server/models/db.model';
 import { Operation } from '../../../../server/constants/db.enum';
+import { UtilService } from '../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-transactions-list',
@@ -18,6 +19,7 @@ import { Operation } from '../../../../server/constants/db.enum';
 })
 export class TransactionsListComponent {
   private readonly loginService = inject(LoginService);
+  private readonly utilService = inject(UtilService);
 
   get user() {
     return this.loginService.user;
@@ -29,6 +31,10 @@ export class TransactionsListComponent {
 
   get operation() {
     return Operation;
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   get transactions2() {
@@ -55,9 +61,8 @@ export class TransactionsListComponent {
   get transactions() {
     const operacoes = this.loginService.userOp()
       .filter(op => op.pago)
-      .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()); // crescente
+      .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
 
-    // 1. Agrupar por data
     const mapa = operacoes.reduce((acc, op) => {
       const data = op.data.toDateString();
 
@@ -72,8 +77,7 @@ export class TransactionsListComponent {
 
       acc[data].dados.push(op);
 
-      // 2. Somar saldo do dia (entrada positiva, saída negativa)
-      const mult = op.origem?.conta === this.user()?.conta
+      const mult = op.origem?.id === this.user()?.id
         ? -1
         : 1
       acc[data].saldoHoje += op.valor * mult;
@@ -87,10 +91,8 @@ export class TransactionsListComponent {
       saldoAcumulado: number;
     }>);
     
-    // 3. Transformar em array ordenado por data
     const dias = Object.values(mapa).sort((a, b) => a.data.getTime() - b.data.getTime());
 
-    // 4. Calcular saldo acumulado
     let saldoAnterior = 0;
 
     dias.forEach(dia => {

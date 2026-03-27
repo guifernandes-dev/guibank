@@ -1,49 +1,57 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { forkJoin, map, Observable } from 'rxjs';
 import { User } from '../models/services.model';
-import { Account, CDIType, Loan, Transaction } from '../../../server/models/db.model';
+import { Account, CDIType, Loan, Login, AccountResp, Transaction } from '../../../server/models/db.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class APIService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = API_BASE_URL;
 
-  getUserByAccount(conta: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/users?id=${conta}`)
+  getUserById(id: string): Observable<Account> {
+    return this.http.get<Account>(`${this.baseUrl}/users/${id}`);
   }
 
-  getUserByEmail(email: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/users?email=${email}`)
+  getUserByEmail(email: string): Observable<Account> {
+    const params = new HttpParams().set('email',email);
+    return this.http.get<Account>(`${this.baseUrl}/users`,{params});
   }
 
-  getUserByEmailESenha(email: string, senha: string): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.baseUrl}/users?email=${email}&senha=${senha}`)
+  getValidUser(): Observable<Account> {
+    return this.http.get<Account>(`${this.baseUrl}/users/me`);
   }
 
-  postUser(user: Omit<User,'conta'>): Observable<Account> {
-    return this.http.post<Account>(`${this.baseUrl}/users`,user);
+  postLogin(login: Login): Observable<AccountResp> {
+    return this.http.post<AccountResp>(`${this.baseUrl}/login`, login)
+  }
+
+  postRegister(user: Omit<User,'id'>): Observable<AccountResp> {
+    return this.http.post<AccountResp>(`${this.baseUrl}/register`, user);
   }
 
   postTransaction(transaction: Omit<Transaction,'id'>): Observable<Transaction> {
     return this.http.post<Transaction>(`${this.baseUrl}/transactions`, transaction);
   }
 
-  getTransactionsByUser(conta: string): Observable<Transaction[]> {
+  getTransactionsByUser(id: string): Observable<Transaction[]> {
+    const paramsOrigem = new HttpParams().set('origem.id', id);
+    const paramsDestino = new HttpParams().set('destino.id', id);
     return forkJoin([
-      this.http.get<Transaction[]>(`${this.baseUrl}/transactions?origem.conta=${conta}`),
-      this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino.conta=${conta}`)
+      this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params: paramsOrigem}),
+      this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params: paramsDestino})
     ]).pipe(
       map(([destino, origem]) => [...destino, ...origem])
     );
   }
-  getTransactionsByUserDestination(conta: string): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions?destino.conta=${conta}`);
+  getTransactionsByUserDestination(id: string): Observable<Transaction[]> {
+    const params = new HttpParams().set('destino.id', id);
+    return this.http.get<Transaction[]>(`${this.baseUrl}/transactions`, {params});
   }
 
-  patchTransactionById(id: string, transaction: Partial<Transaction>): Observable<Transaction> {
+  patchTransactionById(id: string, transaction: Partial<Transaction>): Observable<Transaction> {    
     return this.http.patch<Transaction>(`${this.baseUrl}/transactions/${id}`, transaction);
   }
 
@@ -52,7 +60,8 @@ export class APIService {
   }
 
   getLoansByUserId(id: string): Observable<Loan[]> {
-    return this.http.get<Loan[]>(`${this.baseUrl}/loans?destino.conta=${id}`)
+    const params = new HttpParams().set('destino.id', id);
+    return this.http.get<Loan[]>(`${this.baseUrl}/loans`, {params})
   }
 
   patchLoanById(id: string, body: Loan): Observable<Loan> {

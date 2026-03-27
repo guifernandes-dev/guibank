@@ -16,6 +16,10 @@
             "outputPath": "dist/taskflow",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "define": {
+              "API_BASE_URL": "\"http://localhost:3000\"",
+              "SECRET_JWT": "\"guibankprivate\""
+            },
             "polyfills": [
               "zone.js"
             ],
@@ -31,7 +35,15 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "server": "src/main.server.ts",
+            "security": {
+              "allowedHosts": []
+            },
+            "prerender": true,
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
@@ -52,7 +64,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"

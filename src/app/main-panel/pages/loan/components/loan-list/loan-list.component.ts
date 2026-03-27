@@ -10,6 +10,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db.model';
+import { UtilService } from '../../../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-loan-list',
@@ -19,21 +20,7 @@ import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db
 })
 export class LoanListComponent {
   private readonly loanService = inject(LoanService);
-  private readonly loginService = inject(LoginService);
-    
-
-  constructor() {
-    effect(() => {
-      const user = this.loginService.user();
-      if (!user?.conta) return;
-      this.loanService.getUserLoans(user.conta);
-    });
-  }
-
-  ngOnInit(): void {
-    this.loanService.initTax();
-  }
-
+  private readonly utilService = inject(UtilService);
 
   get dateFormats() {
     return DateFormats;
@@ -41,6 +28,10 @@ export class LoanListComponent {
 
   get loans() {
     return this.loanService.userLoans$;
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   statusParcelas(parcs: Installment[]): string {
@@ -60,16 +51,9 @@ export class LoanListComponent {
     return parcs.every(parc => !parc.pago);
   }
 
-  getBalancoAtual(loan: Loan): LoanTotal {
-    const totais: LoanTotal = {amortizacao: 0, juros: 0, parcela: 0, saldo: loan.valor};
-    return loan.parcelas
-      .filter(({pago}) => pago)
-      .reduce((acc, parc) => {
-        const amortizacao = acc.amortizacao + parc.amortizacao;
-        const juros = acc.juros + parc.juros;
-        const parcela = acc.parcela + parc.parcela;
-        const saldo = acc.saldo - parc.amortizacao;
-        return {amortizacao, juros, parcela, saldo};
-      }, totais)
+  getBalanco(loan: Loan): number {
+    const balancoAtual = this.loanService.getBalanco(loan);
+    const balancoTotal = this.loanService.getBalanco(loan,'total');
+    return balancoTotal.parcela-balancoAtual.parcela;
   }
 }

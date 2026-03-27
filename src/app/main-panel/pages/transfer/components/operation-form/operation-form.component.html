@@ -21,13 +21,13 @@
           matInput
           placeholder="Número da Conta de Destino"
           type="text"
-          formControlName="conta"
+          formControlName="id"
           maxlength="4"
-          (blur)="checkError('conta', true)"
+          (blur)="checkError('id', true)"
           [required]="currentOp().operation === operation.PIX && destinoNumero"
         />
-        @if (operationForm.get('destino')?.get('conta')?.invalid) {
-          <mat-error>{{errorsForm().conta}}</mat-error>
+        @if (operationForm.get('destino')?.get('id')?.invalid) {
+          <mat-error>{{errorsForm().id}}</mat-error>
         } @else if (destino?.get('nome')?.value) {
           <mat-hint>Nome: {{destino?.get('nome')?.value}}</mat-hint>
         }
@@ -92,7 +92,7 @@
   ) {
     <div class="w-100 container-saldo">
       <span class="saldo">
-        Saldo: {{saldo | brCurrency}}
+        Saldo: {{saldo | brCurrency : lang}}
       </span>
       <div class="d-flex gap-1">
         @if (operationForm.get('valor')?.value !== formataValor(saldo)) {
