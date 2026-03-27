@@ -58,6 +58,10 @@ export class LoanFormComponent implements OnInit {
     return this.loanService.valorLoans;
   }
 
+  get lang() {
+    return this.utilService.langAtual;
+  }
+
   constructor () {
     effect(()=> {
       this.loanService.tax$();

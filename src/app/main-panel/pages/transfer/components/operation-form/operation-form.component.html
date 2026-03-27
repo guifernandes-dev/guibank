@@ -92,7 +92,7 @@
   ) {
     <div class="w-100 container-saldo">
       <span class="saldo">
-        Saldo: {{saldo | brCurrency}}
+        Saldo: {{saldo | brCurrency : lang}}
       </span>
       <div class="d-flex gap-1">
         @if (operationForm.get('valor')?.value !== formataValor(saldo)) {

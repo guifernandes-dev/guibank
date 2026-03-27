@@ -6,6 +6,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { Transaction } from '../../../server/models/db.model';
 import { DateTransPipe } from '../../pipe/date-trans.pipe';
 import { DateFormats } from '../../constants/front.enum';
+import { UtilService } from '../../core/util.services/util.service';
 
 @Component({
   selector: 'app-dialog-delete',
@@ -26,10 +27,15 @@ import { DateFormats } from '../../constants/front.enum';
 })
 export class DialogDeleteComponent {
   readonly dialogRef = inject(MatDialogRef<DialogDeleteComponent>);
+  private readonly utilService = inject(UtilService);
   trans = inject<Transaction>(MAT_DIALOG_DATA);
 
   get dateFormats() {
     return DateFormats;
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   deletar() {

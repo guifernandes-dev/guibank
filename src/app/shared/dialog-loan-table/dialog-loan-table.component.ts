@@ -8,6 +8,7 @@ import { DateFormats } from '../../constants/front.enum';
 import { MatIconModule } from '@angular/material/icon';
 import { Operation } from '../../../server/constants/db.enum';
 import { InstallmentsTableComponent } from "../../main-panel/pages/loan/components/installments-table/installments-table.component";
+import { UtilService } from '../../core/util.services/util.service';
 
 @Component({
   selector: 'app-dialog-loan-table',
@@ -29,7 +30,12 @@ import { InstallmentsTableComponent } from "../../main-panel/pages/loan/componen
 })
 export class DialogLoanTableComponent {
   readonly dialogRef = inject(MatDialogRef<DialogLoanTableComponent>);
+  private readonly utilService = inject(UtilService);
   loan = inject<Loan>(MAT_DIALOG_DATA);
+
+  get lang() {
+    return this.utilService.langAtual;
+  }
 
   fechar(): void {
     this.dialogRef.close();

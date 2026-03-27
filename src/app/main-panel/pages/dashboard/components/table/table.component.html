@@ -30,7 +30,7 @@
                 : 'text-danger'
             } valor`"
           >
-            {{trans.valor | brCurrency : trans.origem?.id === user()?.id}}
+            {{trans.valor | brCurrency : lang : trans.origem?.id === user()?.id}}
           </div>
           <div>{{trans.data | dateTrans : dateFormats.RESUME_TRANS}}</div>
         </td>

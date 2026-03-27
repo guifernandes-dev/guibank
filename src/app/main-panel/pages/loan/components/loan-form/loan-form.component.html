@@ -75,7 +75,7 @@
     <h5 class="text-center">RESULTADO</h5>
     @if (!disabledBtn()) {
       <span class="text-center">
-        Líquido Creditado: {{(loan().valor * 0.95) | brCurrency}}
+        Líquido Creditado: {{(loan().valor * 0.95) | brCurrency : lang}}
       </span>
       <span class="text-center taxa" matTooltip="3% IOF + 2% Taxa Administrativa">
         Valor solicitado desconta taxas de 5%
@@ -85,8 +85,8 @@
         x
         {{
           this.form.get('sistema')?.value === sisCredito.PRICE
-            ? (loan().parcelas[0].parcela | brCurrency)
-            : `${loan().parcelas[0].parcela | brCurrency} (Inicial) e ${loan().parcelas[loan().parcelas.length-1].parcela | brCurrency} (Final)`
+            ? (loan().parcelas[0].parcela | brCurrency : lang)
+            : `${loan().parcelas[0].parcela | brCurrency : lang} (Inicial) e ${loan().parcelas[loan().parcelas.length-1].parcela | brCurrency : lang} (Final)`
         }}
       </span>
       <span class="text-center taxa">

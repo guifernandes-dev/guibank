@@ -1,146 +1,149 @@
-
-<form
-  class="d-flex flex-column justify-content-center align-items-center px-4 py-2 max-form gap-2"
-  (ngSubmit)="submit()"
->
-  <img src="/guiBank.png" alt="GuiBank logo" height="150px"/>
-  <div class="w-100 text-center my-2 d-flex align-items-center justify-content-center">
-    {{ 'SIDEBAR.TITLE_LANG' | translate}}: 
-    <button
-      type="button"
-      mat-icon-button
-      (click)="setPt()"
-      class="d-flex justify-content-center align-items-center"
-    >
-      <img src="https://flagsapi.com/BR/flat/24.png" [alt]="'SIDEBAR.FLAG_ALT_BR' | translate">
-    </button>
-    <button
-      type="button"
-      mat-icon-button
-      (click)="setUs()"
-      class="d-flex justify-content-center align-items-center"
-    >
-      <img src="https://flagsapi.com/US/flat/24.png" [alt]="'SIDEBAR.FLAG_ALT_US' | translate">
-    </button>
-  </div>
-  <div class="w-100 d-flex flex-column justify-content-center align-items-center gap-2">
-    @if (!loginForm) {
-      <mat-form-field appearance="outline" class="w-75">
-        <mat-label>{{'LOGIN.NAME.LABEL' | translate}}</mat-label>
-        <input
-          matInput
-          [placeholder]="'LOGIN.NAME.PLACEHOLDER' | translate"
-          [formControl]="nome"
-          type="text"
-          (blur)="updateNomeError()"
-          required
-        />
-        @if (nome.invalid) {
-          <mat-error>{{nomeError() | translate}}</mat-error>
-        }
-      </mat-form-field>
-      <mat-form-field
-        appearance="outline"
-        class="w-75"
-        floatLabel="always"
+@if (isLoading()) {
+  <app-loading/>
+} @else {
+  <form
+    class="d-flex flex-column justify-content-center align-items-center px-4 py-2 max-form gap-2"
+    (ngSubmit)="submit()"
+  >
+    <img src="/guiBank.png" alt="GuiBank logo" height="150px"/>
+    <div class="w-100 text-center my-2 d-flex align-items-center justify-content-center">
+      {{ 'SIDEBAR.TITLE_LANG' | translate}}: 
+      <button
+        type="button"
+        mat-icon-button
+        (click)="setPt()"
+        class="d-flex justify-content-center align-items-center"
       >
-        <mat-label>{{'LOGIN.INCOME.LABEL' | translate}}</mat-label>
+        <img src="https://flagsapi.com/BR/flat/24.png" [alt]="'SIDEBAR.FLAG_ALT_BR' | translate">
+      </button>
+      <button
+        type="button"
+        mat-icon-button
+        (click)="setUs()"
+        class="d-flex justify-content-center align-items-center"
+      >
+        <img src="https://flagsapi.com/US/flat/24.png" [alt]="'SIDEBAR.FLAG_ALT_US' | translate">
+      </button>
+    </div>
+    <div class="w-100 d-flex flex-column justify-content-center align-items-center gap-2">
+      @if (!loginForm) {
+        <mat-form-field appearance="outline" class="w-75">
+          <mat-label>{{'LOGIN.NAME.LABEL' | translate}}</mat-label>
+          <input
+            matInput
+            [placeholder]="'LOGIN.NAME.PLACEHOLDER' | translate"
+            [formControl]="nome"
+            type="text"
+            (blur)="updateNomeError()"
+            required
+          />
+          @if (nome.invalid) {
+            <mat-error>{{nomeError() | translate}}</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field
+          appearance="outline"
+          class="w-75"
+          floatLabel="always"
+        >
+          <mat-label>{{'LOGIN.INCOME.LABEL' | translate}}</mat-label>
+          <input
+            matInput
+            type="text"
+            class="input-valor"
+            step="0.01"
+            [formControl]="renda"
+            (input)="formatar($event)"
+            (focus)="cursorend($event)"
+            (click)="cursorend($event)"
+            required
+          />
+          <span matTextPrefix>{{'LOGIN.INCOME.PREFIX' | translate}}&nbsp;</span>
+          @if (renda.invalid) {
+            <mat-error>{{rendaError() | translate}}</mat-error>
+          }
+        </mat-form-field>
+      }
+      <mat-form-field appearance="outline" class="w-75">
+        <mat-label>{{'LOGIN.EMAIL.LABEL' | translate}}</mat-label>
         <input
           matInput
-          type="text"
-          class="input-valor"
-          step="0.01"
-          [formControl]="renda"
-          (input)="formatar($event)"
-          (focus)="cursorend($event)"
-          (click)="cursorend($event)"
+          [placeholder]="'LOGIN.EMAIL.PLACEHOLDER' | translate"
+          type="email"
+          [formControl]="email"
+          (blur)="updateEmailError()"
           required
         />
-        <span matTextPrefix>{{'LOGIN.INCOME.PREFIX' | translate}}&nbsp;</span>
-        @if (renda.invalid) {
-          <mat-error>{{rendaError() | translate}}</mat-error>
+        @if (email.invalid) {
+          <mat-error>{{emailError() | translate}}</mat-error>
         }
       </mat-form-field>
-    }
-    <mat-form-field appearance="outline" class="w-75">
-      <mat-label>{{'LOGIN.EMAIL.LABEL' | translate}}</mat-label>
-      <input
-        matInput
-        [placeholder]="'LOGIN.EMAIL.PLACEHOLDER' | translate"
-        type="email"
-        [formControl]="email"
-        (blur)="updateEmailError()"
-        required
-      />
-      @if (email.invalid) {
-        <mat-error>{{emailError() | translate}}</mat-error>
-      }
-    </mat-form-field>
-    <div class="w-75">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{'LOGIN.PASSWORD.LABEL' | translate}}</mat-label>
-        <input
-          matInput
-          [type]="hide() ? 'password' : 'text'"
-          [formControl]="password"
-          (input)="updatePasswordChecks()"
-          (blur)="updatePasswordChecks()"
-          maxlength="8"
-          required
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          type="button"
-          (click)="changeHide($event)"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide()"
-        >
-          <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-      </mat-form-field>
-      <div class="w-100">
-        <div class="req" [class.ok]="passwordChecks().hasMinLength">
-          <mat-icon>{{ passwordChecks().hasMinLength ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
-          {{'LOGIN.PASSWORD.ERRORS.4_DIGITS' | translate}}
+      <div class="w-75">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>{{'LOGIN.PASSWORD.LABEL' | translate}}</mat-label>
+          <input
+            matInput
+            [type]="hide() ? 'password' : 'text'"
+            [formControl]="password"
+            (input)="updatePasswordChecks()"
+            (blur)="updatePasswordChecks()"
+            maxlength="8"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="changeHide($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()"
+          >
+            <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+        <div class="w-100">
+          <div class="req" [class.ok]="passwordChecks().hasMinLength">
+            <mat-icon>{{ passwordChecks().hasMinLength ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+            {{'LOGIN.PASSWORD.ERRORS.4_DIGITS' | translate}}
+          </div>
+          <div class="req" [class.ok]="passwordChecks().hasLetter">
+            <mat-icon>{{ passwordChecks().hasLetter ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+            {{'LOGIN.PASSWORD.ERRORS.LETTER' | translate}}
+          </div>
+          <div class="req" [class.ok]="passwordChecks().hasNumber">
+            <mat-icon>{{ passwordChecks().hasNumber ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+            {{'LOGIN.PASSWORD.ERRORS.NUMBER' | translate}}
+          </div>
+          <div class="req" [class.ok]="passwordChecks().hasSpecial">
+            <mat-icon>{{ passwordChecks().hasSpecial ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+            {{'LOGIN.PASSWORD.ERRORS.SPECIAL' | translate}}
+          </div>
         </div>
-        <div class="req" [class.ok]="passwordChecks().hasLetter">
-          <mat-icon>{{ passwordChecks().hasLetter ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
-          {{'LOGIN.PASSWORD.ERRORS.LETTER' | translate}}
-        </div>
-        <div class="req" [class.ok]="passwordChecks().hasNumber">
-          <mat-icon>{{ passwordChecks().hasNumber ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
-          {{'LOGIN.PASSWORD.ERRORS.NUMBER' | translate}}
-        </div>
-        <div class="req" [class.ok]="passwordChecks().hasSpecial">
-          <mat-icon>{{ passwordChecks().hasSpecial ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
-          {{'LOGIN.PASSWORD.ERRORS.SPECIAL' | translate}}
-        </div>
+    
       </div>
-  
     </div>
-  </div>
-  <button
-    mat-fab
-    extended
-    class="btn-padrao"
-    type="submit"
-    [disabled]="formValido()"
-  >
-    <mat-icon>{{loginForm ? 'login' : 'person_add'}}</mat-icon>
-    {{(loginForm
-      ? 'LOGIN.BTN.PRINCIPAL.ENTER'
-      : 'LOGIN.BTN.PRINCIPAL.CREATE') | translate}}
-  </button>
-  <button
-    mat-button
-    class="mt-3"
-    class="link-padrao"
-    type="button"
-    (click)="toogleLoginForm()"
-  >
-    {{(loginForm
-      ? 'LOGIN.BTN.SECUNDARY.CREATE_ACCOUNT'
-      : 'LOGIN.BTN.SECUNDARY.LOGIN') | translate}}
-  </button>
-</form>
+    <button
+      mat-fab
+      extended
+      class="btn-padrao"
+      type="submit"
+      [disabled]="formValido()"
+    >
+      <mat-icon>{{loginForm ? 'login' : 'person_add'}}</mat-icon>
+      {{(loginForm
+        ? 'LOGIN.BTN.PRINCIPAL.ENTER'
+        : 'LOGIN.BTN.PRINCIPAL.CREATE') | translate}}
+    </button>
+    <button
+      mat-button
+      class="mt-3"
+      class="link-padrao"
+      type="button"
+      (click)="toogleLoginForm()"
+    >
+      {{(loginForm
+        ? 'LOGIN.BTN.SECUNDARY.CREATE_ACCOUNT'
+        : 'LOGIN.BTN.SECUNDARY.LOGIN') | translate}}
+    </button>
+  </form>
+}

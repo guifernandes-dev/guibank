@@ -1,15 +1,19 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, Signal } from '@angular/core';
+import { Language } from '../core/models/services.model';
 
 @Pipe({
-  name: 'brCurrency'
+  name: 'brCurrency',
+  pure: false,
 })
 export class BrCurrencyPipe implements PipeTransform {
-  transform(value: number, isExpense?: boolean): string {
+  transform(value: number, lang: Signal<Language>, isExpense?: boolean): string {
     let mult = 1
+    const {culture, currency} = lang();
+    
     if (isExpense)  mult = -1;
-    return (value * mult).toLocaleString('pt-BR', {
+    return (value * mult).toLocaleString(culture, {
       style: 'currency',
-      currency: 'BRL',
+      currency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });

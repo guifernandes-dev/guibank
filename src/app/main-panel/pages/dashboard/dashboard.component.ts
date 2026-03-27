@@ -9,21 +9,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DashboardService } from './services/dashboard.service';
 import { LoginService } from '../../../core/login.services/login.service';
-import { LoanService } from '../loan/services/loan.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [TableComponent, ResumeComponent, DocumentsOpenComponent, LoansOpenComponent, MatButtonModule, MatBadgeModule, MatIconModule, MatProgressSpinnerModule, MatTooltipModule],
+  imports: [TableComponent, ResumeComponent, DocumentsOpenComponent, LoansOpenComponent, MatButtonModule, MatBadgeModule, MatIconModule, MatProgressSpinnerModule, MatTooltipModule, TranslatePipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
   private readonly dashService = inject(DashboardService);
   private readonly loginService = inject(LoginService);
-  private readonly loanService = inject(LoanService);
   
   constructor() {
     effect(() => {
@@ -64,11 +63,11 @@ export class DashboardComponent {
   }
 
   get documents() {
-    return this.dashService.getDocuments
+    return this.dashService.getDocuments()
   }
 
   get parcelas() {
-    return this.dashService.getParcelas
+    return this.dashService.getParcelas()
   }
 
   changeHidden() {

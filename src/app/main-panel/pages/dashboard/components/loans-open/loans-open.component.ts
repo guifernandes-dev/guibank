@@ -14,10 +14,11 @@ import { LoanService } from '../../../loan/services/loan.service';
 import { InstallmentCard } from '../../../../../core/models/services.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPayLoanResumeComponent } from '../../../../../shared/dialog-pay-loan-resume/dialog-pay-loan-resume.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loans-open',
-  imports: [MatIconModule, MatCardModule, MatButtonModule, BrCurrencyPipe, DateTransPipe, AlertClassPipe],
+  imports: [MatIconModule, MatCardModule, MatButtonModule, BrCurrencyPipe, DateTransPipe, AlertClassPipe, TranslatePipe],
   templateUrl: './loans-open.component.html',
   styleUrl: './loans-open.component.css'
 })
@@ -39,6 +40,10 @@ export class LoansOpenComponent {
 
   get parcelas() {
     return this.dashService.getParcelas();
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   pagar(parc: InstallmentCard): void {

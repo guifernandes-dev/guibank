@@ -1,8 +1,8 @@
 <div class="d-flex flex-column gap-2 max">
-  <h3>Dashboard</h3>
+  <h3>{{'DASH.DAD.TITLE' | translate}}</h3>
   <section>
     <div class="d-flex gap-3 align-items-center title mb-2">
-      <h4 class="text">Resumo</h4>
+      <h4 class="text">{{'DASH.DAD.RESUME' | translate}}</h4>
       <button
         mat-icon-button
         [matTooltip]="hidden() ? 'Esconder valores' : 'Ver valores'"
@@ -16,29 +16,31 @@
     <app-resume class="d-flex w-100 justify-content-center"/>
   </section>
   <section>
-    <h4>Próximas</h4>
+    <h4>{{'DASH.DAD.NEXT' | translate}}</h4>
     <div class="d-flex gap-2 mb-2">
       <button
         mat-raised-button
-        [matBadge]="parcelas().length"
+        [matBadge]="parcelas.length"
         matBadgePosition="after"
-        [matBadgeHidden]="!parcelas().length"
+        [matBadgeHidden]="!parcelas.length"
         (click)="toogleNext(nextCards.PARC)"
         [class]="nextSelec() === nextCards.PARC ? 'btn-ativo' : ''"
+        [disabled]="!parcelas.length"
       >
         <mat-icon>price_check</mat-icon>
-        Parcelas
+        {{'DASH.DAD.INSTALLMENTS' | translate}}
       </button>
       <button
         mat-raised-button
-        [matBadge]="documents().length"
+        [matBadge]="documents.length"
         matBadgePosition="after"
-        [matBadgeHidden]="!documents().length"
+        [matBadgeHidden]="!documents.length"
         (click)="toogleNext(nextCards.PG)"
         [class]="nextSelec() === nextCards.PG ? 'btn-ativo' : ''"
+        [disabled]="!documents.length"
       >
         <mat-icon>request_quote</mat-icon>
-        Pagamentos
+        {{'DASH.DAD.PAYMENTS'|translate}}
       </button>
     </div>
     @if (nextSelec() === nextCards.PARC) {
@@ -49,7 +51,7 @@
     }
   </section>
   <section>
-    <h4>Últimas Transações</h4>
+    <h4>{{'DASH.DAD.LATEST_TRANSACTIONS'|translate}}</h4>
     @defer (when !isLoading()) {
       <app-table class="d-flex w-100 justify-content-center"/>
     } @placeholder () {

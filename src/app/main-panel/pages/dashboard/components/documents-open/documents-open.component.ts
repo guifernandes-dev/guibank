@@ -12,10 +12,11 @@ import { DateFormats } from '../../../../../constants/front.enum';
 import { AlertClassPipe } from '../../../../../pipe/alert-class.pipe';
 import { UtilService } from '../../../../../core/util.services/util.service';
 import { DashboardService } from '../../services/dashboard.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-documents-open',
-  imports: [MatIconModule, MatCardModule, MatButtonModule, BrCurrencyPipe, TipoTransPipe, DateTransPipe, AlertClassPipe],
+  imports: [MatIconModule, MatCardModule, MatButtonModule, BrCurrencyPipe, TipoTransPipe, DateTransPipe, AlertClassPipe, TranslatePipe],
   templateUrl: './documents-open.component.html',
   styleUrl: './documents-open.component.css'
 })
@@ -39,6 +40,10 @@ export class DocumentsOpenComponent {
 
   get documents() {
     return this.dashService.getDocuments();
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   pagar(trans: Transaction): void {

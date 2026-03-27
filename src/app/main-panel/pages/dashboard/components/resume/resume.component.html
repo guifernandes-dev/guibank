@@ -3,7 +3,9 @@
     <mat-card appearance="outlined" class="col mx-2">
       <mat-card-header>
         <mat-card-title-group>
-          <mat-card-title class="card-title">SALDO</mat-card-title>
+          <mat-card-title class="card-title">
+            {{'DASH.RESUME.BALANCE'|translate}}
+          </mat-card-title>
         </mat-card-title-group>
       </mat-card-header>
       @defer (when !isLoading()) {
@@ -11,7 +13,7 @@
           ${saldo > 0 ? 'text-success' : 'text-danger'} 
           ${hidden() ? '' : 'blur'}
         `">
-          {{ hidden() ? (saldo | brCurrency) : 'R$9.999,99'}}
+          {{ hidden() ? (saldo | brCurrency : lang) : 'R$9.999,99'}}
         </mat-card-content>
       } @placeholder() {
         <mat-card-content>
@@ -22,12 +24,14 @@
     <mat-card appearance="outlined" class="col mx-2">
       <mat-card-header>
         <mat-card-title-group>
-          <mat-card-title class="card-title">ENTRADAS</mat-card-title>
+          <mat-card-title class="card-title">
+            {{'DASH.RESUME.DEPOSITS'|translate}}
+          </mat-card-title>
         </mat-card-title-group>
       </mat-card-header>
       @defer (when !isLoading()) {
         <mat-card-content [class]="`card-resume text-success ${hidden() ? '' : 'blur'}`">
-          {{ hidden() ? (receitas | brCurrency) : 'R$9.999,99' }}
+          {{ hidden() ? (receitas | brCurrency : lang) : 'R$9.999,99' }}
         </mat-card-content>
       } @placeholder() {
         <mat-card-content>
@@ -38,12 +42,14 @@
     <mat-card appearance="outlined" class="col mx-2">
       <mat-card-header>
         <mat-card-title-group>
-          <mat-card-title class="card-title">SAÍDAS</mat-card-title>
+          <mat-card-title class="card-title">
+            {{'DASH.RESUME.WITHDRAWALS'|translate}}
+          </mat-card-title>
         </mat-card-title-group>
       </mat-card-header>
       @defer (when !isLoading()) {
         <mat-card-content [class]="`card-resume text-danger ${hidden() ? '' : 'blur'}`">
-          {{ hidden() ? (despesas | brCurrency) : 'R$9.999,99' }}
+          {{ hidden() ? (despesas | brCurrency : lang) : 'R$9.999,99' }}
         </mat-card-content>
       } @placeholder() {
         <mat-card-content>

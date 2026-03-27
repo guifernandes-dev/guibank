@@ -54,7 +54,7 @@ export class LoginService {
     return this.cookies.get('accountLogged');
   }
 
-  guardLoggedUser(): Observable<boolean> {
+  guardLoggedUser(): Observable<boolean> {    
     if(this.user()) return of(true);
     const accessToken = this.getToken();
     

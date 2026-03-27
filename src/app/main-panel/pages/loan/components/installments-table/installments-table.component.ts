@@ -51,6 +51,10 @@ export class InstallmentsTableComponent {
     return DateFormats;
   }
 
+  get lang() {
+    return this.utilService.langAtual;
+  }
+
   parcelasHoje(loan: Loan) {
     const parcelasHoje = loan.parcelas
       .filter(p=>!p.pago)

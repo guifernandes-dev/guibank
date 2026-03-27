@@ -23,3 +23,8 @@ export interface InstallmentCard extends Installment {
   title: string,
   subtitle: string
 }
+
+export interface Language {
+  culture: string,
+  currency: string
+}

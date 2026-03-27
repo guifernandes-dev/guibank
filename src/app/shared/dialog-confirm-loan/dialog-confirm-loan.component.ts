@@ -5,6 +5,7 @@ import { BrCurrencyPipe } from '../../pipe/br-currency.pipe';
 import { Loan } from '../../../server/models/db.model';
 import { SisCredito } from '../../../server/constants/db.enum';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { UtilService } from '../../core/util.services/util.service';
 
 @Component({
   selector: 'app-dialog-confirm-loan',
@@ -17,10 +18,15 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 })
 export class DialogConfirmLoanComponent {
   readonly dialogRef = inject(MatDialogRef<DialogConfirmLoanComponent>);
+  private readonly utilService = inject(UtilService);
   loan = inject<Loan>(MAT_DIALOG_DATA);
 
   get sisCredito() {
     return SisCredito;
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   contratar() {

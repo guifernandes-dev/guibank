@@ -8,6 +8,7 @@ import { RouterLink } from "@angular/router";
 import { MatButtonModule } from '@angular/material/button';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 import { LoginService } from '../../../../../core/login.services/login.service';
+import { UtilService } from '../../../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-loan-resume',
@@ -17,7 +18,7 @@ import { LoginService } from '../../../../../core/login.services/login.service';
 })
 export class LoanResumeComponent {
   private readonly loanService = inject(LoanService);
-  private readonly loginService = inject(LoginService);
+  private readonly utilService = inject(UtilService);
 
   get taxa() {
     return this.loanService.tax$;
@@ -45,5 +46,9 @@ export class LoanResumeComponent {
 
   get userLoans() {
     return this.loanService.userLoans$;
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 }

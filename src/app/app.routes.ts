@@ -1,63 +1,59 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './main-panel/pages/dashboard/dashboard.component';
 import { Pages } from './constants/front.enum';
-import { TransferComponent } from './main-panel/pages/transfer/transfer.component';
-import { TransactionsListComponent } from './main-panel/pages/transactions-list/transactions-list.component';
-import { DocumentListComponent } from './main-panel/pages/document-list/document-list.component';
-import { LoanComponent } from './main-panel/pages/loan/loan.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { MainPanelComponent } from './main-panel/main-panel.component';
-import { LoginComponent } from './login/login.component';
 import { authGuard } from './core/guards/auth.guard';
 import { Operation } from '../server/constants/db.enum';
-import { OperationFormComponent } from './main-panel/pages/transfer/components/operation-form/operation-form.component';
 import { operationGuard } from './core/guards/operation.guard';
-import { LoanResumeComponent } from './main-panel/pages/loan/components/loan-resume/loan-resume.component';
-import { LoanFormComponent } from './main-panel/pages/loan/components/loan-form/loan-form.component';
-import { LoanListComponent } from './main-panel/pages/loan/components/loan-list/loan-list.component';
-import { InstallmentsTableComponent } from './main-panel/pages/loan/components/installments-table/installments-table.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: MainPanelComponent,
+    loadComponent: () => import('./main-panel/main-panel.component')
+      .then(c => c.MainPanelComponent),
     canActivate: [authGuard],
     children: [
       {
         path: Pages.DASHBOARD,
-        component: DashboardComponent,
+        loadComponent: () => import('./main-panel/pages/dashboard/dashboard.component')
+          .then(c => c.DashboardComponent),
       },
       {
         path: Pages.STATEMENTS,
-        component: TransactionsListComponent,
+        loadComponent: () => import('./main-panel/pages/transactions-list/transactions-list.component')
+          .then(c => c.TransactionsListComponent),
       },
       {
         path: Pages.OPERATIONS,
-        component: TransferComponent,
+        loadComponent: () => import('./main-panel/pages/transfer/transfer.component')
+          .then(c => c.TransferComponent),
         children: [
           {
             path: Operation.PIX,
-            component: OperationFormComponent,
+            loadComponent: () => import('./main-panel/pages/transfer/components/operation-form/operation-form.component')
+              .then(c => c.OperationFormComponent),
             canActivate: [operationGuard]
           },
           {
             path: Operation.DEPOSITO,
-            component: OperationFormComponent,
+            loadComponent: () => import('./main-panel/pages/transfer/components/operation-form/operation-form.component')
+              .then(c => c.OperationFormComponent),
             canActivate: [operationGuard]
           },
           {
             path: Operation.SAQUE,
-            component: OperationFormComponent,
+            loadComponent: () => import('./main-panel/pages/transfer/components/operation-form/operation-form.component')
+              .then(c => c.OperationFormComponent),
             canActivate: [operationGuard]
           },
           {
             path: Operation.DEBITO,
-            component: OperationFormComponent,
+            loadComponent: () => import('./main-panel/pages/transfer/components/operation-form/operation-form.component')
+              .then(c => c.OperationFormComponent),
             canActivate: [operationGuard]
           },
           {
             path: Operation.PAGAMENTO,
-            component: OperationFormComponent,
+            loadComponent: () => import('./main-panel/pages/transfer/components/operation-form/operation-form.component')
+              .then(c => c.OperationFormComponent),
             canActivate: [operationGuard]
           },
           {
@@ -69,27 +65,33 @@ export const routes: Routes = [
       },
       {
         path: Pages.DOCUMENTS,
-        component: DocumentListComponent,
+        loadComponent: () => import('./main-panel/pages/document-list/document-list.component')
+          .then(c => c.DocumentListComponent),
       },
       {
         path: Pages.LOAN,
-        component: LoanComponent,
+        loadComponent: () => import('./main-panel/pages/loan/loan.component')
+          .then(c => c.LoanComponent),
         children: [
           {
             path: '',
-            component: LoanResumeComponent,
+            loadComponent: () => import('./main-panel/pages/loan/components/loan-resume/loan-resume.component')
+              .then(c => c.LoanResumeComponent),
           },
           {
             path: 'simular',
-            component: LoanFormComponent,
+            loadComponent: () => import('./main-panel/pages/loan/components/loan-form/loan-form.component')
+              .then(c => c.LoanFormComponent),
           },
           {
             path: 'contratos',
-            component: LoanListComponent,
+            loadComponent: () => import('./main-panel/pages/loan/components/loan-list/loan-list.component')
+              .then(c => c.LoanListComponent),
           },
           {
             path: 'contratos/:id',
-            component: InstallmentsTableComponent,
+            loadComponent: () => import('./main-panel/pages/loan/components/installments-table/installments-table.component')
+              .then(c => c.InstallmentsTableComponent),
           }
         ]
       },
@@ -102,11 +104,13 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () => import('./login/login.component')
+      .then(c => c.LoginComponent),
     canActivate: [authGuard]
   },
   {
     path: '**',
-    component: NotFoundComponent
+    loadComponent: () => import('./not-found/not-found.component')
+      .then(c => c.NotFoundComponent),
   }
 ]

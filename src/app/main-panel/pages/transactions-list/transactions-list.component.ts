@@ -9,6 +9,7 @@ import { TipoTransPipe } from '../../../pipe/tipo-trans.pipe';
 import { RecebedorPipe } from '../../../pipe/recebedor.pipe';
 import { Transaction } from '../../../../server/models/db.model';
 import { Operation } from '../../../../server/constants/db.enum';
+import { UtilService } from '../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-transactions-list',
@@ -18,6 +19,7 @@ import { Operation } from '../../../../server/constants/db.enum';
 })
 export class TransactionsListComponent {
   private readonly loginService = inject(LoginService);
+  private readonly utilService = inject(UtilService);
 
   get user() {
     return this.loginService.user;
@@ -29,6 +31,10 @@ export class TransactionsListComponent {
 
   get operation() {
     return Operation;
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   get transactions2() {

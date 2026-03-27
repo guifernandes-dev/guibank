@@ -10,19 +10,23 @@
         <mat-card-title class="d-flex align-items-center gap-1">
           <mat-icon>price_check</mat-icon>
           <div class="d-flex flex-column">
-            {{parc.title}}
+            {{parc.title|translate}} {{parc.item}}
             <span style="font-size: 11px; line-height: 0.9;">
-              {{parc.subtitle}}
+              {{parc.subtitle|translate}} {{parc.loanId}}
             </span>
           </div>
         </mat-card-title>
         <mat-card-subtitle>
-          {{parc.parcela | brCurrency }}
+          {{parc.parcela | brCurrency : lang }}
         </mat-card-subtitle>
       </mat-card-header>
-      <mat-card-content>Vencimento: {{parc.vencimento | dateTrans : dateFormats.DOCS_CARD}}</mat-card-content>
+      <mat-card-content>
+        {{'DASH.PAYMENTS.DUE_DATE'|translate}}: {{parc.vencimento | dateTrans : dateFormats.DOCS_CARD}}
+      </mat-card-content>
       <mat-card-actions>
-        <button mat-button class="btn" (click)="pagar(parc)">Pagar</button>
+        <button mat-button class="btn" (click)="pagar(parc)">
+          {{'DASH.PAYMENTS.PAY'|translate}}
+        </button>
       </mat-card-actions>
     </div>
     }

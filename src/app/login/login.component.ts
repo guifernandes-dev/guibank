@@ -11,10 +11,11 @@ import { LoginService } from '../core/login.services/login.service';
 import { UtilService } from '../core/util.services/util.service';
 import { Login } from '../../server/models/db.model';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { LoadingComponent } from "../shared/loading/loading.component";
 
 @Component({
   selector: 'app-login',
-  imports: [MatButtonModule, MatInputModule, MatIcon, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatSnackBarModule, TranslatePipe],
+  imports: [MatButtonModule, MatInputModule, MatIcon, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatSnackBarModule, TranslatePipe, LoadingComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,6 +51,10 @@ export class LoginComponent {
 
   get loginForm() {
     return this._loginForm()
+  }
+
+  get isLoading() {
+    return this.loginService.isLoading;
   }
 
   toogleLoginForm(): void {

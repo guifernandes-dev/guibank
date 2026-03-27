@@ -5,6 +5,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { RouterModule } from "@angular/router";
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
+import { UtilService } from '../core/util.services/util.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class SidebarComponent {
   private readonly translate = inject(TranslateService);
+  private readonly utils = inject(UtilService);
   readonly menuItems: MenuItem[] = [
     {
       label: 'SIDEBAR.DASHBOARD',
@@ -43,10 +45,14 @@ export class SidebarComponent {
   ];
 
   setPt() {
-    this.translate.use('pt-br');
+    const lang = 'pt-BR';
+    this.translate.use(lang);    
+    this.utils.setLangAtual(lang);
   }
 
   setUs() {
-    this.translate.use('en-us');
+    const lang = 'en-US';
+    this.translate.use(lang);
+    this.utils.setLangAtual(lang);
   }
 }

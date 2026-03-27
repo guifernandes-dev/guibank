@@ -54,5 +54,28 @@
         "LOGIN": "Logar"
       }
     }
+  },
+  "DASH": {
+    "DAD": {
+      "TITLE": "Painel",
+      "RESUME": "Resumo da Conta",
+      "NEXT": "Contas Agendadas",
+      "INSTALLMENTS": "Parcelas",
+      "PAYMENTS": "Pagamentos",
+      "LATEST_TRANSACTIONS": "Últimas Transações"
+    },
+    "RESUME": {
+      "BALANCE": "SALDO",
+      "DEPOSITS": "ENTRADAS",
+      "WITHDRAWALS": "SAÍDAS"
+    },
+    "PAYMENTS": {
+      "INSTALLMENTS": {
+        "TITLE": "Parcela",
+        "SUBTITLE": "Contrato nº"
+      },
+      "DUE_DATE": "Vencimento",
+      "PAY": "Pagar"
+    }
   }
 }

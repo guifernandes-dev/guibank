@@ -98,6 +98,10 @@ export class OperationFormComponent {
     return this.operationForm.get('origem')
   }
 
+  get lang() {
+    return this.utilService.langAtual;
+  }
+
   resetDestino() {
     this.destino?.get('nome')?.reset('');
     this.destino?.get('email')?.reset('');

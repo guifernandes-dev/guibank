@@ -10,6 +10,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db.model';
+import { UtilService } from '../../../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-loan-list',
@@ -19,6 +20,7 @@ import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db
 })
 export class LoanListComponent {
   private readonly loanService = inject(LoanService);
+  private readonly utilService = inject(UtilService);
 
   get dateFormats() {
     return DateFormats;
@@ -26,6 +28,10 @@ export class LoanListComponent {
 
   get loans() {
     return this.loanService.userLoans$;
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   statusParcelas(parcs: Installment[]): string {

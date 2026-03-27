@@ -2,7 +2,6 @@ import { inject, Injectable, signal } from '@angular/core';
 import { LoginService } from '../../../../core/login.services/login.service';
 import { NextCards } from '../../../../constants/front.enum';
 import { LoanService } from '../../loan/services/loan.service';
-import { UtilService } from '../../../../core/util.services/util.service';
 import { InstallmentCard } from '../../../../core/models/services.model';
 
 @Injectable({
@@ -41,8 +40,8 @@ export class DashboardService {
           return {
             ...parc,
             loanId: loan.id!,
-            title: `Parcela ${parc.item}`,
-            subtitle: `Contrato nº ${loan.id}`,
+            title: 'DASH.PAYMENTS.INSTALLMENTS.TITLE',
+            subtitle: 'DASH.PAYMENTS.INSTALLMENTS.SUBTITLE',
           }
         }))
       .filter(parc => new Date(parc.vencimento!).getTime() <= doisMesesDepois.getTime())

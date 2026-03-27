@@ -54,5 +54,28 @@
         "LOGIN": "Login"
       }
     }
+  },
+  "DASH": {
+    "DAD": {
+      "TITLE": "Dashboard",
+      "RESUME": "Account Summary",
+      "NEXT": "Scheduled Payments",
+      "INSTALLMENTS": "Installments",
+      "PAYMENTS": "Payments",
+      "LATEST_TRANSACTIONS": "Latest Transactions"
+    },
+    "RESUME": {
+      "BALANCE": "BALANCE",
+      "DEPOSITS": "DEPOSITS",
+      "WITHDRAWALS": "WITHDRAWALS"
+    },
+    "PAYMENTS": {
+      "INSTALLMENTS": {
+        "TITLE": "Installment",
+        "SUBTITLE": "Contract No."
+      },
+      "DUE_DATE": "Due Date",
+      "PAY": "Pay"
+    }
   }
 }

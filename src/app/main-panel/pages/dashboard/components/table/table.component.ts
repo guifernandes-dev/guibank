@@ -9,6 +9,7 @@ import { TipoTransPipe } from '../../../../../pipe/tipo-trans.pipe';
 import { Operation } from '../../../../../../server/constants/db.enum';
 import { DashboardService } from '../../services/dashboard.service';
 import { Transaction } from '../../../../../../server/models/db.model';
+import { UtilService } from '../../../../../core/util.services/util.service';
 
 @Component({
   selector: 'app-table',
@@ -19,6 +20,7 @@ import { Transaction } from '../../../../../../server/models/db.model';
 export class TableComponent {
   private readonly loginService = inject(LoginService);
   private readonly dashService = inject(DashboardService);
+  private readonly utilService = inject(UtilService);
   dateFormats = DateFormats;
   private readonly BLUR_TRANS: Transaction[] = [
     {
@@ -97,6 +99,10 @@ export class TableComponent {
 
   get user() {
     return this.loginService.user
+  }
+
+  get lang() {
+    return this.utilService.langAtual;
   }
 
   get data() {
