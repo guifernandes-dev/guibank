@@ -13,23 +13,26 @@
       <mat-icon>chevron_left</mat-icon>
     </button>
     <div class="d-flex align-items-center">
-      <h4 class="form-title">SIMULAÇÃO</h4>
+      <h4 class="form-title">
+        {{'LOAN.SIMULATION.SIMULATION'|translate}}
+      </h4>
     </div>
   </div>
   <div class="d-flex gap-2 justify-content-between">
     <div class="sisAmort-select">
-      <span class="text-center text-label">Sistema de Amortização</span>
+      <span class="text-center text-label">
+        {{'LOAN.SIMULATION.AMORTIZATION_SYSTEM'|translate}}
+      </span>
       <div>
         <mat-button-toggle-group
-          aria-label="Sistema de Amortização"
           formControlName="sistema"
           class="mb-2"
         >
           <mat-button-toggle [value]="sisCredito.PRICE" class="d-flex">
-            PRICE
+            {{'LOAN.SIMULATION.PRICE'|translate}}
           </mat-button-toggle>
           <mat-button-toggle [value]="sisCredito.SAC" class="d-flex">
-            SAC
+            {{'LOAN.SIMULATION.CAS'|translate}}
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
@@ -39,7 +42,9 @@
       class="w-50"
       floatLabel="always"
     >
-      <mat-label>Valor</mat-label>
+      <mat-label>
+        {{'LOAN.RESUME.VALUE'|translate}}
+      </mat-label>
       <input
         matInput
         type="text"
@@ -52,15 +57,17 @@
         (blur)="formatar($event)"
         required
       />
-      <span matTextPrefix>R$&nbsp;</span>
+      <span matTextPrefix>{{'LOGIN.INCOME.PREFIX'|translate}}&nbsp;</span>
       @if (this.form.get('valor')?.invalid) {
-        <mat-error>{{erroValor$()}}</mat-error>
+        <mat-error>{{erroValor$()|translate}}</mat-error>
       }
     </mat-form-field>
   </div>
   <div class="d-flex flex-column w-75">
     <label for="parcelas" class="container-slider">
-      <span class="slider-label">Quantidade de Parcelas*</span>
+      <span class="slider-label">
+        {{'LOAN.SIMULATION.NUM_INSTALLMENTS'|translate}}*
+      </span>
       <mat-slider
         min="1"
         [max]="parcelasMax()"
@@ -68,17 +75,19 @@
       >
         <input matSliderThumb id="parcelas" formControlName="parcelas"/>
       </mat-slider>
-      <span class="hint">{{this.form.get('parcelas')?.value}} parcelas</span>
+      <span class="hint">{{this.form.get('parcelas')?.value}} {{'LOAN.SIMULATION.INSTALLMENTS'|translate}}</span>
     </label>
   </div>
   <div class="d-flex justify-content-center flex-column">
-    <h5 class="text-center">RESULTADO</h5>
+    <h5 class="text-center">
+      {{'LOAN.SIMULATION.RESULT'|translate}}
+    </h5>
     @if (!disabledBtn()) {
       <span class="text-center">
-        Líquido Creditado: {{(loan().valor * 0.95) | brCurrency : lang}}
+        {{'LOAN.SIMULATION.NET_CREDIT'|translate}}: {{(loan().valor * 0.95) | brCurrency : lang}}
       </span>
-      <span class="text-center taxa" matTooltip="3% IOF + 2% Taxa Administrativa">
-        Valor solicitado desconta taxas de 5%
+      <span class="text-center taxa" [matTooltip]="'LOAN.SIMULATION.TOOLTIP'|translate">
+        {{'LOAN.SIMULATION.DISCOUNTED'|translate}}
       </span>
       <span class="text-center simulacao">
         {{this.form.get('parcelas')?.value}} 
@@ -90,7 +99,7 @@
         }}
       </span>
       <span class="text-center taxa">
-        Taxa efetiva: {{loan().taxa | brPercent : lang}} a.m.
+        {{'LOAN.SIMULATION.EFFECTIVE_RATE'|translate}}: {{loan().taxa | brPercent : lang}} a.m.
       </span>
       <button
         mat-button
@@ -98,10 +107,12 @@
         (click)="viewTable()"
       >
         <mat-icon>table</mat-icon>
-        VER TABELA DE PARCELAS
+        {{'LOAN.SIMULATION.VIEW_TABLE'|translate}}
       </button>
     } @else {
-      <p>Insira um valor e quantidade de parcelas para ver a simulação.</p>
+      <p>
+        {{'LOAN.SIMULATION.ERROR'|translate}}
+      </p>
     }
   </div>
   <button
@@ -112,6 +123,6 @@
     [disabled]="disabledBtn()"
   >
     <mat-icon>attach_money</mat-icon>
-    CONTRATAR
+    {{'LOAN.SIMULATION.APPLY'|translate}}
   </button>
 </form>

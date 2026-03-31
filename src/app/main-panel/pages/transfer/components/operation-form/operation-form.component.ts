@@ -18,6 +18,7 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import { UtilService } from '../../../../../core/util.services/util.service';
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { ActivatedRoute } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-operation-form',
@@ -32,7 +33,8 @@ import { ActivatedRoute } from '@angular/router';
     MatNativeDateModule,
     MatSlideToggleModule,
     MatSnackBarModule,
-    BrCurrencyPipe
+    BrCurrencyPipe,
+    TranslatePipe
   ],
   templateUrl: './operation-form.component.html',
   styleUrl: './operation-form.component.css'

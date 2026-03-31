@@ -2,35 +2,41 @@
   @if (limiteDisp === 0) {
     <mat-card appearance="outlined" class="no-limit-container flex-fill">
       <mat-card-content class="card-resume-no-limit">
-        <mat-card-title class="card-title">NÃO HÁ LIMITE DISPONÍVEL PARA NOVOS EMPRÉSTIMOS</mat-card-title>
+        <mat-card-title class="card-title">{{'LOAN.RESUME.DONT_LIMIT'|translate}}</mat-card-title>
       </mat-card-content>
     </mat-card>
   } @else {
     <mat-card
       appearance="outlined"
-      matTooltip="Valores máximos disponíveis para simulação de empréstimo."
+      [matTooltip]="'LOAN.RESUME.TOOLTIP.AVAILABLE'|translate"
       class="no-limit-container flex-fill"
     >
       <mat-card-header>
           <mat-card-title class="card-title">
-              DISPONÍVEL
+              {{'LOAN.RESUME.AVAILABLE'|translate}}
           </mat-card-title>
       </mat-card-header>
       <mat-card-content class="card-resume-limit">
         <div class="container-disp-text">
-          <span class="w-100">Valor</span>
+          <span class="w-100">
+            {{'LOAN.RESUME.VALUE'|translate}}
+          </span>
           <span class="w-100 bold">
             {{ limiteDisp | brCurrency : lang}}
           </span>
         </div>
         <div class="container-disp-text">
-          <span class="w-100">Parcelas</span>
+          <span class="w-100">
+            {{'LOAN.RESUME.INSTALLMENTS'|translate}}
+          </span>
           <span class="w-100 bold">
             {{ parcelasMax }}
           </span>
         </div>
         <div class="container-disp-text">
-          <span class="w-100">Taxa (a.m)</span>
+          <span class="w-100">
+            {{'LOAN.RESUME.TAX'|translate}}
+          </span>
           <span class="w-100 bold">
             {{ taxa() | brPercent : lang }}
           </span>
@@ -42,10 +48,12 @@
     <mat-card
       class="flex-fill"
       appearance="outlined"
-      matTooltip="Saldo devedor considera o total com juros do contrato."
+      [matTooltip]="'LOAN.RESUME.TOOLTIP.OUTSTANDING'|translate"
     >
       <mat-card-header class="justify-content-center">
-          <mat-card-title class="card-title">SALDO DEVEDOR TOTAL</mat-card-title>
+          <mat-card-title class="card-title">
+            {{'LOAN.RESUME.TOTAL_OUTSTANDING'|translate}}
+          </mat-card-title>
       </mat-card-header>
       <mat-card-content class="card-resume-valor">
         {{ valorEmprestimos | brCurrency : lang}}
@@ -63,7 +71,7 @@
     routerLink="simular"
   >
     <mat-icon>add</mat-icon>
-    SIMULAR
+    {{'LOAN.RESUME.SIMULATE'|translate}}
   </button>
 }
 @if (userLoans().length) {
@@ -76,6 +84,6 @@
     routerLink="contratos"
   >
     <mat-icon>article_person</mat-icon>
-    MEUS CONTRATOS
+    {{'LOAN.RESUME.CONTRACTS'|translate}}
   </button>
 }

@@ -18,10 +18,11 @@ import { LoginService } from '../../../../../core/login.services/login.service';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { RouterModule } from '@angular/router';
 import { MatTooltip } from "@angular/material/tooltip";
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loan-form',
-  imports: [ReactiveFormsModule, MatSliderModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatIconModule, BrCurrencyPipe, BrPercentPipe, MatButtonToggleModule, RouterModule, MatTooltip],
+  imports: [ReactiveFormsModule, MatSliderModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatIconModule, BrCurrencyPipe, BrPercentPipe, MatButtonToggleModule, RouterModule, MatTooltip, TranslatePipe],
   templateUrl: './loan-form.component.html',
   styleUrl: './loan-form.component.css'
 })
@@ -29,6 +30,7 @@ export class LoanFormComponent implements OnInit {
   private readonly loanService = inject(LoanService);
   private readonly loginService = inject(LoginService);
   private readonly utilService = inject(UtilService);
+  private readonly translate = inject(TranslateService);
   private readonly dialog = inject(MatDialog);
   erroValor$ = signal<string>('');
   form = new FormGroup({
@@ -210,11 +212,13 @@ export class LoanFormComponent implements OnInit {
       const limiteMin = this.loanService.vrParcelaMin;
       const number = this.utilService.formataValorNumero(value);
       if (number > limiteDisp) {
-        return { valueUperSaldo: 'Valor maior que o limite disponível'}
+        return { valueUperSaldo: 'ERRORS.VALUE_LIMIT'}
       }
       if (number < limiteMin) {
+        const text = this.translate.instant('ERRORS.MINIMUM_VALUE');
+        const prefix = this.translate.instant('LOGIN.INCOME.PREFIX');
         return {
-          invalidValue: `Valor mínimo R$${this.utilService.formataValor(limiteMin)}`
+          invalidValue: `${text} ${prefix}${this.utilService.formataValor(limiteMin)}`
         }
       }
       return null

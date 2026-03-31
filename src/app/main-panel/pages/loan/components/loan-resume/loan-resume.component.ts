@@ -9,10 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { UtilService } from '../../../../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loan-resume',
-  imports: [MatCardModule, BrCurrencyPipe, MatTooltipModule, MatIconModule, RouterLink, MatButtonModule, BrPercentPipe],
+  imports: [MatCardModule, BrCurrencyPipe, MatTooltipModule, MatIconModule, RouterLink, MatButtonModule, BrPercentPipe, TranslatePipe],
   templateUrl: './loan-resume.component.html',
   styleUrl: './loan-resume.component.css'
 })

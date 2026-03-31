@@ -9,6 +9,7 @@ import { Account, Transaction } from '../../../../../server/models/db.model';
 import { UtilService } from '../../../../core/util.services/util.service';
 import { Operation } from '../../../../../server/constants/db.enum';
 import { User } from '../../../../core/models/services.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class OperationService {
   private readonly apiService = inject(APIService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
+  private readonly translate = inject(TranslateService);
   operationMenu: MenuOperation[] = this.utilService.transTypes.slice(0,-1);
   currentOp$ = signal<MenuOperation>(this.operationMenu[0]);
   operationForm = new FormGroup({
@@ -71,7 +73,7 @@ export class OperationService {
     return (control: AbstractControl<string>): Observable<ValidationErrors | null> => {
       const value = control.value;
       const user = this.loginService.user();
-      const cbUserNotFound = ()=> of({ userNotExist: 'Usuário não encontrado'});
+      const cbUserNotFound = ()=> of({ userNotExist: 'ERRORS.USER_NOT_FOUND'});
       const cbFound = (conta: Account) => {
           const {nome, id, email} = conta;
           this.operationForm.patchValue({destino: {nome, id, email}});
@@ -79,13 +81,13 @@ export class OperationService {
       };
 
       if(user?.id === value || user?.email === value) {
-        return of({ accountLogged: 'Não pode ser o próprio usuário'})
+        return of({ accountLogged: 'ERRORS.LOGGED_ACCOUNT'})
       }
       if (!value) {
         return of(null);
       }
       if (this.tipoConta?.value === 'num') {
-        if (value.length !== 4) return of({minlength: 'Número de Conta deve ter 4 dígitos'})
+        if (value.length !== 4) return of({minlength: 'ERRORS.MIN_LENGTH'})
         return this.apiService
           .getUserById(value)
           .pipe(
@@ -95,7 +97,7 @@ export class OperationService {
           )
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if(!emailRegex.test(value)) return of({ emailInvalido: 'Formato de e-mail inválido' })
+      if(!emailRegex.test(value)) return of({ emailInvalido: 'ERRORS.INVALID_EMAIL' })
       return this.apiService
         .getUserByEmail(value)
         .pipe(
@@ -120,8 +122,8 @@ export class OperationService {
           this.currentOp$().operation !== Operation.PAGAMENTO
           || this.operationForm.get('pago')?.value
         )
-      ) return { valueUperSaldo: 'Valor maior que o saldo'}
-      if (number < 0.01) return { invalidValue: 'Valor mínimo R$0,01' }
+      ) return { valueUperSaldo: 'ERRORS.VALUE_BIGGEST'}
+      if (number < 0.01) return { invalidValue: 'ERRORS.INVALID_VALUE' }
       return null
     }
   }
@@ -130,10 +132,10 @@ export class OperationService {
     let mensagem = '';
     switch (code) {
       case 'required':
-        mensagem = 'Campo é obrigatório'
+        mensagem = 'ERRORS.REQUIRED_FIELD'
         break;
       case 'matDatepickerParse':
-        mensagem = 'Data inválida'
+        mensagem = 'ERRORS.INVALID_DATE'
         break;
       case undefined:
         mensagem = ''
@@ -164,10 +166,12 @@ export class OperationService {
           });
           const user = this.loginService.user();
           this.buildForm(user, this.currentOp$().operation !== Operation.PAGAMENTO);
-          this.utilService.openSnackBar('Transação salva com sucesso!','Ok','snackbar-sucess');
+          const message = this.translate.instant('TRANSFER.SUCCESS');
+          this.utilService.openSnackBar(message,'Ok','snackbar-sucess');
         },
         error: () => {
-          this.utilService.openSnackBar('Erro ao salvar operação','Ok');
+          const message = this.translate.instant('TRANSFER.ERRO');
+          this.utilService.openSnackBar(message,'Ok');
         }
       });
   }

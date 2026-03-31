@@ -6,10 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '../../../../../core/login.services/login.service';
 import { RouterModule } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-operation-type',
-  imports: [MatIconModule, MatButtonModule, RouterModule],
+  imports: [MatIconModule, MatButtonModule, RouterModule, TranslatePipe],
   templateUrl: './operation-type.component.html',
   styleUrl: './operation-type.component.css'
 })

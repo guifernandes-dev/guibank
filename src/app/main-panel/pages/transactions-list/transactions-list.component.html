@@ -1,5 +1,5 @@
 <main class="d-flex flex-column gap-1 w-100 max">
-  <h3>Extrato</h3>
+  <h3>{{'TRANSACTION.STATEMENT'|translate}}</h3>
   <table class="table table-sm">
     @for (ops of transactions; track $index) {
       <thead>
@@ -8,7 +8,7 @@
             {{ops.data | dateTrans : lang : dateFormats.HEAD_TRANS_LIST}}
           </th>
           <th colspan="1" class="header-table saldo">
-            Saldo: {{ops.saldoAcumulado | brCurrency : lang}}
+            {{'TRANSACTION.BALANCE'|translate}}: {{ops.saldoAcumulado | brCurrency : lang}}
           </th>
         </tr>
       </thead>

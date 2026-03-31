@@ -4,10 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from "@angular/router";
 import { LoginService } from '../../../core/login.services/login.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loan',
-  imports: [MatButtonModule, MatIconModule, RouterModule],
+  imports: [MatButtonModule, MatIconModule, RouterModule, TranslatePipe],
   templateUrl: './loan.component.html',
   styleUrl: './loan.component.css'
 })

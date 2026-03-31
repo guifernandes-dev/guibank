@@ -18,7 +18,7 @@ export class TipoTransPipe implements PipeTransform {
     if(trans.tipo === Operation.PIX) {
       return {
         ...item,
-        label: `MENU_OP.TYPE_TRANS.${trans.destino?.id === accountLogged
+        label: `TRANSACTION.TYPE_TRANS.${trans.destino?.id === accountLogged
           ? 'CREDIT'
           : 'PAYMENT'}`
       };
