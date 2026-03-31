@@ -100,12 +100,11 @@ export class UtilService {
 
   openSnackBar(
     mensagem: string,
-    textBtn: string = 'Fechar',
     panelClass: string = 'snackbar-erro'
   ) {
     this.snackBar.open(
       mensagem,
-      textBtn,
+      'Ok!',
       {
         duration: this.duration,
         panelClass

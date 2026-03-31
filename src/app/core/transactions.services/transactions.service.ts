@@ -10,6 +10,7 @@ import { UtilService } from '../util.services/util.service';
 import { DialogEditComponent } from '../../shared/dialog-edit/dialog-edit.component';
 import { ComponentType } from '@angular/cdk/overlay';
 import { KeyType, OptionChangeDocs } from '../models/services.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,12 @@ export class TransactionsService {
   private readonly loginService = inject(LoginService);
   private readonly apiService = inject(APIService);
   private readonly utilService = inject(UtilService);
+  private readonly translate = inject(TranslateService);
   private readonly dialog = inject(MatDialog);
   private readonly OPTIONS_CHANGE_DOCS: Record<KeyType, OptionChangeDocs> = {
-    pay: {type: 'pay', mensagem: 'Documento pago com sucesso!'},
-    edit: {type: 'edit', mensagem: 'Documento alterado com sucesso!'},
-    delete: {type: 'delete', mensagem: 'Documento deletado com sucesso!'}
+    pay: {type: 'pay', mensagem: this.translate.instant('LOGIN.SNACKS.PAY')},
+    edit: {type: 'edit', mensagem: this.translate.instant('LOGIN.SNACKS.EDIT')},
+    delete: {type: 'delete', mensagem: this.translate.instant('LOGIN.SNACKS.DELETE')}
   }
 
   get saldos(): {rec: number, desp: number} {
@@ -135,7 +137,7 @@ export class TransactionsService {
               vencimento: trans.vencimento ? new Date(trans.vencimento) : null,
             }
             cbSubscribe(dateTrans);
-            this.utilService.openSnackBar(mensagem,'Ok','snackbar-sucess');
+            this.utilService.openSnackBar(mensagem,'snackbar-sucess');
           });
       }
     });

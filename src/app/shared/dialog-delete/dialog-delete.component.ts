@@ -7,6 +7,7 @@ import { Transaction } from '../../../server/models/db.model';
 import { DateTransPipe } from '../../pipe/date-trans.pipe';
 import { DateFormats } from '../../constants/front.enum';
 import { UtilService } from '../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-delete',
@@ -17,7 +18,8 @@ import { UtilService } from '../../core/util.services/util.service';
     MatDialogContent,
     MatDialogActions,
     BrCurrencyPipe,
-    DateTransPipe
+    DateTransPipe,
+    TranslatePipe
   ],
   providers: [
     provideNativeDateAdapter()

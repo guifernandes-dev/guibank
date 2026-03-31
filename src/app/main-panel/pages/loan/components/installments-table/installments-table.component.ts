@@ -14,10 +14,11 @@ import { UtilService } from '../../../../../core/util.services/util.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPayLoanComponent } from '../../../../../shared/dialog-pay-loan/dialog-pay-loan.component';
 import { TransactionsService } from '../../../../../core/transactions.services/transactions.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-installments-table',
-  imports: [AlertClassPipe,DateTransPipe,BrCurrencyPipe,MatIconModule, MatButtonModule, RouterLink, MatTooltipModule],
+  imports: [AlertClassPipe,DateTransPipe,BrCurrencyPipe,MatIconModule, MatButtonModule, RouterLink, MatTooltipModule, TranslatePipe],
   templateUrl: './installments-table.component.html',
   styleUrl: './installments-table.component.css'
 })
@@ -25,6 +26,7 @@ export class InstallmentsTableComponent {
   private readonly loanService = inject(LoanService);
   private readonly utilService = inject(UtilService);
   private readonly transService = inject(TransactionsService);
+  private readonly translate = inject(TranslateService);
   private readonly dialog = inject(MatDialog);
   private route = inject(ActivatedRoute);
   readonly loan$ = signal<Loan | null>(null)
@@ -85,12 +87,14 @@ export class InstallmentsTableComponent {
     let saldo = this.totalHoje();
     const saldoUser = this.transService.saldo;
     if(saldo > saldoUser) {
-      this.utilService.openSnackBar('Saldo inferior ao valor de quitação do contrato!','Ok')
+      const message = this.translate.instant('LOAN.SNACKS.BALANCE_SETTLE');
+      this.utilService.openSnackBar(message)
       return;
     }
     const loan = this.loan$();
     if(!loan) {
-      this.utilService.openSnackBar('Empréstimo não encontrado!')
+      const message = this.translate.instant('LOAN.SNACKS.LOAN_NOT_FOUND');
+      this.utilService.openSnackBar(message)
       return;
     };
     const dialogRef = this.dialog.open(DialogPayLoanComponent,{data: { obj: loan, template}});
@@ -125,7 +129,8 @@ export class InstallmentsTableComponent {
   pagar(parcelaChange: Installment, template: TemplateRef<any>) {
     const parcela = this.parcelaHoje(parcelaChange.item);
     if(parcela > this.transService.saldo) {
-      this.utilService.openSnackBar('Saldo inferior ao valor da parcela!','Ok');
+      const message = this.translate.instant('LOAN.SNACKS.BALANCE_INSTALLMENT');
+      this.utilService.openSnackBar(message);
       return;
     }
     const dialogRef = this.dialog.open(DialogPayLoanComponent,{

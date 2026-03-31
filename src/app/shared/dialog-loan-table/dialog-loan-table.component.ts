@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Operation } from '../../../server/constants/db.enum';
 import { InstallmentsTableComponent } from "../../main-panel/pages/loan/components/installments-table/installments-table.component";
 import { UtilService } from '../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-loan-table',
@@ -20,8 +21,9 @@ import { UtilService } from '../../core/util.services/util.service';
     MatDialogActions,
     BrCurrencyPipe,
     MatIconModule,
-    InstallmentsTableComponent
-],
+    InstallmentsTableComponent,
+    TranslatePipe
+  ],
   providers: [
     provideNativeDateAdapter()
   ],

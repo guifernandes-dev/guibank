@@ -1,6 +1,6 @@
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/api.interceptor';
@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withPreloading(PreloadAllModules)
     ),
-    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    provideNativeDateAdapter(),
     provideHttpClient(
       withInterceptors([authInterceptor]),
       withFetch()

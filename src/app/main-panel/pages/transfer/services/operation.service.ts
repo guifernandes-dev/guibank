@@ -167,11 +167,11 @@ export class OperationService {
           const user = this.loginService.user();
           this.buildForm(user, this.currentOp$().operation !== Operation.PAGAMENTO);
           const message = this.translate.instant('TRANSFER.SUCCESS');
-          this.utilService.openSnackBar(message,'Ok','snackbar-sucess');
+          this.utilService.openSnackBar(message,'snackbar-sucess');
         },
         error: () => {
           const message = this.translate.instant('TRANSFER.ERRO');
-          this.utilService.openSnackBar(message,'Ok');
+          this.utilService.openSnackBar(message);
         }
       });
   }

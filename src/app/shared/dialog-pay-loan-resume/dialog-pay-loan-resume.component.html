@@ -1,10 +1,23 @@
-<h2 mat-dialog-title>PAGAR</h2>
+<h2 mat-dialog-title>
+  {{'DIALOGS.PAY.TITLE'|translate}}
+</h2>
 <mat-dialog-content>
-  <p>Deseja realmente pagar a parcela {{parc.item}} do contrato {{parc.loanId}}?</p>
-  <p>Valor atualizado para pagamento agora:</p>
+  <p>
+    {{
+      'DIALOGS.LOAN.RESUME.CONTENT_1'|translate
+    }} {{parc.item}} {{
+      'DIALOGS.LOAN.RESUME.CONTENT_2'|translate
+    }} {{parc.loanId}}?</p>
+  <p>
+    {{'DIALOGS.LOAN.RESUME.CONTENT_3'|translate}}:
+  </p>
   <h4>{{parc.parcela | brCurrency : lang}}</h4>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="pagar()" cdkFocusInitial>PAGAR AGORA</button>
-  <button mat-button (click)="fechar()">Cancelar</button>
+  <button mat-button (click)="pagar()" cdkFocusInitial>
+    {{'DIALOGS.PAY.NOW'|translate}}
+  </button>
+  <button mat-button (click)="fechar()">
+    {{'DIALOGS.PAY.CANCEL'|translate}}
+  </button>
 </mat-dialog-actions>

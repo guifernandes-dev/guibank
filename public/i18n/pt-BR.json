@@ -53,6 +53,15 @@
         "CREATE_ACCOUNT": "Criar Conta",
         "LOGIN": "Logar"
       }
+    },
+    "SNACKS": {
+      "PAY": "Documento pago com sucesso!",
+      "EDIT": "Documento alterado com sucesso!",
+      "DELETE": "Documento deletado com sucesso!",
+      "FIND_OP": "Erro ao buscar as operações!",
+      "FIND_USER": "Erro ao buscar o usuário, tente novamente mais tarde.",
+      "INCORRECT_USER": "Usuário ou E-mail incorreto.",
+      "EMAIL_EXIST": "E-mail já cadastrado!"
     }
   },
   "DASH": {
@@ -75,7 +84,8 @@
         "SUBTITLE": "Contrato nº"
       },
       "DUE_DATE": "Vencimento",
-      "PAY": "Pagar"
+      "PAY": "Pagar",
+      "LOWER_BALANCE": "Saldo inferior ao valor do documento!"
     }
   },
   "TRANSACTION": {
@@ -183,6 +193,84 @@
         "INFOS": "Informações, parcelas e quitação"
       },
       "PAID_OFF": "CONTRATO QUITADO"
+    },
+    "TABLE": {
+      "SETTLE_TEMP": {
+        "PAY": "Deseja realmente pagar parcela Nº",
+        "PAID_OFF": "Deseja realmente quitar o contrato Nº",
+        "DUE_DATE": "Vencimento"
+      },
+      "TITLE": "PARCELAS - Contrato Nº",
+      "HEADER": {
+        "NO": "Nº",
+        "DUE_DATE": "Vencimento",
+        "INSTALLMENT": "Prestação",
+        "INTEREST": "Juros",
+        "AMORTIZATION": "Amortização",
+        "BALANCE": "Saldo",
+        "PAYMENT_TODAY": "Pagamento Hoje",
+        "PAY": "Pagar"
+      },
+      "PAID": "Pago",
+      "CURRENT_VALUE": "VALOR ATUAL",
+      "SETTLE": "QUITAR CONTRATO",
+      "SNACKS": {
+        "BALANCE_SETTLE": "Saldo inferior ao valor de quitação do contrato!",
+        "LOAN_NOT_FOUND": "Empréstimo não encontrado!",
+        "BALANCE_INSTALLMENT": "Saldo inferior ao valor da parcela!"
+      },
+      "PAY": "Pagar"
+    }
+  },
+  "DIALOGS": {
+    "PAY": {
+      "TITLE": "PAGAR",
+      "NOW": "PAGAR AGORA",
+      "CANCEL": "Cancelar"
+    },
+    "LOAN": {
+      "CONFIRM": {
+        "TITLE": "CONTRATAR",
+        "CONTENT_1": "Deseja realmente contratar um empréstimo de",
+        "CONTENT_2": "Com pagamento em",
+        "CONTENT_3": "parcelas de",
+        "APPLY": "CONTRATAR",
+        "CANCEL": "Cancelar"
+      },
+      "TABLE": {
+        "BALANCE": "SALDO DEVEDOR INICIAL",
+        "AMORTIZATION": "TABELA DE AMORTIZAÇÃO",
+        "CLOSE": "Fechar"
+      },
+      "RESUME": {
+        "CONTENT_1": "Deseja realmente pagar a parcela",
+        "CONTENT_2": "do contrato",
+        "CONTENT_3": "Valor atualizado para pagamento agora"
+      }
+    },
+    "DOCUMENT": {
+      "PAY": {
+        "CONTENT": "Deseja realmente pagar"
+      },
+      "DELETE": {
+        "TITLE": "DELETAR",
+        "CONTENT_1": "Deseja realmente deletar o documento",
+        "CONTENT_2": "No valor de",
+        "CONTENT_3": "e vencimento em",
+        "DELETE": "DELETAR",
+        "CANCEL": "Cancelar"
+      },
+      "EDIT": {
+        "TITLE": "EDITAR",
+        "DESCRIPTION":"Descrição",
+        "DESCRIPTION_PH": "Descrição do Pagamento",
+        "DUE_DATE": "Data de Vencimento",
+        "VALUE": "Valor",
+        "PREFIX": "R$",
+        "PAID": "Pago",
+        "SAVE": "SALVAR",
+        "CANCEL": "Cancelar"
+      }
     }
   }
 }

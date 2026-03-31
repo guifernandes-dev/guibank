@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>EDITAR</h2>
+<h2 mat-dialog-title>
+  {{'DIALOGS.DOCUMENT.EDIT.TITLE'|translate}}
+</h2>
 <form
   [formGroup]="form"
   (ngSubmit)="submit()"
@@ -7,10 +9,12 @@
     class="d-flex flex-column justify-content-center align-items-center w-100 px-4 py-2 container gap-2"
   >
     <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Descrição</mat-label>
+      <mat-label>
+        {{'DIALOGS.DOCUMENT.EDIT.DESCRIPTION'|translate}}
+      </mat-label>
       <input
         matInput
-        placeholder="Descrição do Pagamento"
+        [placeholder]="'DIALOGS.DOCUMENT.EDIT.DESCRIPTION_PH'|translate"
         type="text"
         formControlName="descricao"
         required
@@ -21,34 +25,40 @@
         <mat-error>{{erroMessage$().descricao}}</mat-error>
       }
     </mat-form-field>
-    <mat-form-field
-      appearance="outline"
-      class="w-75 mt-2 mx-auto"
-      floatLabel="always"
-      [formGroup]="form"
-    >
-      <mat-label>Data de Vencimento</mat-label>
-      <input
-        matInput
-        [matDatepickerFilter]="filtraData"
-        [matDatepicker]="picker"
-        formControlName="vencimento"
-        (dateInput)="checkError('vencimento')"
-        (dateChange)="checkError('vencimento')"
-        (blur)="checkError('vencimento')"
-      />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      @if (this.form.get('data')?.invalid) {
-        <mat-error>{{erroMessage$()}}</mat-error>
-      }
-    </mat-form-field>
+    @defer(on immediate) {
+      <mat-form-field
+        appearance="outline"
+        class="w-75 mt-2 mx-auto"
+        floatLabel="always"
+        [formGroup]="form"
+      >
+        <mat-label>
+          {{'DIALOGS.DOCUMENT.EDIT.DUE_DATE'|translate}}
+        </mat-label>
+        <input
+          matInput
+          [matDatepickerFilter]="filtraData"
+          [matDatepicker]="picker"
+          formControlName="vencimento"
+          (dateInput)="checkError('vencimento')"
+          (dateChange)="checkError('vencimento')"
+          (blur)="checkError('vencimento')"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (this.form.get('data')?.invalid) {
+          <mat-error>{{erroMessage$()}}</mat-error>
+        }
+      </mat-form-field>
+    }
     <mat-form-field
       appearance="outline"
       class="w-75"
       floatLabel="always"
     >
-      <mat-label>Valor</mat-label>
+      <mat-label>
+        {{'DIALOGS.DOCUMENT.EDIT.VALUE'|translate}}
+      </mat-label>
       <input
         matInput
         type="text"
@@ -61,9 +71,9 @@
         (blur)="formatar($event)"
         required
       />
-      <span matTextPrefix>R$&nbsp;</span>
+      <span matTextPrefix>{{'DIALOGS.DOCUMENT.EDIT.PREFIX'|translate}}&nbsp;</span>
       <mat-slide-toggle matTextSuffix formControlName="pago" (change)="checkError('valor')">
-        Pago
+        {{'DIALOGS.DOCUMENT.EDIT.PAID'|translate}}
       </mat-slide-toggle>
       @if (form.get('valor')?.invalid) {
         <mat-error>{{erroMessage$().valor}}</mat-error>
@@ -77,8 +87,10 @@
       type="submit"
       [disabled]="disabledBtn()"
     >
-      SALVAR
+      {{'DIALOGS.DOCUMENT.EDIT.SAVE'|translate}}
     </button>
-    <button mat-button type="button" (click)="fechar()">Cancelar</button>
+    <button mat-button type="button" (click)="fechar()">
+      {{'DIALOGS.DOCUMENT.EDIT.CANCEL'|translate}}
+    </button>
   </mat-dialog-actions>
 </form>

@@ -1,11 +1,25 @@
-<h2 mat-dialog-title>DELETAR</h2>
+<h2 mat-dialog-title>
+  {{'DIALOGS.DOCUMENT.DELETE.TITLE'|translate}}
+</h2>
 <mat-dialog-content class="d-flex flex-column">
-  <span>Deseja realmente deletar o documento {{trans.descricao}}?</span>
-  <span>No valor de {{trans.valor | brCurrency : lang}} e vencimento em {{
-    (trans.vencimento || trans.data) | dateTrans : lang : dateFormats.DOCS_CARD
-  }}.</span>
+  <span>
+    {{'DIALOGS.DOCUMENT.DELETE.CONTENT_1'|translate}} {{trans.descricao}}?
+  </span>
+  <span>
+    {{
+      'DIALOGS.DOCUMENT.DELETE.CONTENT_2'|translate
+    }} {{trans.valor | brCurrency : lang}} {{
+      'DIALOGS.DOCUMENT.DELETE.CONTENT_3'|translate
+    }} {{
+      (trans.vencimento || trans.data) | dateTrans : lang : dateFormats.DOCS_CARD
+    }}.
+  </span>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="deletar()" cdkFocusInitial>DELETAR</button>
-  <button mat-button (click)="fechar()">Cancelar</button>
+  <button mat-button (click)="deletar()" cdkFocusInitial>
+    {{'DIALOGS.DOCUMENT.DELETE.DELETE'|translate}}
+  </button>
+  <button mat-button (click)="fechar()">
+    {{'DIALOGS.DOCUMENT.DELETE.CANCEL'|translate}}
+  </button>
 </mat-dialog-actions>

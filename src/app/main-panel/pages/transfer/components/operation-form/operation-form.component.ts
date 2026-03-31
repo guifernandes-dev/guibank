@@ -9,20 +9,17 @@ import { ErrorsForm } from '../../models/operation.models';
 import { BrCurrencyPipe } from '../../../../../pipe/br-currency.pipe';
 import { MatIconModule } from "@angular/material/icon";
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TransactionsService } from '../../../../../core/transactions.services/transactions.service';
 import { Transaction } from '../../../../../../server/models/db.model';
-import {provideNativeDateAdapter} from '@angular/material/core';
 import { UtilService } from '../../../../../core/util.services/util.service';
 import { LoginService } from '../../../../../core/login.services/login.service';
-import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-operation-form',
-  providers: [provideNativeDateAdapter()],
   imports: [
     MatButtonModule,
     MatInputModule,
@@ -44,6 +41,7 @@ export class OperationFormComponent {
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
   private readonly loginService = inject(LoginService);
+  private dateAdapter = inject(DateAdapter);
   formataValor = this.utilService.formataValor;
   filtraData = this.utilService.filtraData;
 
@@ -51,6 +49,10 @@ export class OperationFormComponent {
     effect(()=>{
       const user = this.loginService.user();
       this.operationService.buildForm(user);
+    });
+    effect(()=>{
+      const lang = this.utilService.langAtual();
+      this.dateAdapter.setLocale(lang.culture);
     });
   }
 

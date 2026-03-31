@@ -6,10 +6,11 @@ import { Loan } from '../../../server/models/db.model';
 import { SisCredito } from '../../../server/constants/db.enum';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { UtilService } from '../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-confirm-loan',
-  imports: [MatDialogModule, MatButtonModule, BrCurrencyPipe],
+  imports: [MatDialogModule, MatButtonModule, BrCurrencyPipe, TranslatePipe],
   providers: [
     provideNativeDateAdapter()
   ],

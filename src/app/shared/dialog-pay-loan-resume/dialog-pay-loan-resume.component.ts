@@ -1,11 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogModule, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { BrCurrencyPipe } from '../../pipe/br-currency.pipe';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { LoanService } from '../../main-panel/pages/loan/services/loan.service';
-import { Loan } from '../../../server/models/db.model';
 import { UtilService } from '../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-pay-loan-resume',
@@ -15,7 +14,8 @@ import { UtilService } from '../../core/util.services/util.service';
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    BrCurrencyPipe
+    BrCurrencyPipe,
+    TranslatePipe
   ],
   providers: [
     provideNativeDateAdapter()

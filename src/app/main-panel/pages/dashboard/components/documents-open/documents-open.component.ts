@@ -12,7 +12,7 @@ import { DateFormats } from '../../../../../constants/front.enum';
 import { AlertClassPipe } from '../../../../../pipe/alert-class.pipe';
 import { UtilService } from '../../../../../core/util.services/util.service';
 import { DashboardService } from '../../services/dashboard.service';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-documents-open',
@@ -25,6 +25,7 @@ export class DocumentsOpenComponent {
   private readonly dashService = inject(DashboardService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
+  private readonly translate = inject(TranslateService);
   
   get dateFormats() {
     return DateFormats;
@@ -48,7 +49,8 @@ export class DocumentsOpenComponent {
 
   pagar(trans: Transaction): void {
     if(trans.valor > this.saldo) {
-      this.utilService.openSnackBar('Saldo inferior ao valor do documento!');
+      const message = this.translate.instant('DASH.PAYMENTS.LOWER_BALANCE');
+      this.utilService.openSnackBar(message);
       return;
     }
     this.transService.payTrans(trans);

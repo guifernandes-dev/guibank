@@ -1,8 +1,14 @@
-<h2 mat-dialog-title>PAGAR</h2>
+<h2 mat-dialog-title>
+  {{'DIALOGS.PAY.TITLE'|translate}}
+</h2>
 <mat-dialog-content>
   <ng-container *ngTemplateOutlet="data.template; context: {obj: data.obj}"/>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="pagar()" cdkFocusInitial>PAGAR AGORA</button>
-  <button mat-button (click)="fechar()">Cancelar</button>
+  <button mat-button (click)="pagar()" cdkFocusInitial>
+    {{'DIALOGS.PAY.NOW'|translate}}
+  </button>
+  <button mat-button (click)="fechar()">
+    {{'DIALOGS.PAY.CANCEL'|translate}}
+  </button>
 </mat-dialog-actions>

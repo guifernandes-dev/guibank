@@ -53,6 +53,15 @@
         "CREATE_ACCOUNT": "Create Account",
         "LOGIN": "Login"
       }
+    },
+    "SNACKS": {
+      "PAY": "Document paid successfully!",
+      "EDIT": "Document edited successfully!",
+      "DELETE": "Document deleted successfully!",
+      "FIND_OP": "Error retrieving operations!",
+      "FIND_USER": "Error retrieving user, please try again later.",
+      "INCORRECT_USER": "Incorrect username or email address.",
+      "EMAIL_EXIST": "Email address already registered!"
     }
   },
   "DASH": {
@@ -75,7 +84,8 @@
         "SUBTITLE": "Contract No."
       },
       "DUE_DATE": "Due Date",
-      "PAY": "Pay"
+      "PAY": "Pay",
+      "LOWER_BALANCE": "Balance lower than the document value!"
     }
   },
   "TRANSACTION": {
@@ -162,7 +172,7 @@
       "ERROR": "Enter a value and number of installments to see the simulation."
     },
     "LIST": {
-      "SETTLE_TEMP": "Do you really want to settle contract No. ",
+      "SETTLE_TEMP": "Do you really want to settle contract No.",
       "CONTRACTS": "CONTRACTS",
       "NO": "No.",
       "ACQUISITION": "Acquisition",
@@ -183,6 +193,84 @@
         "INFOS": "Information, installments and settlement"
       },
       "PAID_OFF": "CONTRACT SETTLED"
+    },
+    "TABLE": {
+      "SETTLE_TEMP": {
+        "PAY": "Do you really want to pay installment No.",
+        "PAID_OFF": "Do you really want to settle loan No.",
+        "DUE_DATE": "Due Date"
+      },
+      "TITLE": "INSTALLMENTS - Loan No.",
+      "HEADER": {
+        "NO": "No.",
+        "DUE_DATE": "Due Date",
+        "INSTALLMENT": "Payment",
+        "INTEREST": "Interest Amount",
+        "AMORTIZATION": "Principal Amount",
+        "BALANCE": "Balance",
+        "PAYMENT_TODAY": "Payment Today",
+        "PAY": "Pay"
+      },
+      "PAID": "Paid",
+      "CURRENT_VALUE": "CURRENT AMOUNT",
+      "SETTLE": "SETTLE LOAN",
+      "SNACKS": {
+        "BALANCE_SETTLE": "Balance lower than the loan settlement amount!",
+        "LOAN_NOT_FOUND": "Loan not found!",
+        "BALANCE_INSTALLMENT": "Balance lower than the installment amount!"
+      },
+      "PAY": "Pay"
+    }
+  },
+  "DIALOGS": {
+    "PAY": {
+      "TITLE": "PAY",
+      "NOW": "PAY NOW",
+      "CANCEL": "Cancel"
+    },
+    "LOAN": {
+      "CONFIRM": {
+        "TITLE": "APPLY",
+        "CONTENT_1": "Do you really want to apply for a loan of",
+        "CONTENT_2": "With payment in",
+        "CONTENT_3": "installments of",
+        "APPLY": "APPLY",
+        "CANCEL": "Cancel"
+      },
+      "TABLE": {
+        "BALANCE": "INITIAL OUTSTANDING BALANCE",
+        "AMORTIZATION": "AMORTIZATION SCHEDULE",
+        "CLOSE": "Close"
+      },
+      "RESUME": {
+        "CONTENT_1": "Do you really want to pay installment",
+        "CONTENT_2": "of loan",
+        "CONTENT_3": "Updated amount for payment now"
+      }
+    },
+    "DOCUMENT": {
+      "PAY": {
+        "CONTENT": "Do you really want to pay"
+      },
+      "DELETE": {
+        "TITLE": "DELETE",
+        "CONTENT_1": "Do you really want to delete the document",
+        "CONTENT_2": "With the amount of",
+        "CONTENT_3": "and due on",
+        "DELETE": "DELETE",
+        "CANCEL": "Cancel"
+      },
+      "EDIT": {
+        "TITLE": "EDIT",
+        "DESCRIPTION": "Description",
+        "DESCRIPTION_PH": "Payment Description",
+        "DUE_DATE": "Due Date",
+        "VALUE": "Amount",
+        "PREFIX": "$",
+        "PAID": "Paid",
+        "SAVE": "SAVE",
+        "CANCEL": "Cancel"
+      }
     }
   }
 }
