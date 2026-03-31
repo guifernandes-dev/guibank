@@ -1,0 +1,188 @@
+{
+  "SIDEBAR": {
+    "DASHBOARD": "Dashboard",
+    "STATEMENTS": "Statements",
+    "DOCUMENTS": "Documents",
+    "OPERATIONS": "Operations",
+    "LOAN": "Loans",
+    "FLAG_ALT_BR": "Flag of Brazil",
+    "FLAG_ALT_US": "Flag of the United States",
+    "TITLE_LANG": "Select the language"
+  },
+  "HEADER": {
+    "HELLO": "Hello",
+    "ACCOUNT": "Account"
+  },
+  "LOGIN": {
+    "NAME": {
+      "LABEL": "Name",
+      "PLACEHOLDER": "Full Name",
+      "ERROR": {
+        "REQUIRED": "enter a name",
+        "MINLENGTH": "the name must be at least 3 characters long"
+      }
+    },
+    "INCOME": {
+      "LABEL": "Income",
+      "PREFIX": "$",
+      "ERROR": "income less than $40,000.00"
+    },
+    "EMAIL": {
+      "LABEL": "E-mail",
+      "PLACEHOLDER": "user@email.com",
+      "ERROR": {
+        "REQUIRED": "enter an email address",
+        "INVALID": "invalid email address"
+      }
+    },
+    "PASSWORD": {
+      "LABEL": "Password",
+      "ERRORS": {
+        "4_DIGITS": "password between 4 and 8 digits",
+        "LETTER": "password with a letter",
+        "NUMBER": "password with a number",
+        "SPECIAL": "password with special character"
+      }
+    },
+    "BTN": {
+      "PRINCIPAL": {
+        "ENTER": "Sign In",
+        "CREATE": "Sign Up"
+      },
+      "SECUNDARY": {
+        "CREATE_ACCOUNT": "Create Account",
+        "LOGIN": "Login"
+      }
+    }
+  },
+  "DASH": {
+    "DAD": {
+      "TITLE": "Dashboard",
+      "RESUME": "Account Summary",
+      "NEXT": "Scheduled Payments",
+      "INSTALLMENTS": "Installments",
+      "PAYMENTS": "Payments",
+      "LATEST_TRANSACTIONS": "Latest Transactions"
+    },
+    "RESUME": {
+      "BALANCE": "BALANCE",
+      "DEPOSITS": "DEPOSITS",
+      "WITHDRAWALS": "WITHDRAWALS"
+    },
+    "PAYMENTS": {
+      "INSTALLMENTS": {
+        "TITLE": "Installment",
+        "SUBTITLE": "Contract No."
+      },
+      "DUE_DATE": "Due Date",
+      "PAY": "Pay"
+    }
+  },
+  "TRANSACTION": {
+    "LABELS": {
+      "TRANSFER": "TRANSFER",
+      "DEPOSIT": "DEPOSIT",
+      "WITHDRAWAL": "WITHDRAWAL",
+      "DEBIT": "DEBIT",
+      "PAYMENT": "PAYMENT",
+      "LOAN_CREDIT": "LOAN CREDIT"
+    },
+    "TYPE_TRANS": {
+      "PAYMENT": "PAYMENT BY TRANSFER",
+      "CREDIT": "CREDIT BY TRANSFER"
+    },
+    "BALANCE": "Balance",
+    "STATEMENT": "Statement",
+    "DOCS_OPEN": "Open Documents",
+    "ICONS_TOOLTIP": {
+      "PAY": "Pay",
+      "EDIT": "Edit",
+      "DELETE": "Delete"
+    }
+  },
+  "TRANSFER": {
+    "KEY_TYPE": "Key Type",
+    "NUMBER": "Number",
+    "DESTINE_KEY": "Destination Key",
+    "DESTINE_NUMBER": "Destination Account Number",
+    "DESTINE_EMAIL": "Destination Account Email",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PLACE": "Description of the",
+    "BALANCE": "Balance",
+    "DUE_DATE": "Due Date",
+    "TOTAL_BALANCE": "Total Balance in Amount",
+    "CLEAR_VALUE": "Clear Value",
+    "PAID": "Paid",
+    "SUBMIT": "SUBMIT",
+    "SUCCESS": "Transaction saved successfully!",
+    "ERRO": "Error saving operation."
+  },
+  "ERRORS": {
+    "USER_NOT_FOUND": "User not found",
+    "LOGGED_ACCOUNT": "It cannot be the user themselves",
+    "MIN_LENGTH": "The account number must have 4 digits",
+    "INVALID_EMAIL": "Invalid email format",
+    "VALUE_BIGGEST": "Value greater than the balance",
+    "INVALID_VALUE": "Minimum value $0.01",
+    "REQUIRED_FIELD": "This field is required",
+    "INVALID_DATE": "Invalid date",
+    "VALUE_LIMIT": "Value greater than the available limit",
+    "MINIMUM_VALUE": "Minimum value"
+  },
+  "LOAN": {
+    "LOAN": "LOAN",
+    "RESUME": {
+      "DONT_LIMIT": "NO LIMIT AVAILABLE FOR NEW LOANS",
+      "AVAILABLE": "AVAILABLE",
+      "VALUE": "Value",
+      "INSTALLMENTS": "Installments",
+      "TAX": "Monthly rate",
+      "TOOLTIP": {
+        "AVAILABLE": "Maximum values ​​available for loan simulation",
+        "OUTSTANDING": "Outstanding balance considers the total with contract interest"
+      },
+      "TOTAL_OUTSTANDING": "TOTAL OUTSTANDING",
+      "SIMULATE": "SIMULATE",
+      "CONTRACTS": "MY CONTRACTS"
+    },
+    "SIMULATION": {
+      "SIMULATION": "SIMULATION",
+      "AMORTIZATION_SYSTEM": "Amortization System",
+      "PRICE": "PRICE",
+      "CAS": "CAS",
+      "NUM_INSTALLMENTS": "Number of Installments",
+      "INSTALLMENTS": "Installments",
+      "RESULT": "RESULT",
+      "NET_CREDIT": "Net Credited",
+      "DISCOUNTED": "Requested amount discounts 5% fee",
+      "EFFECTIVE_RATE": "Effective Rate",
+      "VIEW_TABLE": "VIEW INSTALLMENT TABLE",
+      "APPLY": "APPLY",
+      "TOOLTIP": "3% Loan Origination Fee + 2% Administrative Fee",
+      "ERROR": "Enter a value and number of installments to see the simulation."
+    },
+    "LIST": {
+      "SETTLE_TEMP": "Do you really want to settle contract No. ",
+      "CONTRACTS": "CONTRACTS",
+      "NO": "No.",
+      "ACQUISITION": "Acquisition",
+      "REQUESTED": "Requested",
+      "TAX": "Rate",
+      "STATUS": "Status",
+      "BALANCE": "Balance",
+      "NEXT": "Next",
+      "MONTHLY": "per month",
+      "TOOLTIPS": {
+        "NO": "Contract number",
+        "ACQUISITION": "Contract acquisition date",
+        "REQUESTED": "Loan amount requested",
+        "TAX": "Contract interest rate",
+        "STATUS": "Number of installments paid / Number of installments contracted",
+        "BALANCE": "Total outstanding balance",
+        "NEXT": "Next installment due",
+        "INFOS": "Information, installments and settlement"
+      },
+      "PAID_OFF": "CONTRACT SETTLED"
+    }
+  }
+}
