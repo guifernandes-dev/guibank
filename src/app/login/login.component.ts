@@ -179,10 +179,10 @@ export class LoginComponent {
   }
 
   setPt() {
-    this.translate.use('pt-br');
+    this.translate.use('pt-BR');
   }
 
   setUs() {
-    this.translate.use('en-us');
+    this.translate.use('en-US');
   }
 }

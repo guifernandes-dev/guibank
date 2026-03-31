@@ -7,6 +7,7 @@ import { Login, AccountResp, Transaction } from '../../../server/models/db.model
 import { UtilService } from '../util.services/util.service';
 import { Router } from '@angular/router';
 import { Pages } from '../../constants/front.enum';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ import { Pages } from '../../constants/front.enum';
 export class LoginService {
   private readonly api = inject(APIService);
   private readonly utils = inject(UtilService);
+  private readonly translate = inject(TranslateService);
   private readonly cookies = inject(CookieService);
   private readonly router = inject(Router);
   private user$ = signal<User | null>(null);
@@ -42,7 +44,8 @@ export class LoginService {
           })));
         },
         error: () => {
-          this.utils.openSnackBar('Erro ao buscar as operações!')
+          const message = this.translate.instant('LOGIN.SNACKS.FIND_OP');
+          this.utils.openSnackBar(message);
         },
         complete: () => {
           this.isLoading.set(false);
@@ -68,7 +71,8 @@ export class LoginService {
           return true;
         }),
         catchError(()=> {
-          this.utils.openSnackBar('Erro ao buscar o usuário, tente novamente mais tarde.')
+          const message = this.translate.instant('LOGIN.SNACKS.FIND_OP');
+          this.utils.openSnackBar(message);
           return of(false);
         })
       )
@@ -83,7 +87,8 @@ export class LoginService {
           this.router.navigate([`/${Pages.DASHBOARD}`])
         },
         error: () => {
-          this.utils.openSnackBar('Usuário ou E-mail incorreto.');
+          const message = this.translate.instant('LOGIN.SNACKS.INCORRECT_USER');
+          this.utils.openSnackBar(message);
         }
     });
   }
@@ -104,7 +109,8 @@ export class LoginService {
           this.router.navigate([`/${Pages.DASHBOARD}`])
         },
         error: () => {
-          this.utils.openSnackBar('E-mail já cadastrado!', 'Ok')
+          const message = this.translate.instant('LOGIN.SNACKS.EMAIL_EXIST');
+          this.utils.openSnackBar(message);
         }
       });
   }

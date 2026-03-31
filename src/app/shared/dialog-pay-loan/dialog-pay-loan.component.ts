@@ -1,13 +1,13 @@
-import { Component, Inject, inject, TemplateRef } from '@angular/core';
+import { Component, Inject, TemplateRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { Installment } from '../../../server/models/db.model';
 import { DateFormats } from '../../constants/front.enum';
 import { NgTemplateOutlet } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-pay-loan',
-  imports: [MatDialogModule, MatButtonModule,NgTemplateOutlet],
+  imports: [MatDialogModule, MatButtonModule,NgTemplateOutlet, TranslatePipe],
   templateUrl: './dialog-pay-loan.component.html',
   styleUrl: './dialog-pay-loan.component.css'
 })

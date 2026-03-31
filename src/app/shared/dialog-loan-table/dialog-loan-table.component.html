@@ -1,8 +1,16 @@
-<span class="saldo-dev-incial">SALDO DEVEDOR INICIAL: {{loan.valor | brCurrency : lang}}</span>
-<h2 mat-dialog-title class="text-center">TABELA DE AMORTIZAÇÃO</h2>
+<span class="saldo-dev-incial">
+  {{
+    'DIALOGS.LOAN.TABLE.BALANCE'|translate
+  }}: {{loan.valor | brCurrency : lang}}
+</span>
+<h2 mat-dialog-title class="text-center">
+  {{'DIALOGS.LOAN.TABLE.AMORTIZATION'|translate}}
+</h2>
 <mat-dialog-content class="d-flex flex-column f">
   <app-installments-table/>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="fechar()" cdkFocusInitial>Fechar</button>
+  <button mat-button (click)="fechar()" cdkFocusInitial>
+    {{'DIALOGS.LOAN.TABLE.CLOSE'|translate}}
+  </button>
 </mat-dialog-actions>

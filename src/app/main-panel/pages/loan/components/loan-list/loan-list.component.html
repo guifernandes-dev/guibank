@@ -1,5 +1,5 @@
 <ng-template #payLoan let-loan="obj">
-  <p>Deseja realmente quitar o contrato Nº {{loan.id}}?</p>
+  <p>{{'LOAN.LIST.SETTLE_TEMP'|translate}} {{loan.id}}?</p>
   <h4 class="m-0">{{loan.valor | brCurrency : lang}}</h4>
 </ng-template>
 
@@ -13,7 +13,9 @@
     <mat-icon>chevron_left</mat-icon>
   </button>
   <div class="d-flex align-items-center">
-    <h4 class="form-title">CONTRATOS</h4>
+    <h4 class="form-title">
+      {{'LOAN.LIST.CONTRACTS'|translate}}
+    </h4>
   </div>
 </div>
 <table class="table">
@@ -29,34 +31,34 @@
           <table class="table table-borderless table-sm m-0">
             <tbody>
               <tr [class]="loan.pago ? 'table-success': ''">
-                <td matTooltip="Número do contrato">
-                  Nº {{loan.id}}
+                <td [matTooltip]="'LOAN.LIST.TOOLTIPS.NO'|translate">
+                  {{'LOAN.LIST.NO'|translate}}
                 </td>
-                <td matTooltip="Data de aquisição do contrato">
-                  Aquisição: {{loan.data | dateTrans : dateFormats.LOAN_LIST}}
+                <td [matTooltip]="'LOAN.LIST.TOOLTIPS.ACQUISITION'|translate">
+                  {{'LOAN.LIST.ACQUISITION'|translate}}: {{loan.data | dateTrans : lang : dateFormats.LOAN_LIST}}
                 </td>
-                <td matTooltip="Valor solicitado no empréstimo">
-                  Solicitado: {{loan.valor | brCurrency : lang}}
+                <td [matTooltip]="'LOAN.LIST.TOOLTIPS.REQUESTED'|translate">
+                  {{'LOAN.LIST.REQUESTED'|translate}}: {{loan.valor | brCurrency : lang}}
                 </td>
-                <td matTooltip="Taxa de juros de cálculo do contrato">
-                  Taxa: {{loan.taxa | brPercent}} a.m.
+                <td [matTooltip]="'LOAN.LIST.TOOLTIPS.TAX'|translate">
+                  {{'LOAN.LIST.TAX'|translate}}: {{loan.taxa | brPercent : lang}} {{'LOAN.LIST.MONTHLY'|translate}}
                 </td>
               </tr>
               <tr [class]="loan.pago ? 'table-success': ''">
-                <td matTooltip="Quantidade de parcelas pagas / Quantidade de parcelas contratadas">
-                  Status: {{ statusParcelas(loan.parcelas) }}
+                <td [matTooltip]="'LOAN.LIST.TOOLTIPS.STATUS'|translate">
+                  {{'LOAN.LIST.STATUS'|translate}}: {{ statusParcelas(loan.parcelas) }}
                 </td>
-                <td matTooltip="Saldo devedor total">
-                  Saldo: {{getBalanco(loan) | brCurrency : lang}}
+                <td [matTooltip]="'LOAN.LIST.TOOLTIPS.BALANCE'|translate">
+                  {{'LOAN.LIST.BALANCE'|translate}}: {{getBalanco(loan) | brCurrency : lang}}
                 </td>
                 @if(loan.pago) {
-                  <td>CONTRATO QUITADO</td>
+                  <td>{{'LOAN.LIST.PAID_OFF'|translate}}</td>
                 } @else {
-                  <td matTooltip="Próxima parcela a pagar">
-                    Próxima: {{
+                  <td [matTooltip]="'LOAN.LIST.TOOLTIPS.NEXT'|translate">
+                    {{'LOAN.LIST.NEXT'|translate}}: {{
                       getProxParc(loan.parcelas).parcela | brCurrency : lang
                     }} - {{
-                      getProxParc(loan.parcelas).vencimento | dateTrans : dateFormats.DOCS_CARD
+                      getProxParc(loan.parcelas).vencimento | dateTrans : lang : dateFormats.DOCS_CARD
                     }}
                   </td>
                 }
@@ -64,7 +66,7 @@
                   <div class="d-flex justify-content-end">
                     <button
                       mat-icon-button
-                      matTooltip="Informações, parcelas e quitação"
+                      [matTooltip]="'LOAN.LIST.TOOLTIPS.INFOS'|translate"
                       type="button"
                       [routerLink]="loan.id"
                     >

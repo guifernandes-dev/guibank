@@ -5,6 +5,7 @@ import { BrCurrencyPipe } from '../../pipe/br-currency.pipe';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { Transaction } from '../../../server/models/db.model';
 import { UtilService } from '../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-overview',
@@ -14,7 +15,8 @@ import { UtilService } from '../../core/util.services/util.service';
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    BrCurrencyPipe
+    BrCurrencyPipe,
+    TranslatePipe
   ],
   providers: [
     provideNativeDateAdapter()

@@ -10,10 +10,11 @@ import { Operation } from '../../../../../../server/constants/db.enum';
 import { DashboardService } from '../../services/dashboard.service';
 import { Transaction } from '../../../../../../server/models/db.model';
 import { UtilService } from '../../../../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-table',
-  imports: [BrCurrencyPipe, MatIconModule, RecebedorPipe, DateTransPipe, TipoTransPipe],
+  imports: [BrCurrencyPipe, MatIconModule, RecebedorPipe, DateTransPipe, TipoTransPipe, TranslatePipe],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })

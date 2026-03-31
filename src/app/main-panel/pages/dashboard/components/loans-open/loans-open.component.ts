@@ -14,7 +14,7 @@ import { LoanService } from '../../../loan/services/loan.service';
 import { InstallmentCard } from '../../../../../core/models/services.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPayLoanResumeComponent } from '../../../../../shared/dialog-pay-loan-resume/dialog-pay-loan-resume.component';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loans-open',
@@ -28,6 +28,7 @@ export class LoansOpenComponent {
   private readonly loanService = inject(LoanService);
   private readonly transService = inject(TransactionsService);
   private readonly utilService = inject(UtilService);
+  private readonly translate = inject(TranslateService);
   private readonly dialog = inject(MatDialog);
   
   get dateFormats() {
@@ -57,7 +58,8 @@ export class LoansOpenComponent {
       juros: valorHoje - parc.amortizacao,
     }
     if(parcHoje.parcela > this.transService.saldo) {
-      this.utilService.openSnackBar('Saldo inferior ao valor do documento!');
+      const message = this.translate.instant('DASH.PAYMENTS.LOWER_BALANCE')
+      this.utilService.openSnackBar(message);
       return;
     }
     const dialogRef = this.dialog.open(DialogPayLoanResumeComponent,{data: parcHoje});

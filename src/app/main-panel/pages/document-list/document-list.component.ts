@@ -11,10 +11,11 @@ import { DateFormats } from '../../../constants/front.enum';
 import { AlertClassPipe } from '../../../pipe/alert-class.pipe';
 import { UtilService } from '../../../core/util.services/util.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-document-list',
-  imports: [MatIconModule, BrCurrencyPipe, MatButtonModule, TipoTransPipe, DateTransPipe, AlertClassPipe, MatTooltipModule],
+  imports: [MatIconModule, BrCurrencyPipe, MatButtonModule, TipoTransPipe, DateTransPipe, AlertClassPipe, MatTooltipModule, TranslatePipe],
   templateUrl: './document-list.component.html',
   styleUrl: './document-list.component.css'
 })
@@ -22,6 +23,7 @@ export class DocumentListComponent {
   private readonly utilService = inject(UtilService);
   private readonly loginService = inject(LoginService);
   private readonly transService = inject(TransactionsService);
+  private readonly translate = inject(TranslateService);
 
   get user() {
     return this.loginService.user;
@@ -51,7 +53,8 @@ export class DocumentListComponent {
 
   pagar(trans: Transaction) {
     if(trans.valor > this.saldo) {
-      this.utilService.openSnackBar('Saldo inferior ao valor do documento!');
+      const message = this.translate.instant('DASH.PAYMENTS.LOWER_BALANCE')
+      this.utilService.openSnackBar(message);
       return;
     }
     this.transService.payTrans(trans);

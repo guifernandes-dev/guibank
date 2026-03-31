@@ -1,11 +1,15 @@
 <ng-template #payParc let-parcela="obj">
-  <p>Deseja realmente pagar parcela Nº {{parcela.item}}?</p>
+  <p>
+    {{'LOAN.TABLE.SETTLE_TEMP.PAY'|translate}} {{parcela.item}}?
+  </p>
   <h4 class="m-0">{{parcela.parcela | brCurrency : lang}}</h4>
-  <span>vencimento: {{parcela.vencimento | dateTrans : dateFormats.DOCS_LIST}}</span>
+  <span>
+    {{'LOAN.TABLE.SETTLE_TEMP.DUE_DATE'|translate}}: {{parcela.vencimento | dateTrans : lang : dateFormats.DOCS_LIST}}
+  </span>
 </ng-template>
 
 <ng-template #payLoan let-loan="obj">
-  <p>Deseja realmente quitar o contrato Nº {{loan.id}}?</p>
+  <p>{{'LOAN.TABLE.SETTLE_TEMP.PAID_OFF'|translate}} {{loan.id}}?</p>
   <h4 class="m-0">{{totalHoje() | brCurrency : lang}}</h4>
 </ng-template>
 
@@ -20,24 +24,40 @@
     <mat-icon>chevron_left</mat-icon>
   </button>
   <div class="d-flex align-items-center">
-    <h4 class="form-title">PARCELAS - Contrato Nº {{loan$()?.id}}</h4>
+    <h4 class="form-title">{{'LOAN.TABLE.TITLE'|translate}} {{loan$()?.id}}</h4>
   </div>
 </div>
 }
 <table class="table table-bordered table-striped table-sm text-center">
   <thead [class]="`sticky-top ${loan$()?.id ? '' : 'fixed-head'}`">
     <tr>
-      <th scope="col">Nº</th>
-      <th>Vencimento</th>
-      <th>Prestação</th>
-      <th>Juros</th>
-      <th>Amortização</th>
+      <th scope="col">
+        {{'LOAN.TABLE.HEADER.NO'|translate}}
+      </th>
+      <th>
+        {{'LOAN.TABLE.HEADER.DUE_DATE'|translate}}
+      </th>
+      <th>
+        {{'LOAN.TABLE.HEADER.INSTALLMENT'|translate}}
+      </th>
+      <th>
+        {{'LOAN.TABLE.HEADER.INTEREST'|translate}}
+      </th>
+      <th>
+        {{'LOAN.TABLE.HEADER.AMORTIZATION'|translate}}
+      </th>
       @if (!loan$()?.id) {
-        <th>Saldo</th>
+        <th>
+          {{'LOAN.TABLE.HEADER.BALANCE'|translate}}
+        </th>
       }
       @if (loan$()?.id) {
-        <th>Pagamento Hoje</th>
-        <th>Pagar</th>
+        <th>
+          {{'LOAN.TABLE.HEADER.PAYMENT_TODAY'|translate}}
+        </th>
+        <th>
+          {{'LOAN.TABLE.HEADER.PAY'|translate}}
+        </th>
       }
     </tr>
   </thead>
@@ -50,7 +70,7 @@
           <div>{{parc.item}}</div>
         </th>
         <td>
-          {{parc.vencimento | dateTrans: dateFormats.DOCS_LIST }}
+          {{parc.vencimento | dateTrans : lang: dateFormats.DOCS_LIST }}
         </td>
         <td>
           {{parc.parcela | brCurrency : lang}}
@@ -71,7 +91,7 @@
             @if(parcelaHoje(parc.item)) {
               {{parcelaHoje(parc.item) | brCurrency : lang}}
             } @else {
-              ✅Pago
+              ✅{{'LOAN.TABLE.PAID'|translate}}
             }
           </td>
           <td>
@@ -79,7 +99,7 @@
             } @else {
               <button
                 mat-icon-button
-                matTooltip="Pagar"
+                [matTooltip]="'LOAN.TABLE.PAY'|translate"
                 type="button"
                 class="text-success pay-btn"
                 (click)="pagar(parc, payParc)"
@@ -114,9 +134,13 @@
 </table>
 @if (loan$()?.id) {
   <div class="d-flex justify-content-center align-items-center">
-    <span class="px-3">VALOR ATUAL: {{totalHoje() | brCurrency : lang}}</span>
+    <span class="px-3">
+      {{'LOAN.TABLE.CURRENT_VALUE'|translate}}: {{totalHoje() | brCurrency : lang}}
+    </span>
     @if (!loan$()?.pago) {
-      <button mat-button (click)="quitar(payLoan)">QUITAR CONTRATO</button>
+      <button mat-button (click)="quitar(payLoan)">
+        {{'LOAN.TABLE.SETTLE'|translate}}
+      </button>
     }
   </div>
 }

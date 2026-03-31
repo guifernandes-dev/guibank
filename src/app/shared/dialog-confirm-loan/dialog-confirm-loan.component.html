@@ -1,8 +1,14 @@
 <h2 mat-dialog-title>CONTRATAR</h2>
 <mat-dialog-content class="d-flex flex-column">
-  <span>Deseja realmente contratar um empréstimo de {{loan.valor | brCurrency : lang}}?</span>
   <span>
-    Com pagamento em {{loan.parcelas.length}} parcelas de {{
+    {{'DIALOGS.LOAN.CONFIRM.CONTENT_1'|translate}} {{loan.valor | brCurrency : lang}}?
+  </span>
+  <span>
+    {{
+      'DIALOGS.LOAN.CONFIRM.CONTENT_2'|translate
+    }} {{loan.parcelas.length}} {{
+      'DIALOGS.LOAN.CONFIRM.CONTENT_3'|translate
+    }} {{
       loan.sistema === sisCredito.PRICE
         ? (loan.parcelas[0].parcela | brCurrency : lang)
         : `${loan.parcelas[0].parcela | brCurrency : lang} (Inicial) e ${loan.parcelas[loan.parcelas.length-1].parcela | brCurrency : lang} (Final)`
@@ -10,6 +16,10 @@
   </span>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="contratar()" cdkFocusInitial>CONTRATAR</button>
-  <button mat-button (click)="fechar()">Cancelar</button>
+  <button mat-button (click)="contratar()" cdkFocusInitial>
+    {{'DIALOGS.LOAN.CONFIRM.APPLY'|translate}}
+  </button>
+  <button mat-button (click)="fechar()">
+    {{'DIALOGS.LOAN.CONFIRM.CANCEL'|translate}}
+  </button>
 </mat-dialog-actions>

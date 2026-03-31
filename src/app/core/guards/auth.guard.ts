@@ -34,9 +34,6 @@ export const authGuard: CanActivateFn = (_, state) => {
       .pipe(
         first(),
         map(isLogged => {
-          console.log(platform);
-          console.log('aqyu');
-          
           if(!isLogged) return router.createUrlTree(['/login']);
           loginService.findUserOp();
           const {id} = loginService.user()!;

@@ -20,32 +20,32 @@ export class UtilService {
   transTypes: MenuOperation[] = [
     {
       icon: 'send_money',
-      label: 'PIX',
+      label: 'TRANSACTION.LABELS.TRANSFER',
       operation: Operation.PIX
     },
     {
       icon: 'savings',
-      label: 'DEPÓSITO',
+      label: 'TRANSACTION.LABELS.DEPOSIT',
       operation: Operation.DEPOSITO
     },
     {
       icon: 'payments',
-      label: 'SAQUE',
+      label: 'TRANSACTION.LABELS.WITHDRAWAL',
       operation: Operation.SAQUE
     },
     {
       icon: 'money',
-      label: 'DÉBITO',
+      label: 'TRANSACTION.LABELS.DEBIT',
       operation: Operation.DEBITO
     },
     {
       icon: 'request_quote',
-      label: 'PAGAMENTO',
+      label: 'TRANSACTION.LABELS.PAYMENT',
       operation: Operation.PAGAMENTO
     },
     {
       icon: 'price_check',
-      label: 'CRÉDITO DE EMPRÉSTIMO',
+      label: 'TRANSACTION.LABELS.LOAN_CREDIT',
       operation: Operation.CREDITO
     }
   ]
@@ -100,12 +100,11 @@ export class UtilService {
 
   openSnackBar(
     mensagem: string,
-    textBtn: string = 'Fechar',
     panelClass: string = 'snackbar-erro'
   ) {
     this.snackBar.open(
       mensagem,
-      textBtn,
+      'Ok!',
       {
         duration: this.duration,
         panelClass

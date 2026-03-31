@@ -4,22 +4,22 @@
   (ngSubmit)="submit()"
 >
   <h3>
-    {{ currentOp().label }}
+    {{ currentOp().label|translate }}
   </h3>
   @if (currentOp().operation === operation.PIX) {
     <div>
-      <label>Tipo de Chave: </label>
+      <label>{{'TRANSFER.KEY_TYPE'|translate}}: </label>
       <mat-radio-group [formControl]="tipoConta" (change)="resetDestino()">
         <mat-radio-button value="email">E-mail</mat-radio-button>
-        <mat-radio-button value="num">Número</mat-radio-button>
+        <mat-radio-button value="num">{{'TRANSFER.NUMBER'|translate}}</mat-radio-button>
       </mat-radio-group>
     </div>
     @if (destinoNumero) {
       <mat-form-field appearance="outline" class="w-100" formGroupName="destino">
-        <mat-label>Chave de Destino</mat-label>
+        <mat-label>{{'TRANSFER.DESTINE_KEY'|translate}}</mat-label>
         <input
           matInput
-          placeholder="Número da Conta de Destino"
+          [placeholder]="'TRANSFER.DESTINE_NUMBER'|translate"
           type="text"
           formControlName="id"
           maxlength="4"
@@ -27,17 +27,17 @@
           [required]="currentOp().operation === operation.PIX && destinoNumero"
         />
         @if (operationForm.get('destino')?.get('id')?.invalid) {
-          <mat-error>{{errorsForm().id}}</mat-error>
+          <mat-error>{{errorsForm().id|translate}}</mat-error>
         } @else if (destino?.get('nome')?.value) {
-          <mat-hint>Nome: {{destino?.get('nome')?.value}}</mat-hint>
+          <mat-hint>{{'LOGIN.NAME.LABEL'|translate}}: {{destino?.get('nome')?.value}}</mat-hint>
         }
       </mat-form-field>
     } @else {
       <mat-form-field appearance="outline" class="w-100" formGroupName="destino">
-        <mat-label>Chave de Destino</mat-label>
+        <mat-label>{{'TRANSFER.DESTINE_KEY'|translate}}</mat-label>
         <input
           matInput
-          placeholder="E-mail da Conta de Destino"
+          [placeholder]="'TRANSFER.DESTINE_EMAIL'|translate"
           type="email"
           formControlName="email"
           maxlength="40"
@@ -45,18 +45,24 @@
           [required]="currentOp().operation === operation.PIX && !destinoNumero"
         />
         @if (operationForm.get('destino')?.get('email')?.invalid) {
-          <mat-error>{{errorsForm().email}}</mat-error>
+          <mat-error>{{errorsForm().email|translate}}</mat-error>
         } @else if (destino?.get('nome')?.value) {
-          <mat-hint>Nome: {{destino?.get('nome')?.value}}</mat-hint>
+          <mat-hint>{{'LOGIN.NAME.LABEL'|translate}}: {{destino?.get('nome')?.value}}</mat-hint>
         }
       </mat-form-field>
     }
   }
   <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Descrição</mat-label>
+    <mat-label>{{'TRANSFER.DESCRIPTION'|translate}}</mat-label>
     <input
       matInput
-      [placeholder]="`Descrição do ${currentOp().operation}`"
+      [placeholder]="`${
+        'TRANSFER.DESCRIPTION_PLACE'|translate
+      } ${
+        (currentOp().label|translate) !== 'PIX'
+        ? (currentOp().label|translate).charAt(0).toUpperCase() + (currentOp().label|translate).slice(1).toLowerCase()
+        : (currentOp().label|translate)
+      }`"
       type="text"
       formControlName="descricao"
       [required]="currentOp().operation === operation.PAGAMENTO"
@@ -64,12 +70,14 @@
       (input)="checkError('descricao')"
     />
     @if (operationForm.get('descricao')?.invalid) {
-      <mat-error>{{errorsForm().descricao}}</mat-error>
+      <mat-error>{{errorsForm().descricao|translate}}</mat-error>
     }
   </mat-form-field>
   @if(currentOp().operation === operation.PAGAMENTO) {
     <mat-form-field appearance="outline" class="w-50" floatLabel="always">
-      <mat-label>Data de Vencimento</mat-label>
+      <mat-label>
+        {{'TRANSFER.DUE_DATE'|translate}}
+      </mat-label>
       <input
         matInput
         [matDatepickerFilter]="filtraData"
@@ -82,7 +90,7 @@
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
       @if (operationForm.get('vencimento')?.invalid) {
-        <mat-error>{{errorsForm().vencimento}}</mat-error>
+        <mat-error>{{errorsForm().vencimento|translate}}</mat-error>
       }
     </mat-form-field>
   }
@@ -92,7 +100,7 @@
   ) {
     <div class="w-100 container-saldo">
       <span class="saldo">
-        Saldo: {{saldo | brCurrency : lang}}
+        {{'TRANSFER.BALANCE'|translate}}: {{saldo | brCurrency : lang}}
       </span>
       <div class="d-flex gap-1">
         @if (operationForm.get('valor')?.value !== formataValor(saldo)) {
@@ -101,7 +109,7 @@
             class="btn"
             (click)="transfSaldoTotal()"
           >
-            Saldo Total no Valor
+            {{'TRANSFER.TOTAL_BALANCE'|translate}}
           </button>
         }
         @if (operationForm.get('valor')?.value !== '0,00') {
@@ -110,7 +118,7 @@
             class="btn"
             (click)="limparValor()"
           >
-            Limpar Valor
+            {{'TRANSFER.CLEAR_VALUE'|translate}}
           </button>
         }
       </div>
@@ -134,14 +142,14 @@
       (blur)="formatar($event)"
       required
     />
-    <span matTextPrefix>R$&nbsp;</span>
+    <span matTextPrefix>{{'LOGIN.INCOME.PREFIX'|translate}}&nbsp;</span>
     @if (currentOp().operation === operation.PAGAMENTO) {
       <mat-slide-toggle matTextSuffix formControlName="pago" (change)="checkError('valor')">
-        Pago
+        {{'TRANSFER.PAID'|translate}}
       </mat-slide-toggle>
     }
     @if (operationForm.get('valor')?.invalid) {
-      <mat-error>{{errorsForm().valor}}</mat-error>
+      <mat-error>{{errorsForm().valor|translate}}</mat-error>
     }
   </mat-form-field>
   <button
@@ -152,6 +160,6 @@
     [disabled]="disabledBtn()"
   >
     <mat-icon>check</mat-icon>
-    REALIZAR
+    {{'TRANSFER.SUBMIT'|translate}}
   </button>
 </form>

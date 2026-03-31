@@ -11,10 +11,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrPercentPipe } from '../../../../../pipe/br-percent.pipe';
 import { Installment, Loan, LoanTotal } from '../../../../../../server/models/db.model';
 import { UtilService } from '../../../../../core/util.services/util.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loan-list',
-  imports: [DateTransPipe, MatIconModule, BrCurrencyPipe, MatButtonModule, RouterModule, MatTooltipModule, BrPercentPipe, RouterLink],
+  imports: [DateTransPipe, MatIconModule, BrCurrencyPipe, MatButtonModule, RouterModule, MatTooltipModule, BrPercentPipe, RouterLink, TranslatePipe],
   templateUrl: './loan-list.component.html',
   styleUrl: './loan-list.component.css'
 })

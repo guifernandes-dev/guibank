@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogModule, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { UtilService } from '../../core/util.services/util.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,6 +12,7 @@ import { Transaction } from '../../../server/models/db.model';
 import { ErrorsDialog } from '../../main-panel/pages/transfer/models/operation.models';
 import { TransactionsService } from '../../core/transactions.services/transactions.service';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-overview',
@@ -28,11 +29,10 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
     MatDialogActions,
     MatNativeDateModule,
     FormsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    TranslatePipe
 ],
-  providers: [
-    provideNativeDateAdapter()
-  ],
+  providers: [],
   templateUrl: './dialog-edit.component.html',
   styleUrl: './dialog-edit.component.css'
 })
